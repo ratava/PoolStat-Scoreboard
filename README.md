@@ -6,10 +6,9 @@
 
 ```
 
-CueSport ScoreBoard is a modified version of G4ScoreBoard. The purpose of this modification was to simplify and enhance the UI/UX for users.
-I have removed the Salotto logo, as I myself have not asked for permission to use - but if you choose to use it, it can be uploaded as a custom logo.
-This implementation now uses 5 custom logos, 2 associated with players, and 3 for a slideshow functionality.
+PoolStat ScoreBoard is a modified version of CueSport Scoreboard which was orgianlly based of G4ScoreBoard. The purpose of this modification is to integrate Live scoring from PoolStat.net.au.
 
+PoolStat Scoreboatd addon for OBS Copyright 2025 Brent Wesley
 CueSport ScoreBoard addon for OBS Copyright 2025 Iain MacLeod
 
 Modified version of G$Scoreboard:-
