@@ -13,16 +13,16 @@
         <tr>
             <td colspan="2">
                 <div align="center"><br><b>Made for Australian users of PoolStat, based off of <a href="https://github.com/iainsmacleod/CueSport-Scoreboard)/">CueSport Scoreboard</a><br><span style="color: yellow"> and <a href="https://github.com/ngholson/g4ScoreBoard/">g4scoreboard</a><br><span style="color: yellow"> 
-					<br>A clean and professional solution for displaying: player names, race and wager information, scores, logos, and sponsors.</span><br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Includes g4scoreboard shot clock inspired by the clock used during the Mosconi Cup<a href="#matchroom-pool">*</a> and European Open<a href="#matchroom-pool">*</a></b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br><br><br></div>
+				</div>
             </td>
         </tr>
         <tr>
             <td>
-                <div align="left">Hotkey Support<br>Add you own custom logos<br>Main OBS Themes supported<br>Custom Logo Slideshow (Sponsor Logos)<br><b><i>Docks cleanly into the OBS user interface</i></b></div>
+                </div>
             </td>
             <td>
-                <div align="right"><br>View the full Wiki <a href="https://github.com/iainsmacleod/CueSport-Scoreboard/wiki">Here</a>
-                    <br><a href="https://github.com/iainsmacleod/CueSport-Scoreboard#installation" target="_blank">ScoreBoard Installation Instructions</a><br><a href="https://github.com/ngholson/g4ScoreBoard/wiki/Installation-(Scoreboard)" target="_blank">Hotkey Installation Instructions</a><br>See <a href="https://github.com/iainsmacleod/CueSport-Scoreboard/releases" target="_blank">Releases Page</a> for most recent official release
+                <div align="right"><br>View the full Wiki <a href="https://github.com/ratava/PoolStat-Scoreboard/wiki">Here</a>
+                    <br><a href="https://github.com/ratava/PoolStat-Scoreboard#installation" target="_blank">Plugin Installation Instructions</a><br>See <a href="https://github.com/iainsmacleod/CueSport-Scoreboard/releases" target="_blank">Releases Page</a> for most recent official release
                 </div>
             </td>
         </tr>
