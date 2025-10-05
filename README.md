@@ -29,7 +29,7 @@
     </table>
 </div>
 <br>
-<a href="https://www.buymeacoffee.com/iainmacleod" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+<a href="https://www.buymeacoffee.com/brentwesley" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
 ```
 
 PoolStat ScoreBoard is a modified version of CueSport Scoreboard which was orgianlly based of G4ScoreBoard. The purpose of this modification is to integrate Live scoring from PoolStat.net.au.
