@@ -3,7 +3,7 @@
         <tr>
             <td>
                 <div align="center">
-                    <p style="color:yellow; font-weight:bolder"><b>CueSport ScoreBoard</b>
+                    <p style="color:yellow; font-weight:bolder"><b>PoolStat ScoreBoard</b>
                 </div>
             </td>
             <td>
