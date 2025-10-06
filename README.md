@@ -100,90 +100,25 @@ Zip contents:
 Extract the downloaded file to the directory of your choosing, 
 just make sure you know where to find it again. 
 
-OBS V27.1 and lower Configuration:
-	
-1. click on the Docks Menu from the top menu bar.
-2. Select "Custom Browser Docks".
-3. type a name (Cuesport-Scoreboard) in the "Dock Name" box.
-4. input the full path to "control_panel.html" in the URL box. 
-   (example: "c:\users\yourname\desktop\Cuesport-Scoreboard\control_panel.html")
-5. Click "Close"
-6. Select the scene you want the scoreboard to display.
-7. Add a "Browser Source" -> "Create New" -> give it a name. click OK.
-8. Input the full path to "browser_source.html" in the URL box.
-   (example: "c:\users\yourname\desktop\Cuesport-Scoreboard\browser_source.html")
-9. Set Width to 1920 and Height to 1080. 
-10. click OK.
-
-OBS V27.2 and higher Configuration:
+OBS V27.2 and higher Configuration (required):
 	
 1. click on the Docks Menu from the top menu bar.
 2. Select "Custom Browser Docks".
 3. type a name (Cuesport-Scoreboard) in the "Dock Name" box.
 4. input the full path file URI to "control_panel.html" in the URL box. 
-   (example: "file:///c:/users/yourname/desktop/Cuesport-Scoreboard/control_panel.html")
+   (example: "file:///c:/users/yourname/desktop/PoolStat-Scoreboard/control_panel.html")
 5. Click "Close"
 6. Select the scene you want the scoreboard to display.
 7. Add a "Browser Source" -> "Create New" -> give it a name. click OK.
 8. Input the full path file URI to "browser_source.html" in the URL box.
-   (example: "file:///c:/users/yourname/desktop/Cuesport-Scoreboard/browser_source.html")
+   (example: "file:///c:/users/yourname/desktop/PoolStat-Scoreboard/browser_source.html")
 9. Set Width to 1920 and Height to 1080. 
 10. click OK.
 
 	
-To install Hotkeys:
-	
-1. Click on "Tools" from the top menu in OBS.
-2. Select "Scripts" from the menu.
-3. Click the "+" in the lower left.
-4. Navigate to and select the "g4ScoreBoard_hotkeys.lua" file that came with this download.
-5. Click Open.  
-6. Open the "Settings" in OBS and navigate to the "Hotkeys" section.
-7. The scoreboard hotkeys all have the "G4" prefix for easy identification.
-```
---------------------------------------------------------------
-
-## Notes on use:  
-```
-1. The race info and wager info boxes will disappear if text box is left blank when updating match info.
-   (behavior is by design. if you wish to have the panels display empty,
-   type "&nbsp;" (without the quotes) in the text box.)
-2. The shot clock will auto display in the stream starting at 10s remaining.
-3. Once a player strokes the ball click Stop Clock and then start a new 30s timer for the next shot or
-   the incoming player when the cue ball fully stops moving.
-4. Audible alerts will sound starting at 5s remaining. 
-   (these only play locally unless picked up by microphone).
-5. Players get 1 30s extension per rack. if accidently clicked you can use the P1/P2 ext reset buttons. 
-6. When a player score is recorded the shot clock will stop and the player extensions are reset. 
-7. Clock will display in the control_panel in obs when Shot clock is started. 
-```	
----------------------------------------------------------------
-
-
-## Shot Clock
-If you are not familiar with the use of a shot clock in pool.
-```
-A shot clock is used in most professional 9 ball tournaments. shot clock play is as follows:
-
-	1. first shot after break is a 60s shot. 
-	2. if player elects to "push" the incoming player gets 60s. 
-	   if player chooses to give it back to the original shooter, 
-	   then that shot it is a 30s shot. 
-	3. all shots thereafter are 30s shots.
-	4. shot clock starts when cue ball has stopped moving.
-	   and stops when player contacts cue ball with stick. 
-	5. each player/team gets 1 30s extension per rack. 
-	   which must be called before time expires.
-									
-```	   
 
 ---------------------------------------------------------------
 
-## Add your own Logo
-```
-Simply click on the "Upload Custom Logo" button and choose your image.
-Max file size 2.4 MB 
 
-```
-<br><br>
-<a id="user-content-matchroom-pool" class="anchor" aria-hidden="true" href="#matchroom-pool"></a><div align="center"><i>*Mosconi Cup and European Open are the Copyright and or Trademark of Matchroom Pool and is in no way affiliated with CueSport Scoreboard.</i><br>
+
+
