@@ -48,18 +48,6 @@ initializeDefaults();
 
 // First, separate handlers into distinct functions
 const handlers = {
-    ballTracker(data) {
-        console.log('Ball tracker value:', data.ballTracker);
-        if (data.ballTracker === "vertical") {
-            document.getElementById("ballTracker").style.display = "flex";
-            document.getElementById("ballTracker").style.flexDirection = "column";
-            console.log('Changed ball tracker direction to vertical');
-        } else if (data.ballTracker === "horizontal") {
-            document.getElementById("ballTracker").style.display = "flex";
-            document.getElementById("ballTracker").style.flexDirection = "row";
-            console.log('Changed ball tracker direction to horizontal');
-        }
-    },
 
     score(data) {
         console.log(`Player: ${data.player}, Score: ${data.score}`);
@@ -74,14 +62,6 @@ const handlers = {
         }
     },
 
-    opacity(data) {
-        console.log(`Opacity setting: ${data.opacity}`);
-        const elements = ["scoreBoardDiv", "gameInfo", "ballTracker"];
-        elements.forEach(id => {
-            document.getElementById(id).style.opacity = data.opacity;
-        });
-    },
-
     scaling(data) {
         console.log(`Scaling setting: ${data.scaling}`);
         document.documentElement.style.setProperty('--ui-scaling', data.scaling);
@@ -89,40 +69,29 @@ const handlers = {
 
     race(data) {
         console.log("Race info: " + data.race);
-        const player1Enabled = getStorageItem("usePlayer1");
-        const player2Enabled = getStorageItem("usePlayer2");
-        const bothPlayersEnabled = player1Enabled && player2Enabled;
-        if (data.race == "" || !bothPlayersEnabled) {
-            document.getElementById("raceInfo").classList.add("noShow");
-            document.getElementById("raceInfo").classList.remove("fadeInElm");
-            document.getElementById("customLogo1").classList.remove("customLogoWide1");
-            document.getElementById("customLogo2").classList.remove("customLogoWide2");
+
+        if (data.race != "") {
+            document.getElementById("raceInfo").classList.remove("noShow");
+            document.getElementById("raceInfo").classList.add("fadeInElm");
+            document.getElementById("raceInfo").innerHTML = data.race;
         } else {
-            // if (getStorageItem("scoreDisplay") === "yes") {
-                document.getElementById("raceInfo").classList.remove("noShow");
-                document.getElementById("raceInfo").classList.add("fadeInElm");
-                document.getElementById("raceInfo").innerHTML = "(" + data.race + ")";
-            // }
-            document.getElementById("customLogo1").classList.add("customLogoWide1");
-            document.getElementById("customLogo2").classList.add("customLogoWide2");
+            document.getElementById("raceInfo").classList.add("noShow");
+            document.getElementById("raceInfo").classList.remove("fadeInElm");        
         }
+        document.getElementById("customLogo1").classList.add("customLogoWide1");
+        document.getElementById("customLogo2").classList.add("customLogoWide2");
     },
 
     game(data) {
         console.log("Game info: " + data.game);
-        if (data.game == "") {
-            document.getElementById("gameInfo").classList.add("noShow");
-            document.getElementById("gameInfo").classList.remove("fadeInElm");
-        } else {
+        if (data.game != "") {
             document.getElementById("gameInfo").classList.remove("noShow");
             document.getElementById("gameInfo").classList.add("fadeInElm");
             document.getElementById("gameInfo").innerHTML = data.game;
+        } else {
+            document.getElementById("gameInfo").classList.add("noShow");
+            document.getElementById("gameInfo").classList.remove("fadeInElm");        
         }
-    },
-
-    time(data) {
-        console.log("event.data.time: " + data.time);
-        shotTimer(data.time);
     },
 
     color(data) {
@@ -142,11 +111,11 @@ const handlers = {
 
     playerDisplay(data) {
         // Code to assist with displaying active player image when only two players are enabled, on reload.
-        const player1Enabled = getStorageItem("usePlayer1");
-        const player2Enabled = getStorageItem("usePlayer2");
-        const bothPlayersEnabled = player1Enabled === "yes" && player2Enabled === "yes";
-        const playerToggleEnabled = getStorageItem("usePlayerToggle") === "yes";
-        const useclockEnabled = getStorageItem("useClock") === "yes";
+        const player1Enabled = "yes"
+        const player2Enabled = "yes"
+        const bothPlayersEnabled = true
+        const playerToggleEnabled = false
+        const useclockEnabled = false
 
         console.log(`Player States in playerDisplay:`, {
             player1Enabled,
@@ -157,30 +126,8 @@ const handlers = {
             rawPlayer1: getStorageItem("usePlayer1"),
             rawPlayer2: getStorageItem("usePlayer2")
         });
-
-        // If we don't have valid player states, initialize defaults
-        if (player1Enabled === null || player2Enabled === null) {
-            console.log('Initializing defaults in playerDisplay handler');
-            initializeDefaults();
-            // Recheck values after initialization
-            const newPlayer1Enabled = getStorageItem("usePlayer1") === "yes";
-            const newPlayer2Enabled = getStorageItem("usePlayer2") === "yes";
-            const newBothPlayersEnabled = newPlayer1Enabled && newPlayer2Enabled;
-            console.log('After initialization:', {
-                newPlayer1Enabled,
-                newPlayer2Enabled,
-                newBothPlayersEnabled
-            });
-        }
-                
+               
         if (data.playerDisplay == "showPlayer") {
-            if (useclockEnabled && bothPlayersEnabled) {
-                console.log("Use clock evaluating as enabled");
-                document.getElementById("p1ExtIcon").classList.replace("fadeOutElm", "fadeInElm");
-                document.getElementById("p2ExtIcon").classList.replace("fadeOutElm", "fadeInElm");
-            } else {
-                console.log("Use clock evaluating as not enabled");
-            }
             // Check if both players are enabled before fading in the player images
             if (bothPlayersEnabled && playerToggleEnabled) {
                 const activePlayer = getStorageItem("activePlayer");
@@ -198,10 +145,6 @@ const handlers = {
                 document.getElementById("raceInfo").classList.replace("fadeOutElm", "fadeInElm");
             }
 
-			if (getStorageItem("enableBallTracker") === "true"){
-				document.getElementById("ballTracker").classList.remove("noShow");
-			}
-
             showPlayer(data.playerNumber);
 
             // Add a small delay to check after showPlayer has completed
@@ -218,17 +161,6 @@ const handlers = {
             }, 50); // Small delay to ensure localStorage is updated
         };
 
-        if (data.playerDisplay == "hidePlayer") { 
-            hidePlayer(data.playerNumber); 
-            hideScores();
-            hideClock();
-            document.getElementById("p1ExtIcon").classList.replace("fadeInElm", "fadeOutElm");
-            document.getElementById("p2ExtIcon").classList.replace("fadeInElm", "fadeOutElm");
-            document.getElementById("player1Image").classList.replace("fadeInElm", "fadeOutElm");
-            document.getElementById("player2Image").classList.replace("fadeInElm", "fadeOutElm");
-            document.getElementById("customLogo"+ data.playerNumber).classList.replace("fadeInElm", "fadeOutElm");
-			document.getElementById("ballTracker").classList.add("noShow");
-        };
     },
 
     scoreDisplay(data) {
@@ -236,91 +168,6 @@ const handlers = {
             showScores();
         } else {
             hideScores();
-        }
-    },
-
-    clockDisplay(data) {
-        // start of original clockDisplay channel 
-        if (data.clockDisplay != null) {
-            if (data.clockDisplay == "show") { showClock(); };
-            if (data.clockDisplay == "hide") { hideClock(); };
-            if (data.clockDisplay == "stopClock") { stopClock(); };
-            if (data.clockDisplay == "noClock") {
-                document.getElementById("p1ExtIcon").classList.replace("fadeInElm", "fadeOutElm");
-                document.getElementById("p2ExtIcon").classList.replace("fadeInElm", "fadeOutElm");
-            }
-            if (data.clockDisplay == "useClock") {
-                document.getElementById("p1ExtIcon").classList.replace("fadeOutElm", "fadeInElm");
-                document.getElementById("p2ExtIcon").classList.replace("fadeOutElm", "fadeInElm");
-            }
-            if (data.clockDisplay == "p1extension") { add30(1); };
-            if (data.clockDisplay == "p2extension") { add30(2); };
-            if (data.clockDisplay == "p1ExtReset") { extReset('p1'); };
-            if (data.clockDisplay == "p2ExtReset") { extReset('p2'); };
-            if (data.clockDisplay == "hidesalotto") { salottoHide(); };
-            if (data.clockDisplay == "showsalotto") { salottoShow(); };
-            if (data.clockDisplay == "hidecustomLogo") { 
-                customHide(); 
-            }
-            if (data.clockDisplay == "showcustomLogo") { 
-                customShow(); 
-            }
-            if (data.clockDisplay == "hidecustomLogo2") { 
-                custom2Hide(); 
-            }
-            if (data.clockDisplay == "showcustomLogo2") { 
-                custom2Show(); 
-            }
-            if (data.clockDisplay == "postLogo") { postLogo(); };
-            if (data.clockDisplay == "logoSlideShow-show") {
-                customHide();
-                document.getElementById("logoSlideshowDiv").classList.replace("fadeOutElm", "fadeInElm");
-                if (getStorageItem("customLogo3") != null) { document.getElementById("customLogo3").src = getStorageItem("customLogo3"); } else { document.getElementById("customLogo3").src = "./common/images/placeholder.png"; };
-                if (getStorageItem("customLogo4") != null) { document.getElementById("customLogo4").src = getStorageItem("customLogo4"); } else { document.getElementById("customLogo4").src = "./common/images/placeholder.png"; };
-                if (getStorageItem("customLogo5") != null) { document.getElementById("customLogo5").src = getStorageItem("customLogo5"); } else { document.getElementById("customLogo5").src = "./common/images/placeholder.png"; };
-            }
-            if (data.clockDisplay == "logoSlideShow-hide") { document.getElementById("logoSlideshowDiv").classList.replace("fadeInElm", "fadeOutElm"); };
-
-            // if (data.clockDisplay == "style125") {
-            //     styleChange(1); 
-            //     // Reload the specific HTML file
-            //     window.location.href = 'browser_source.html'; // This line redirects to browser_source.html
-            //  };
-            // if (data.clockDisplay == "style150") {
-            //     styleChange(2);
-            //     // Reload the specific HTML file
-            //     window.location.href = 'browser_source.html'; // This line redirects to browser_source.html
-            //  };
-            // if (data.clockDisplay == "style200") {
-            //     styleChange(3);
-            //     // Reload the specific HTML file
-            //     window.location.href = 'browser_source.html'; // This line redirects to browser_source.html
-            //  };
-
-            if (data.clockDisplay === 'toggleActivePlayer') {
-                const playerToggle = data.player; // Get the active player from the message
-                var activePlayer = playerToggle ? "1": "2";
-                console.log(`Toggle to player ${activePlayer}`);
-                changeActivePlayer(playerToggle); // Call the function to update the display
-            }
-
-            if (data.clockDisplay === 'showActivePlayer'){
-                const activePlayer = data.player; // Get the active player from the message
-                const player1Enabled = getStorageItem("usePlayer1") === "yes";
-                const player2Enabled = getStorageItem("usePlayer2") === "yes";
-                const bothPlayersEnabled = player1Enabled && player2Enabled;
-                // const playerToggle = (activePlayer === 1 || activePlayer === 2); // true if activePlayer is 1 or 2, otherwise false
-                // console.log(`playerToggle: ${playerToggle}`);
-                console.log(`Display active player: ${bothPlayersEnabled}`)
-                if (bothPlayersEnabled) {
-                    //const activePlayer = getStorageItem("activePlayer");
-                    changeActivePlayer(activePlayer); // Call the function to update the display
-                }
-            }
-            if (data.clockDisplay === 'hideActivePlayer'){
-                document.getElementById("player1Image").classList.replace("fadeInElm", "fadeOutElm");
-                document.getElementById("player2Image").classList.replace("fadeInElm", "fadeOutElm");
-            }
         }
     },
 
@@ -339,61 +186,7 @@ const handlers = {
             }
         }
     },
-
-    resetBall(data) {
-        const elementId = data.resetBall;
-        // Find the element on this page with the corresponding id
-        const elementToToggle = document.getElementById(elementId);
-        if (elementToToggle) {
-            // Toggle the 'faded' class on this 
-            elementToToggle.classList.remove('faded');
-            console.log('Removed faded class from', elementId, 'on browser_source.html');
-        } else {
-            console.log('Element with id', elementId, 'not found on browser_source.html');
-        }
-    },
-
-    displayBallTracker(data) {
-        const ballTracker = document.getElementById("ballTracker");
-        if (!ballTracker) {
-            console.warn('Ball tracker element not found in DOM');
-            return;
-        }
-        
-        if (data.displayBallTracker === true) {
-            ballTracker.classList.remove("noShow");
-            console.log('Show ball tracker');
-        } else if (data.displayBallTracker === false) {
-            ballTracker.classList.add("noShow");
-            console.log('Hide ball tracker');
-        }
-    },
-
-    gameType(data) {
-        console.log('Game type value:', data.gameType);
-        if (data.gameType === "game2") {
-            // 9-ball
-            ["10", "11", "12", "13", "14", "15"].forEach(num => {
-                document.getElementById(`ball ${num}`).classList.add("noShow");
-            });
-        } else if (data.gameType === "game3") {
-            // 10-ball
-            document.getElementById("ball 10").classList.remove("noShow");
-            ["11", "12", "13", "14", "15"].forEach(num => {
-                document.getElementById(`ball ${num}`).classList.add("noShow");
-            });
-        } else {
-            // All balls
-            ["10", "11", "12", "13", "14", "15"].forEach(num => {
-                document.getElementById(`ball ${num}`).classList.remove("noShow");
-            });
-        }
-    },
-
-    ballSelection(data) {
-        console.log('Ball selection value:', data.ballSelection);
-        updateBallImages(data.ballSelection);
-    }
+ 
 };
 
 // Main event handler
@@ -435,52 +228,25 @@ if (getStorageItem("activePlayer") === null) {
     setStorageItem("activePlayer", "1");
 }
 
+if (getStorageItem("poolStat") === null) {
+    setStorageItem("poolStat", "yes");
+}
+
 setCustomLogo("customLogo1", "useCustomLogo", "usePlayer1");
 setCustomLogo("customLogo2", "useCustomLogo2", "usePlayer2");
-
-if (getStorageItem("gameType") === "game3"){
-	document.getElementById("ball 10").classList.add("noShow");
-	document.getElementById("ball 11").classList.add("noShow");
-	document.getElementById("ball 12").classList.add("noShow");
-	document.getElementById("ball 13").classList.add("noShow");
-	document.getElementById("ball 14").classList.add("noShow");
-	document.getElementById("ball 15").classList.add("noShow");
-} else if (getStorageItem("gameType") === "game4"){
-	document.getElementById("ball 10").classList.remove("noShow");
-	document.getElementById("ball 11").classList.add("noShow");
-	document.getElementById("ball 12").classList.add("noShow");
-	document.getElementById("ball 13").classList.add("noShow");
-	document.getElementById("ball 14").classList.add("noShow");
-	document.getElementById("ball 15").classList.add("noShow");
-} else {
-	document.getElementById("ball 10").classList.remove("noShow");
-	document.getElementById("ball 11").classList.remove("noShow");
-	document.getElementById("ball 12").classList.remove("noShow");
-	document.getElementById("ball 13").classList.remove("noShow");
-	document.getElementById("ball 14").classList.remove("noShow");
-	document.getElementById("ball 15").classList.remove("noShow");
-}
-
-if (getStorageItem("customLogo3") != null) { document.getElementById("customLogo3").src = getStorageItem("customLogo3"); } else { document.getElementById("customLogo3").src = "./common/images/placeholder.png"; };
-if (getStorageItem("customLogo4") != null) { document.getElementById("customLogo4").src = getStorageItem("customLogo4"); } else { document.getElementById("customLogo4").src = "./common/images/placeholder.png"; };
-if (getStorageItem("customLogo5") != null) { document.getElementById("customLogo5").src = getStorageItem("customLogo5"); } else { document.getElementById("customLogo5").src = "./common/images/placeholder.png"; };
-if (getStorageItem("slideShow") == "yes") {
-	document.getElementById("logoSlideshowDiv").classList.replace("fadeOutElm", "fadeInElm");
-	document.getElementById("logoSlideshowDiv").classList.replace("fadeOutElm", "fadeInElm");
-}
 
 if (getStorageItem("p1NameCtrlPanel") != "" || getStorageItem("p1NameCtrlPanel") != null) {
 	document.getElementById("player1Name").innerHTML = getStorageItem("p1NameCtrlPanel");
 }
 if (getStorageItem("p1NameCtrlPanel") == "" || getStorageItem("p1NameCtrlPanel") == null) {
-	document.getElementById("player1Name").innerHTML = "Player 1";
+	document.getElementById("player1Name").innerHTML = " ";
 }
 
 if (getStorageItem("p2NameCtrlPanel") != "" || getStorageItem("p2NameCtrlPanel") != null) {
 	document.getElementById("player2Name").innerHTML = getStorageItem("p2NameCtrlPanel");
 }
 if (getStorageItem("p2NameCtrlPanel") == "" || getStorageItem("p2NameCtrlPanel") == null) {
-	document.getElementById("player2Name").innerHTML = "Player 2";
+	document.getElementById("player2Name").innerHTML = " ";
 }
 
 // Code to assist with displaying active player image when only two players are enabled, on reload.
@@ -535,31 +301,41 @@ if (bothPlayersEnabled && playerToggleEnabled) {
     document.getElementById("player2Image").classList.add("fadeOutElm");
 }
 
-if (getStorageItem("p1ScoreCtrlPanel") != null) {
+if (getStorageItem("p1ScoreCtrlPanel") != null && getStorageItem("usePoolStat") != "yes") {
 	document.getElementById("player1Score").innerHTML = getStorageItem("p1ScoreCtrlPanel");
 } else {
-	document.getElementById("player1Score").innerHTML = 0;
+    if (getStorageItem("usePoolStat") != "yes") {
+	    document.getElementById("player1Score").innerHTML = 0;
+    }
 }
 
-if (getStorageItem("p2ScoreCtrlPanel") != null) {
+
+if (getStorageItem("p2ScoreCtrlPanel") != null && getStorageItem("usePoolStat") != "yes") {
 	document.getElementById("player2Score").innerHTML = getStorageItem("p2ScoreCtrlPanel");
 } else {
-	document.getElementById("player2Score").innerHTML = 0;
+    if (getStorageItem("usePoolStat") != "yes") {
+    	document.getElementById("player2Score").innerHTML = 0;
+    }
 }
 
-if (getStorageItem("gameInfo") != "" && getStorageItem("gameInfo") != null) {
+if (getStorageItem("gameInfo") != "" ) {
 	document.getElementById("gameInfo").classList.remove("noShow");
+    document.getElementById("gameInfo").classList.add("fadeInElm");
+    document.getElementById("gameInfo").innerHTML = getStorageItem("gameInfo");
+} else {
+    document.getElementById("gameInfo").classList.add("noShow");
+    document.getElementById("gameInfo").classList.remove("fadeInElm");
 }
+
 
 if (getStorageItem("raceInfo") != "" && getStorageItem("raceInfo") != null && bothPlayersEnabled && getStorageItem("scoreDisplay") === "yes") {
 	document.getElementById("raceInfo").classList.remove("noShow");
 	document.getElementById("raceInfo").classList.add("fadeInElm");
+    document.getElementById("raceInfo").innerHTML = getStorageItem("raceInfo");
+    
 	document.getElementById("customLogo1").classList.add("customLogoWide1");
 	document.getElementById("customLogo2").classList.add("customLogoWide2");
 }
-
-document.getElementById("gameInfo").innerHTML = getStorageItem("gameInfo");
-document.getElementById("raceInfo").innerHTML = "(" + getStorageItem("raceInfo") + ")";
 
 function updateIconsVisibility(show) {
     const action = show ? "fadeInElm" : "fadeOutElm";
@@ -595,53 +371,6 @@ if (getStorageItem('p2colorSet') != "") {
 	console.log("p2color: " + getStorageItem('p2colorSet'));
 }
 
-if (getStorageItem("enableBallTracker") === "false" || getStorageItem("enableBallTracker") === null){
-	document.getElementById("ballTracker").classList.add("noShow");
-	console.log(`Ball tracker disabled on overlay`);
-} else {
-	document.getElementById("ballTracker").classList.remove("noShow");
-	console.log(`Ball tracker enabled on overlay`);
-}
-
-// On browser_source.html load, check stored direction and apply it
-const initializeBallTracker = () => {
-    const direction = getStorageItem("ballTrackerDirection") || "vertical";
-    const ballTracker = document.getElementById("ballTracker");
-    
-    if (ballTracker) {
-        ballTracker.style.display = "flex";
-        ballTracker.style.flexDirection = direction === "vertical" ? "column" : "row";
-        console.log(`Ball tracker initialized from stored value: ${direction}`);
-    }
-};
-
-// Run initialization
-initializeBallTracker();
-
-// Only handle changes via broadcast messages after initial setup
-if (getStorageItem("ballTrackerDirection") === null) {
-    setStorageItem("ballTrackerDirection", "vertical");
-    console.log(`Ball tracker default value set to vertical`);
-} else {
-    const direction = getStorageItem("ballTrackerDirection");
-    console.log(`Ball tracker using existing value: ${direction}`);
-}
-
-let slideIndex = 0;
-showSlides();
-applySavedBallStates();
-
-// Initialize ball selection on page load
-const initializeBallSelection = () => {
-    const selection = getStorageItem("ballSelection") || "american";
-    updateBallImages(selection);
-    console.log(`Ball selection initialized to: ${selection}`);
-};
-
-// Run ball selection initialization
-initializeBallSelection();
-
-// Functions
 
 function setCustomLogo(logoId, useCustomLogoKey, usePlayerKey) {
     if (getStorageItem(logoId) !== null && getStorageItem(logoId) !== "") {

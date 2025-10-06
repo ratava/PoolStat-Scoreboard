@@ -1,6 +1,20 @@
 :root {
     --standard-font-size: 36px;
     --small-font-size: 24pt;
+    --player-name-font-size: 32px;
+    --player-name-font-color: white;
+    --player-name-font-weight: bold;
+    --player-score-font-size: 40px;
+    --player-score-font-color: white;
+    --player-score-font-weight: bold;
+    --player1-name-position-top: 1000px;
+    --player1-name-position-left: 500px;
+    --player1-score-position-top: 1000px;
+    --player1-score-position-left: 750px;
+    --player2-score-position-top: 1000px;
+    --player2-score-position-left: 800px;
+    --player2-name-position-top: 1000px;
+    --player2-name-position-left: 1050px;
 }
 
 html, body {
@@ -220,35 +234,38 @@ html, body {
 
 /* Player names */
 #player1Name, #player2Name {
-    position: relative;
-    background: rgba(255,255,255,1);
+    position: fixed;
+    /* background: rgba(255,255,255,1);
     text-shadow: 1px 1px 2px black, 0 0 25px black, 0 0 5px black;
-    -webkit-text-stroke: 1px black;
-    font-size: calc(var(--standard-font-size) * var(--ui-scaling));
-    /* font-size: calc(32px * var(--ui-scaling)); */
-    color: white;
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.6);
-    font-weight: bold;
+    -webkit-text-stroke: 1px black; */
+    font-size: var(--player-name-font-size);
+    color: var(--player-name-font-color);
+    /* box-shadow: 0 8px 16px 0 rgba(0,0,0,0.6); */
+    font-weight: var(--player-name-font-weight);
     text-align: center;
-    width: calc(550px * var(--ui-scaling));
+    width: 550px;
     overflow: hidden;
     text-overflow: ellipsis;
-    border: 2px solid black;
-    z-index: 2;
+    /* border: 2px solid black;
+    z-index: 2; */
 }
 
 #player1Name {
-    background-image: linear-gradient(to left, white, steelblue);
+    /* background-image: linear-gradient(to left, white, steelblue); */
+    top: var(--player1-name-position-top);
+    left: var(--player1-name-position-left);
     padding: 5px 15px;
 }
 
 #player2Name {
-    background-image: linear-gradient(to right, white, steelblue);
+    /* background-image: linear-gradient(to right, white, steelblue); */
+    top: var(--player2-name-position-top);
+    left: var(--player2-name-position-left);
     padding: 5px 15px;
 }
 
 .score-logo-container {
-    position: relative;
+    position: fixed;
     display: inline-block;
 
 }
@@ -263,28 +280,28 @@ html, body {
 
 /* Scores */
 #player1Score, #player2Score {
-    position: relative;
+    position: fixed;
     text-align: center;
-    background: #ed4e54;
-    font-size: calc(var(--standard-font-size) * var(--ui-scaling));
-    font-weight: bold;
-    color: white;
-    -webkit-text-stroke: 1px black;
+    /* background: #ed4e54; */
+    font-size: var(--player-score-font-size);
+    font-weight: var(--player-score-font-weight);
+    color: var(--player-score-font-color);
+    /* -webkit-text-stroke: 1px black; */
     padding: 5px 10px;
-    border: solid black;
+    /* border: solid black; */
     z-index: 2;
 }
 
 #player1Score {
-    border-width:2px 2px 2px 0; /* No left border */
-    margin: 0 5px 0 0;
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.6);
+    /* border-width:2px 2px 2px 0; No left border */
+    /* margin: 0 5px 0 0; */
+    /* box-shadow: 0 8px 16px 0 rgba(0,0,0,0.6); */
 }
 
 #player2Score {
-    border-width:2px 0 2px 2px; /* No right border */
-    margin: 0 0 0 5px;
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.6);
+    /* border-width:2px 0 2px 2px; No right border */
+    /* margin: 0 0 0 5px; */
+    /* box-shadow: 0 8px 16px 0 rgba(0,0,0,0.6); */
 }
 
 /* Custom logos */

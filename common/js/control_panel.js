@@ -1,5 +1,5 @@
 'use strict';
-// CueSport ScoreBoard is a modified version of G4ScoreBoard by Iain MacLeod. The purpose of this modification was to simplify and enhance the UI/UX for users.
+// PoolStat ScoreBoard is a modified version of CueSport ScoreBoard and G4ScoreBoard by Brent Wesley. The purpose of this modification was to simplify and enhance the UI/UX for users.
 // I have removed the Salotto logo, as I myself have not asked for permission to use - but if you choose to use it, it can be uploaded as a custom logo.
 // This implementation now uses 5 custom logos, 2 associated with players, and 3 for a slideshow functionality.
 
@@ -15,42 +15,392 @@
 // functions
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////			
 
-// function bsStyleChange() {
-// 	if (document.getElementById("bsStyle").value == 1) {
-// 		bc.postMessage({ clockDisplay: 'style125' });
-// 		setStorageItem("b_style", 1);
-// 	}
-// 	if (document.getElementById("bsStyle").value == 2) {
-// 		bc.postMessage({ clockDisplay: 'style150' });
-// 		setStorageItem("b_style", 2);
-// 	}
-// 	if (document.getElementById("bsStyle").value == 3) {
-// 		bc.postMessage({ clockDisplay: 'style200' });
-// 		setStorageItem("b_style", 3);
-// 	}
-// }
 
+// declare mqtt client variable
+let client = null;
+const extraDebug = true;
 
 function updateTabVisibility() {
     // Get the state of the player settings
-    const player1Enabled = document.getElementById("usePlayer1Setting").checked;
-    const player2Enabled = document.getElementById("usePlayer2Setting").checked;
-	const clockEnabled = document.getElementById("useClockSetting").checked;
+    // const player1Enabled = document.getElementById("usePlayer1Setting").checked;
+    // const player2Enabled = document.getElementById("usePlayer2Setting").checked;
+	// const clockEnabled = document.getElementById("useClockSetting").checked;
+	// const poolStatEnabled = document.getElementById("poolStatCheckbox").checked;
 
     // Determine if both players are enabled
-    const bothPlayersEnabled = player1Enabled && player2Enabled;
+    // const bothPlayersEnabled = player1Enabled && player2Enabled;
 
     // Get tab elements
-    const scoringTab = document.getElementById("scoringTab");
+    // const scoringTab = document.getElementById("scoringTab");
+	// const poolStatTab = document.getElementById("poolStatTab");
 
-    // Show or hide the scoring tab
-    scoringTab.style.display = bothPlayersEnabled ? "inline-block" : "none";
+    // // Show or hide the scoring tab
+    // scoringTab.style.display = bothPlayersEnabled ? "inline-block" : "none";
+	// scoringTab.style.display = poolStatEnabled ? "none" : "inline-block";
+	// poolStatTab.style.display = poolStatEnabled ? "inline-block" : "none";
 }
 
 // Call updateTabVisibility on page load to set initial tab visibility
 document.addEventListener("DOMContentLoaded", function() {
 	updateTabVisibility();
+	//check if we are using PoolStat Live Stream and connect if setup.
+	if (getStorageItem("PoolStatRigID") != null) {
+		connectPSLiveStream();
+	}
 });
+
+//main function to update scoreboard from PoolStat Live Stream
+function poolstatUpdate(updateJSON) {
+	if (Object.keys(updateJSON).length == 18) {
+		console.log('Update Received');
+		if (updateJSON["compId"].length > 1) {setStorageItem("compId", updateJSON["compId"]);}
+		if (updateJSON["matchId"].length > 1) {setStorageItem("matchId", updateJSON["matchId"]);}
+		if (updateJSON["obsProfileName"].length > 1) {setStorageItem("obsProfileName", updateJSON["obsProfileName"]);}
+			
+		
+		if (updateJSON["streamKey"].length > 1) {setStorageItem("streamKey", updateJSON["streamKey"]);}
+		if (updateJSON["streamStatus"] === true) {
+			setStorageItem("streamStatus", updateJSON["streamStatus"]);
+			changeOBSProfile(updateJSON["obsProfileName"]);
+			updateStreamStatus();
+		} else {
+			setStorageItem("streamStatus", updateJSON["streamStatus"]);
+			updateStreamStatus();
+		}
+		if (updateJSON["breakingPlayer"] != null) {setStorageItem("breakingPlayer", updateJSON["breakingPlayer"]);}
+		if (updateJSON["homePlayerLogo"] != null) {setStorageItem("homePlayerLogo", updateJSON["homePlayerLogo"]);}
+		if (updateJSON["awayPlayerLogo"] != null) {setStorageItem("awayPlayerLogo", updateJSON["awayPlayerLogo"]);}
+
+		if (updateJSON["matchFormat"].length > 1) {document.getElementById("raceInfoTxt").textContent  = updateJSON["matchFormat"];}
+		if (updateJSON["eventName"].length > 1) {document.getElementById("gameInfoTxt").textContent  = updateJSON["eventName"];}
+		if (updateJSON["compId"] > 0) {document.getElementById("compIdTxt").textContent  = updateJSON["compId"];}
+		if (updateJSON["matchId"] > 0) {document.getElementById("matchIdTxt").textContent  = updateJSON["matchId"];}		
+		postInfo(document.getElementById("raceInfoTxt").textContent, document.getElementById("gameInfoTxt").textContent );
+		if (updateJSON["homePlayer"].length > 1) {document.getElementById("p1NameTxt").textContent = updateJSON["homePlayer"];}
+		if (updateJSON["awayPlayer"].length > 1) {document.getElementById("p2NameTxt").textContent = updateJSON["awayPlayer"];}
+		postNames(document.getElementById("p1NameTxt").textContent, document.getElementById("p2NameTxt").textContent);
+		pushScores(updateJSON["homePlayerScore"], updateJSON["awayPlayerScore"]);	
+	}	
+}
+
+// OBS WebSocket functions
+// get list of profiles
+async function getOBSProfiles() {
+	const obsWS = new OBSWebSocket();
+	try {
+		await obsWS.connect();
+		const data = await obsWS.call('GetProfileList');
+		await obsWS.disconnect();
+		return data.profiles;
+	} catch (err) {
+		console.error('Error fetching profiles:', err);
+		return null;
+	}
+}
+
+// get list of scenes
+async function getOBSScenes() {
+	const obsWS = new OBSWebSocket();
+	try {
+		await obsWS.connect();
+		const data = await obsWS.call('GetSceneList');
+		await obsWS.disconnect();
+		return data.scenes;
+	} catch (err) {
+		console.error('Error fetching scenes:', err);
+		return null;
+	}
+}
+
+// get stream config
+function getOBStreamConfig() {
+	const obsWS = new OBSWebSocket();
+	return obsWS.connect()
+		.then(() => obsWS.call('GetStreamServiceSettings'))
+		.then(data => {
+			const response = {
+				streamKey: data.streamServiceSettings.key,
+				service: data.streamServiceSettings.service
+			};
+			obsWS.disconnect();
+			return response;
+		})
+		.catch(err => {
+			console.error('Error:', err);
+			return null;
+		});
+}
+
+
+// send OBS config to PoolStat Live Stream
+async function sendOBSConfig(data) {
+	try {
+		const profiles = await getOBSProfiles();
+		const scenes = await getOBSScenes();
+		const streamConfig = await getOBStreamConfig();
+
+		const messageJSON = {
+			rigId: data.rigId,
+			profiles: profiles,
+			scenes: scenes,
+			streamConfig: streamConfig
+		};
+
+		console.log('OBS Config Message:', JSON.stringify(messageJSON));
+		client.publish('livestream/rigConfig', JSON.stringify(messageJSON));
+		
+	} catch (err) {
+		console.error('Failed to send OBS config:', err);
+	}
+}
+
+// update stream status
+function updateStreamStatus() {
+	if (getStorageItem("streamStatus") === "true") {
+		document.getElementById("streamStatus").textContent = "Streaming";
+        document.getElementById("streamStatus").style.color = "green";
+		if (getStorageItem("streamKey") != null) {
+			setOBSStreamKey(getStorageItem("streamKey"));
+		}
+		startOBSStream();
+	} else {
+		document.getElementById("streamStatus").textContent = "Not Streaming";
+        document.getElementById("streamStatus").style.color = "red";
+		stopOBSStream();
+	}
+}
+
+// set stream key if required
+function setOBSStreamKey(newKey) {
+	const obsWS = new OBSWebSocket();
+
+	obsWS.connect()
+		.then(() => {
+			if (extraDebug) {console.log('Connected to OBS WebSocket');}
+		
+			return obsWS.call('GetStreamServiceSettings');
+		})
+		.then(data => {
+			console.log('Current Stream Service Settings:', data);
+			if (data.streamServiceSettings.key !== newKey) {
+				if (data.streamServiceType === 'rtmp_common') {
+					const newSettings = {
+						...data.streamServiceSettings, // Keep existing settings
+						key: newKey // Update the stream key
+					};
+					return obsWS.call('SetStreamServiceSettings', {
+						streamServiceType: 'rtmp_common',
+						streamServiceSettings: newSettings
+					});
+				} else {
+					console.log('Stream service is not RTMPStream, skipping stream key update.');
+					return Promise.resolve(); // Resolve to continue the chain
+				}
+			}
+		})
+		.then(() => {
+			console.log('Stream service settings updated (if applicable).');
+			obsWS.disconnect();
+		})
+		.catch(err => {
+			console.error('Error:', err);
+		});
+
+	// Event listeners (optional, but useful for real-time updates)
+	obsWS.on('ConnectionClosed', () => {
+		if (extraDebug) {console.log('Disconnected from OBS WebSocket');}
+	});
+
+	obsWS.on('error', err => {
+		console.error('OBS WebSocket error:', err);
+	});
+
+	return obsWS;
+}
+
+function changeOBSProfile(newProfile) {
+	const obsWS = new OBSWebSocket();
+
+	obsWS.connect()
+		.then(() => {
+			if (extraDebug) {console.log('Connected to OBS WebSocket Profile');}
+			return obsWS.call('GetProfileList');
+		})
+		.then(data => {
+			console.log('Current Profile:', data.currentProfileName);
+			if (data.currentProfileName !== newProfile) {
+				return obsWS.call('SetCurrentProfile', { profileName: newProfile });
+			} else {
+				if (extraDebug) {console.log('Profile is already set to the desired profile.');}
+				return Promise.resolve(); // Resolve to continue the chain
+			}
+		})
+		.then(() => {
+			console.log('Profile changed (if applicable).');
+			obsWS.disconnect();
+		})
+		.catch(err => {
+			console.error('Error:', err);
+		});
+	
+	obsWS.on('ConnectionClosed', () => {
+		console.log('Disconnected from OBS WebSocket');
+	});
+	obsWS.on('error', err => {
+		console.error('OBS WebSocket error:', err);
+	});
+	return obsWS;
+}
+
+// start OBS stream
+function startOBSStream() {
+	const obsWS = new OBSWebSocket();
+
+	obsWS.connect()
+		.then(() => {
+			if (extraDebug) {console.log('Connected to OBS WebSocket startStream');}
+			return obsWS.call('GetStreamStatus');
+		})
+		.then(data => {
+			if (extraDebug) {console.log('Current Stream Status', data);}
+			if (data.outputActive === false) {
+				return obsWS.call('StartStream');
+			} else {
+				console.log('Stream service is already running');
+				return Promise.resolve(); // Resolve to continue the chain
+			}
+		})
+		.then(() => {
+			console.log('Stream service Started');
+			obsWS.disconnect();
+		})
+		.catch(err => {
+			console.error('Error:', err);
+		});
+
+	obsWS.on('ConnectionClosed', () => {
+		console.log('Disconnected from OBS WebSocket');
+	});
+
+	obsWS.on('error', err => {
+		console.error('OBS WebSocket error:', err);
+	});
+
+	return obsWS;
+}
+
+// stop OBS stream
+function stopOBSStream() {
+	const obsWS = new OBSWebSocket();
+
+	obsWS.connect()
+		.then(() => {
+			console.log('Connected to OBS WebSocket');
+
+			return obsWS.call('GetStreamStatus');
+		})
+		.then(data => {
+			console.log('Current Stream Status', data);
+			if (data.outputActive === true) {
+				return obsWS.call('StopStream');
+			} else {
+				console.log('Stream service is not running');
+				return Promise.resolve(); // Resolve to continue the chain
+			}
+		})
+		.then(() => {
+			console.log('Stream service Started');
+			obsWS.disconnect();
+		})
+		.catch(err => {
+			console.error('Error:', err);
+		});
+
+	obsWS.on('ConnectionClosed', () => {
+		console.log('Disconnected from OBS WebSocket');
+	});
+
+	obsWS.on('error', err => {
+		console.error('OBS WebSocket error:', err);
+	});
+
+	return obsWS;
+}
+
+//main function to connect to PoolStat Live Stream
+//including handling messages
+function connectPSLiveStream() {
+	const psRigId = getStorageItem("PoolStatRigID");
+	console.log(psRigId);
+    const host = 'wss://btim.brellahost.com.au:9001/'
+    const options = {
+      keepalive: 60,
+      clientId: psRigId,
+      protocolId: 'MQTT',
+      protocolVersion: 5,
+      clean: true,
+      reconnectPeriod: 1000,
+      connectTimeout: 30 * 1000,
+      will: {
+        topic: 'WillMsg',
+        payload: 'Connection Closed abnormally..!',
+        qos: 0,
+        retain: false
+      },
+    }
+
+    console.log('Connecting to PoolStat Live Stream server')
+	psLiveStatus.textContent = 'Connecting to PoolStat Live Stream server';
+
+    client = mqtt.connect(host, options)
+  
+    client.on('connect', function () {
+    	console.log('Connected to PoolStat Live Stream');
+	  	psLiveStatus.textContent = 'Connected to PoolStat Live Stream. Awaiting Match';
+
+		console.log('Subscribing & Sending Status');
+    	client.subscribe('livestream/matches');
+		client.subscribe('livestream/rigConfig');
+    	client.publish('livestream/status','Rig ' + psRigId + ' Online');
+    })
+
+    client.on('error', (err) => {
+      console.log('Connection error: ', err);
+      client.end();
+    })
+
+    client.on('message', function (topic, message) {
+        var messageJSON = JSON.parse(message.toString());
+        if (extraDebug) {console.log('Message Received: Topic-', topic, 'Message-', messageJSON);}
+        switch (topic)	{
+            case 'livestream/matches':
+                if (JSON.parse(message.toString())) {
+                    //check if the message for this Rig
+                    if (messageJSON['rigId'] === psRigId) {
+                        poolstatUpdate(JSON.parse(message.toString()));
+                    } else {
+                        //it is not ours so check if it matches our CompetitionID and if it does process it for 
+                        //Ticker display
+                    }
+                }
+                break;
+            case 'livestream/rigConfig':
+                if (JSON.parse(message.toString())) {
+                    //check if the message for this Rig
+                    if (messageJSON['rigId'] === psRigId && messageJSON['request'] === 'rigConfig') {
+                        sendOBSConfig({ rigId: messageJSON['rigId'] });
+                    }
+                }
+                break;
+            }
+        }
+    )
+
+    client.on('reconnect', () => {
+      console.log('Reconnecting to PoolStat Live Stream');
+	  psLiveStatus.textContent = 'Reconnecting to PoolStat Live Stream';
+    })
+}
 
 function openTab(evt, tabName) {
     var i, tabcontent, tablinks;
@@ -91,198 +441,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-function toggleAnimationSetting(){
-	if (!document.getElementById("winAnimation").checked) {
-		setStorageItem("winAnimation", "no");
-		console.log("Win animation disabled");
-	} else if (document.getElementById("winAnimation").checked) {
-		setStorageItem("winAnimation", "yes");
-		console.log("Win animation enabled");
-	}	
-}
-
-function gameType(value) {
-	setStorageItem("gameType", value);
-	if (getStorageItem("gameType") === "game2"){
-		document.getElementById("ball 10").classList.add("noShow");
-		document.getElementById("ball 11").classList.add("noShow");
-		document.getElementById("ball 12").classList.add("noShow");
-		document.getElementById("ball 13").classList.add("noShow");
-		document.getElementById("ball 14").classList.add("noShow");
-		document.getElementById("ball 15").classList.add("noShow");
-	} else if (getStorageItem("gameType") === "game3"){
-		document.getElementById("ball 10").classList.remove("noShow");
-		document.getElementById("ball 11").classList.add("noShow");
-		document.getElementById("ball 12").classList.add("noShow");
-		document.getElementById("ball 13").classList.add("noShow");
-		document.getElementById("ball 14").classList.add("noShow");
-		document.getElementById("ball 15").classList.add("noShow");
-	} else {
-		document.getElementById("ball 10").classList.remove("noShow");
-		document.getElementById("ball 11").classList.remove("noShow");
-		document.getElementById("ball 12").classList.remove("noShow");
-		document.getElementById("ball 13").classList.remove("noShow");
-		document.getElementById("ball 14").classList.remove("noShow");
-		document.getElementById("ball 15").classList.remove("noShow");
-	}
-	bc.postMessage({ gameType: value });
-	resetBallTracker();
-
-	// Update Ball Style toggle visibility based on selected game
-	var bs = document.getElementById("ballSelection");
-	if (bs) {
-		bs.classList[(value === "game1" && document.getElementById("ballTrackerCheckbox").checked) ? "remove" : "add"]("noShow");
-	}
-
-	// Reset ball style to American when switching away from 8-ball (game1)
-	if (value !== "game1") {
-		setStorageItem("ballSelection", "american");
-		bc.postMessage({ ballSelection: "american" });
-		updateControlPanelBallImages("american");
-		// Update button label
-		if (bs) {
-			bs.innerHTML = "American Balls";
-		}
-		console.log("Ball style reset to American for non-8-ball game");
-	}
-}
-
-function useBallTracker(){
-	const player1Enabled = getStorageItem("usePlayer1") === "yes";
-    const player2Enabled = getStorageItem("usePlayer2") === "yes";
-    const bothPlayersEnabled = player1Enabled && player2Enabled;
-	setStorageItem("enableBallTracker", document.getElementById("ballTrackerCheckbox").checked);
-	if (document.getElementById("ballTrackerCheckbox").checked) {
-		document.getElementById("ballTrackerDirectionDiv").classList.remove("noShow");
-		document.getElementById("ballTrackerDirection").classList.remove("noShow");
-		document.getElementById("ballTrackerLabel").classList.remove("noShow");
-		document.getElementById("ballTrackerDiv").classList.remove("noShow");
-		document.getElementById("ballTracker").classList.remove("noShow");
-		// Show ball style toggle only when tracker is enabled AND game type is 8-ball (game1)
-		var bs = document.getElementById("ballSelection");
-		var currentGameType = getStorageItem("gameType") || "game1";
-		if (bs) { bs.classList[currentGameType === "game1" ? "remove" : "add"]("noShow"); }
-	} else {
-		document.getElementById("ballTrackerDirectionDiv").classList.add("noShow");
-		document.getElementById("ballTrackerDirection").classList.add("noShow");
-		document.getElementById("ballTrackerLabel").classList.add("noShow");
-		document.getElementById("ballTrackerDiv").classList.add("noShow");
-		document.getElementById("ballTracker").classList.add("noShow");
-		// Hide ball style toggle when tracker is disabled
-		var bs2 = document.getElementById("ballSelection");
-		if (bs2) { bs2.classList.add("noShow"); }
-	}
-	if (bothPlayersEnabled){
-		bc.postMessage({ displayBallTracker: document.getElementById("ballTrackerCheckbox").checked});
-	}
-	console.log(`Both players are not enabled so we are not enabling the ball tracker`)
-}
-
-function toggleBallTrackerDirection() {
-    // Get current direction from localStorage or default to "vertical"
-    const currentDirection = getStorageItem("ballTrackerDirection") || "vertical";
-    // Toggle direction
-    const newDirection = currentDirection === "horizontal" ? "vertical" : "horizontal";
-    // Send message to browser source
-    bc.postMessage({ ballTracker: newDirection });
-    // Update localStorage
-    setStorageItem("ballTrackerDirection", newDirection);
-    console.log(`Changed ball tracker to ${newDirection} orientation`);
-	// Update button label to reflect NEW direction (current state after toggle)
-	document.getElementById("ballTrackerDirection").innerHTML = newDirection.charAt(0).toUpperCase() + newDirection.slice(1).toLowerCase() + " Ball Tracker";
-}
-
-function updateControlPanelBallImages(selection) {
-    console.log(`Updating control panel ball images to: ${selection}`);
-    
-    // Update all ball images in the control panel
-    for (let i = 1; i <= 15; i++) {
-        const ballElement = document.getElementById(`ball ${i}`);
-        if (ballElement) {
-            const img = ballElement.querySelector('img');
-            if (img) {
-                let imageSrc;
-                
-                if (selection === "international") {
-                    // International ball naming convention
-                    if (i >= 1 && i <= 7) {
-                        imageSrc = `./common/images/yellow-international-small-ball.png`;
-                    } else if (i >= 8 && i <= 14) {
-                        imageSrc = `./common/images/red-international-small-ball.png`;
-                    } else if (i === 15) {
-                        imageSrc = `./common/images/international-8-small-ball.png`;
-                    }
-                } else {
-                    // American ball naming convention (default)
-                    imageSrc = `./common/images/${i}ball_small.png`;
-                }
-                
-                img.src = imageSrc;
-            }
-        }
-    }
-}
-
-function toggleBallSelection() {
-    // Get current selection from localStorage or default to "american"
-    const currentSelection = getStorageItem("ballSelection") || "american";
-    // Only allow toggling ball style for 8-ball (game1)
-    const currentGame = getStorageItem("gameType") || (document.getElementById("gameType") ? document.getElementById("gameType").value : "game1");
-    if (currentGame !== "game1") {
-        console.log("Ball style toggle is only available for 8-ball (game1)");
-        return;
-    }
-    // Toggle selection
-    const newSelection = currentSelection === "international" ? "american" : "international";
-    // Send message to browser source
-    bc.postMessage({ ballSelection: newSelection });
-    // Update localStorage
-    setStorageItem("ballSelection", newSelection);
-    console.log(`Changed ball selection to ${newSelection} ball style`);
-	// Update button label to reflect NEW selection (what it will show after toggle)
-	var bs = document.getElementById("ballSelection");
-	if (bs) {
-		bs.innerHTML = (newSelection === "american" ? "American Balls" : "International Balls");
-	}
-	// Update control panel ball images
-	updateControlPanelBallImages(newSelection);
-}
-
-function togglePot(element) {
-    // Toggle the 'faded' class on the element
-    element.classList.toggle('faded');
-
-    // Parse the current ball state from localStorage or default to an empty object
-    const ballState = JSON.parse(getStorageItem('ballState') || '{}');
-    
-    // Update the state by reading the current status from the element
-    ballState[element.id] = element.classList.contains('faded');
-    
-    // Save the updated state back to localStorage
-    setStorageItem('ballState', JSON.stringify(ballState));
-
-    // Broadcast the change if needed
-    bc.postMessage({ toggle: element.id });
-    console.log(`Toggle pot state of`, element.id);
-}
-
-function applySavedBallStates() {
-    // Retrieve the ballState object from localStorage (or default to an empty object)
-    const ballState = JSON.parse(getStorageItem('ballState') || '{}');
-
-    // Get all ball elements (assuming each ball has the class 'ball')
-    const balls = document.querySelectorAll('.ball');
-
-    // Iterate over each ball element and apply or remove the 'faded' class
-    balls.forEach(function(ball) {
-        if (ballState[ball.id]) {
-            ball.classList.add("faded");
-        } else {
-            // ball.classList.remove("faded");
-        }
-    });
-}
-
 // Function to save the opacity value to localStorage
 function saveOpacity() {
 	var opacityValue = document.getElementById('scoreOpacity').value;
@@ -303,124 +461,6 @@ function toggleCheckbox(checkboxId, inputElement) {
     checkbox.disabled = !inputElement.files.length; // Enable if file is selected, disable otherwise
 }
 
-function toggleSetting() {
-	const checkbox = document.getElementById("useToggleSetting").checked;
-	const activePlayer = document.getElementById("playerToggleCheckbox").checked;
-	console.log(`Display active player ${checkbox ? "enabled" : "disabled"}`);
-	if (checkbox) {
-		document.getElementById("playerToggle").classList.remove("noShow");
-		document.getElementById("playerToggleLabel").classList.remove("noShow");
-		setStorageItem("usePlayerToggle", "yes");
-		bc.postMessage({ clockDisplay: 'showActivePlayer', player: activePlayer });
-		console.log(`Player ${activePlayer ? 1 : 2} is active`);
-	} else {
-		document.getElementById("playerToggle").classList.add("noShow");
-		document.getElementById("playerToggleLabel").classList.add("noShow");
-		setStorageItem("usePlayerToggle", "no");
-		bc.postMessage({ clockDisplay: 'hideActivePlayer' });
-	}
-}
-
-function logoSlideshow() {
-	if (document.getElementById("logoSlideshowChk").checked == true) {
-		setStorageItem("slideShow", "yes");
-		bc.postMessage({ clockDisplay: 'logoSlideShow-show' });
-	} else {
-		bc.postMessage({ clockDisplay: 'logoSlideShow-hide' });
-		setStorageItem("slideShow", "no");
-	}
-}
-
-function logoPost(input, xL) {
-	if (input.files && input.files[0]) {
-		const reader = new FileReader();
-		reader.readAsDataURL(input.files[0]);
-		reader.addEventListener("load", function () {
-			try {
-				setStorageItem("customLogo" + xL, reader.result);
-			} catch (err) {
-				alert("The selected image exceeds the maximum file size");
-				input.value = ""; // Clear the input
-				// Additional error handling here if needed
-			}
-			document.getElementById("l" + xL + "Img").src = getStorageItem("customLogo" + xL);
-			
-			// Update label and rebind container click to clearLogo
-			if (xL >= 1 && xL <= 5) {
-				var textElem = document.getElementById(`FileUploadLText${xL}`);
-				if (textElem) {
-					textElem.textContent = "Clear";
-				}
-				// Choose the correct container ID based on the logo type
-				var containerId;
-				if (xL === 1) {
-					containerId = "uploadCustomLogo";
-				} else if (xL === 2) {
-					containerId = "uploadCustomLogo2";
-				} else {
-					containerId = "logoSsImg" + xL;
-				}
-				var container = document.getElementById(containerId);
-				if (container) {
-					container.onclick = function(e) {
-						e.preventDefault();
-						clearLogo(xL);
-					};
-					// Apply the red background and white text to indicate "clear" mode
-                    container.style.backgroundColor = "red";
-                    container.style.color = "white";
-				}
-			} else {
-				console.log(`No related element for changing innerHtml to clear`);
-			}
-			
-			// Additional logic for slideshows or other settings...
-		}, false);
-		if (document.getElementById("logoSlideshowChk").checked == true) { setTimeout(slideOther, 50); };
-		if (xL == 1 || xL == 2) { setTimeout(logoOther, 50); };
-	}
-}
-
-function logoOther() {
-	bc.postMessage({ clockDisplay: 'postLogo' });
-}
-
-function slideOther() {
-	bc.postMessage({ clockDisplay: 'logoSlideShow-show' });
-}
-
-function swapColors() {
-	// Get current colors with default "white"
-	const p1original = getStorageItem('p1colorSet') || "white";
-	const p2original = getStorageItem('p2colorSet') || "white";
-	
-	// If colors are identical, don't swap
-	if (p1original === p2original) {
-		return;
-	}
-	
-	setTimeout(function () {
-		document.getElementById("p1colorDiv").value = p2original;
-		document.getElementById("p2colorDiv").value = p1original;
-		bc.postMessage({ player: '1', color: p2original });
-		bc.postMessage({ player: '2', color: p1original });
-		document.getElementById("p2colorDiv").style.background = p1original;
-		document.getElementById("p1colorDiv").style.background = p2original;
-		setStorageItem('p1colorSet', p2original);
-		setStorageItem('p2colorSet', p1original);
-		document.getElementById("p2Name").style.background = `linear-gradient(to left, ${p1original}, white)`;
-		document.getElementById("p1Name").style.background = `linear-gradient(to right, ${p2original}, white)`;
-		document.getElementsByTagName("select")[0].options[0].value = p2original;
-		document.getElementsByTagName("select")[1].options[0].value = p1original;
-		c1value = p1original;
-		c2value = p2original;
-		if (c1value == "white" || c1value == "") { document.getElementById("p1colorDiv").style.color = "black"; document.getElementById("p1colorDiv").style.textShadow = "none"; 
-		} else { document.getElementById("p1colorDiv").style.color = "white"; };
-		if (c2value == "white" || c2value == "") { document.getElementById("p2colorDiv").style.color = "black"; document.getElementById("p2colorDiv").style.textShadow = "none"; 
-		} else { document.getElementById("p2colorDiv").style.color = "white"; };
-	}, 100);
-}
-
 function playerColorChange(player) {
 	var cvalue = document.getElementById("p" + player + "colorDiv").value;
 	if (player == 1) {
@@ -429,7 +469,7 @@ function playerColorChange(player) {
 		bc.postMessage({ player: playerx, color: pColormsg });
 		var selectedColor = document.getElementById("p" + player + "colorDiv").value;
 		document.getElementById("p1colorDiv").style.background = `${selectedColor}`;
-		document.getElementById("p1Name").style.background = `linear-gradient(to right, ${selectedColor}, white)`;
+		//document.getElementById("p1Name").style.background = `linear-gradient(to right, ${selectedColor}, white)`;
 
 		if (cvalue == "white" || cvalue == "") { document.getElementById("p1colorDiv").style.color = "black"; document.getElementById("p1colorDiv").style.textShadow = "none"; 
 		} else { document.getElementById("p1colorDiv").style.color = "white"; };
@@ -441,7 +481,6 @@ function playerColorChange(player) {
 		bc.postMessage({ player: playerx, color: pColormsg });
 		var selectedColor = document.getElementById("p" + player + "colorDiv").value;
 		document.getElementById("p2colorDiv").style.background = `${selectedColor}`;
-		document.getElementById("p2Name").style.background = `linear-gradient(to left, ${selectedColor}, white)`;
 
 		if (cvalue == "white" || cvalue == "") { document.getElementById("p2colorDiv").style.color = "black"; document.getElementById("p2colorDiv").style.textShadow = "none"; 
 		} else { document.getElementById("p2colorDiv").style.color = "white"; };
@@ -499,7 +538,6 @@ function playerSetting(player) {
         ballTrackerCheckbox.disabled = true;
         ballTrackerCheckbox.checked = false;
         setStorageItem("enableBallTracker", "no");
-		setStorageItem("ballSelection", "american");
 
         // Hide related elements
         document.getElementById("clockInfo").classList.add("noShow");
@@ -509,10 +547,10 @@ function playerSetting(player) {
         document.getElementById("playerToggleLabel").classList.add("noShow");
         document.getElementById("ballTrackerDirectionDiv").classList.add("noShow");
         document.getElementById("ballTrackerDirection").classList.add("noShow");
-		//document.getElementById("ballTrackerSelection").classList.add("noShow");
         document.getElementById("ballTrackerLabel").classList.add("noShow");
         document.getElementById("ballTrackerDiv").classList.add("noShow");
-        document.getElementById("ballTracker").classList.add("noShow");
+		document.getElementById("internationalBallTracker").classList.add("noShow");
+		document.getElementById("worldBallTracker").classList.add("noShow");
 
         // Send messages to hide these features
         bc.postMessage({ clockDisplay: 'noClock' });
@@ -548,8 +586,24 @@ function playerSetting(player) {
     bc.postMessage({playerDisplay: usePlayer, playerNumber: player});
 
     updateTabVisibility();
+}
 
-    document.getElementById("swapBtn").classList[bothPlayersEnabled ? "remove" : "add"]("noShow");
+function poolStatConfigTicker() {
+    var usePoolStatConfigTicker = document.getElementById("poolStatConfigTickerCheckbox");
+    var isChecked = usePoolStatConfigTicker.checked;
+    var storageValue = isChecked ? "yes" : "no";
+    
+	console.log(`Use PoolStat Ticker ${isChecked}`);
+    setStorageItem("usePoolStatTicker", storageValue);
+}
+
+function poolStatConfigBreakingPlayer() {
+    var usePoolStatConfigBreakingPlayer = document.getElementById("poolStatConfigBreakingPlayerCheckbox");
+    var isChecked = usePoolStatConfigBreakingPlayer.checked;
+    var storageValue = isChecked ? "yes" : "no";
+    
+	console.log(`Use PoolStat Breaking Player ${isChecked}`);
+    setStorageItem("usePoolStatBreakingPlayer", storageValue);
 }
 
 function scoreDisplaySetting() {
@@ -562,66 +616,41 @@ function scoreDisplaySetting() {
 	if (getStorageItem("usePlayer1") === "yes" && getStorageItem("usePlayer2") === "yes") {
 		bc.postMessage({ scoreDisplay: scoreDisplay.checked ? "yes" : "no" });
 	}
-}
-
-function clockSetting() {
-	const clockDiv = document.getElementById("clockInfo");
-	if (!document.getElementById("useClockSetting").checked) {
-		setStorageItem("useClock", "no");
-		bc.postMessage({ clockDisplay: 'noClock' });
-		document.getElementById("clockInfo").classList.add("noShow");
-		document.getElementById("extensionControls").classList.add("noShow");
-		document.getElementById("clockControlLabel").classList.add("noShow");
-	} else if (document.getElementById("useClockSetting").checked) {
-		setStorageItem("useClock", "yes");
-		bc.postMessage({ clockDisplay: 'useClock' });
-		document.getElementById("clockInfo").classList.remove("noShow");
-		document.getElementById("extensionControls").classList.remove("noShow");
-		document.getElementById("clockControlLabel").classList.remove("noShow");
-	}
-	updateTabVisibility();
-}
-
-function clockDisplay(opt3) {
-	var optmsg = opt3;
-	bc.postMessage({ clockDisplay: optmsg });
-	if (opt3 == "show") {
-		document.getElementById("shotClockShow").innerHTML = "Hide Clock";
-		document.getElementById("shotClockShow").setAttribute("onclick", "clockDisplay('hide')");
-		document.getElementById("shotClockShow").style.background = "green";
-		document.getElementById("shotClockShow").style.color = "black";
-	} else if (opt3 == "hide") {
-		document.getElementById("shotClockShow").innerHTML = "Show Clock";
-		document.getElementById("shotClockShow").setAttribute("onclick", "clockDisplay('show')");
-		document.getElementById("shotClockShow").style.background = "none";
-		document.getElementById("shotClockShow").style.color = "lightgrey";
+	if (getStorageItem("usePoolStat") === "yes") {
+		bc.postMessage({ scoreDisplay: poolStatCheckbox.checked ? "yes" : "no" });
 	}
 }
 
-function postNames() {
-	p1namemsg = document.getElementById("p1Name").value.substring(0, 20);
-	p2namemsg = document.getElementById("p2Name").value.substring(0, 20);
+function clearGame() {
+	console.log('Clearing Match Data');
+	document.getElementById("raceInfoTxt").textContent = "";
+	document.getElementById("gameInfoTxt").textContent = "";
+	document.getElementById("compIdTxt").textContent = "";
+	document.getElementById("matchIdTxt").textContent = "";
+	document.getElementById("p1NameTxt").textContent= "";
+	document.getElementById("p2NameTxt").textContent= "";
+	setStorageItem("p1NameCtrlPanel", "");
+	setStorageItem("p2NameCtrlPanel", "");	
+	setStorageItem("raceInfo", "");
+	setStorageItem("gameInfo", "");	
+	setStorageItem("compId", "");
+	setStorageItem("matchId", "");	
+	postNames("","");
+	postInfo("","");	
+}
+
+function postNames(p1namemsg, p2namemsg) {
+	console.log('p1: ' + p1namemsg);
+	console.log('p2: ' + p2namemsg);
 	bc.postMessage({ player: '1', name: p1namemsg });
 	bc.postMessage({ player: '2', name: p2namemsg });
-	var p1FirstName = document.getElementById("p1Name").value.split(" ")[0];
-	var p2FirstName = document.getElementById("p2Name").value.split(" ")[0];
-	if (!p1Name.value == "") { document.getElementById("p1extensionBtn").innerHTML = p1FirstName.substring(0, 9) + "'s Extension"; } else { document.getElementById("p1extensionBtn").innerHTML = "P1's Extension"; }
-	if (!p2Name.value == "") { document.getElementById("p2extensionBtn").innerHTML = p2FirstName.substring(0, 9) + "'s Extension"; } else { document.getElementById("p2extensionBtn").innerHTML = "P2's Extension"; }
-	if (!p1Name.value == "") { document.getElementById("p1ScoreLabel").innerHTML = p1namemsg + " - Score/Rack(s)/Ball(s)"; } else { document.getElementById("p1ScoreLabel").innerHTML = "Player/Team 1 - Score/Rack(s)/Ball(s)";}
-	if (!p2Name.value == "") { document.getElementById("p2ScoreLabel").innerHTML = p2namemsg + " - Score/Rack(s)/Ball(s)"; } else { document.getElementById("p2ScoreLabel").innerHTML = "Player/Team 2 - Score/Rack(s)/Ball(s)";}
-	setStorageItem("p1NameCtrlPanel", p1Name.value);
-	setStorageItem("p2NameCtrlPanel", p2Name.value);
+	setStorageItem("p1NameCtrlPanel", p1namemsg);
+	setStorageItem("p2NameCtrlPanel", p2namemsg);
 }
 
-function postInfo() {
-	if (raceInfoTxt.value == " ") {
-		raceInfoTxt.value = null;
-	}
-	if (gameInfoTxt.value == " ") {
-		gameInfoTxt.value = null;
-	}
-	racemsg = document.getElementById("raceInfoTxt").value;
-	gamemsg = document.getElementById("gameInfoTxt").value;
+function postInfo(racemsg, gamemsg) {
+	if (extraDebug) {console.log('racemsg: ' + racemsg);}
+	if (extraDebug) {console.log('gamemsg: ' + gamemsg);}
 	bc.postMessage({ race: racemsg });
 	bc.postMessage({ game: gamemsg });	
 	setStorageItem("raceInfo", raceInfoTxt.value);
@@ -629,22 +658,10 @@ function postInfo() {
 }
 
 
-function pushScores() {
-	// Send current scores
-    const p1Score = document.getElementById("p1Score").value || 0;
-    const p2Score = document.getElementById("p2Score").value || 0;
-    bc.postMessage({ player: '1', score: p1Score });
+function pushScores(p1Score, p2Score) {
+	bc.postMessage({ player: '1', score: p1Score });
     bc.postMessage({ player: '2', score: p2Score });
-    
-    // Update global score variables
-    p1ScoreValue = parseInt(p1Score) || 0;
-    p2ScoreValue = parseInt(p2Score) || 0;
-    
-    // Store scores in localStorage
-    setStorageItem("p1ScoreCtrlPanel", p1ScoreValue);
-	setStorageItem("p1Score", p1ScoreValue);
-    setStorageItem("p2ScoreCtrlPanel", p2ScoreValue);
-	setStorageItem("p2Score", p2ScoreValue);
+
 }
 
 function postScore(opt1, player) {
@@ -701,215 +718,6 @@ function postScore(opt1, player) {
         }
     }
 	resetBallTracker()
-}
-
-function shotClock(timex) {
-    // Stop any existing timer
-    stopClock();
-
-	// Explicitly set tev based on the new timer
-    tev = timex === 30000 ? 30 : 60;  // Set initial time explicitly
-    console.log("Starting new timer with:", tev, "seconds");
-    
-    timerIsRunning = true;
-    var stime = timex;
-    bc.postMessage({ time: stime });
-
-    // Store which button was clicked
-    const buttonId = timex === 30000 ? 'shotClock30' : 'shotClock60';
-    const button = document.getElementById(buttonId);
-    const clockDisplay = document.getElementById("clockLocalDisplay");
-
-    // Reset both buttons first
-    document.getElementById("shotClock30").style.border = "2px solid black";
-    document.getElementById("shotClock60").style.border = "2px solid black";
-    document.getElementById("shotClock30").classList.remove("clkd");
-    document.getElementById("shotClock60").classList.remove("clkd");
-
-    // Then style only the clicked button
-    if (timex == 30000) {
-        document.getElementById("shotClock30").style.border = "2px solid black";
-        document.getElementById("shotClock30").classList.add("clkd");
-    } else {
-        document.getElementById("shotClock60").style.border = "2px solid black";
-        document.getElementById("shotClock60").classList.add("clkd");
-    }
-
-    // Disable both buttons while timer is running
-    document.getElementById("shotClock30").setAttribute("onclick", "");
-    document.getElementById("shotClock60").setAttribute("onclick", "");
-    
-    document.getElementById("stopClockDiv").classList.replace("obs28", "blue28");
-    document.getElementById("stopClockDiv").classList.remove("hover");
-    
-    // Position clockLocalDisplay over the button that was clicked
-    const buttonRect = button.getBoundingClientRect();
-    clockDisplay.style.position = 'fixed';
-    clockDisplay.style.left = buttonRect.left + 'px';
-    clockDisplay.style.top = buttonRect.top + 'px';
-    clockDisplay.style.width = '100px';
-    clockDisplay.style.height = '24px';
-    clockDisplay.style.display = 'flex';
-    clockDisplay.style.justifyContent = 'center';
-    clockDisplay.style.alignItems = 'center';
-    clockDisplay.style.zIndex = '1';
-}
-
-function stopClock() {
-	console.log("Stopping clock - Current tev:", tev); // Log before clearing
-
-	// Reset ALL timer-related variables
-	timerIsRunning = false;
-	tev = null;  // Reset the time event variable
-	countDownTime = null;  // Reset countdown time
-	shotClockxr = null;  // Reset interval timer
-
-	bc.postMessage({ clockDisplay: 'stopClock' });
-	
-	document.getElementById("shotClock30").style.border = "2px solid black";
-	document.getElementById("shotClock60").style.border = "2px solid black";
-	document.getElementById("shotClock30").setAttribute("onclick", "shotClock(30000)");
-	document.getElementById("shotClock60").setAttribute("onclick", "shotClock(60000)");
-	document.getElementById("clockLocalDisplay").style.display = 'none';
-	clockDisplay("hide");
-	if (getStorageItem("obsTheme") == "light") {
-		document.getElementById("shotClock30").classList.remove("clkd");
-		document.getElementById("shotClock60").classList.remove("clkd");
-	} else {
-		document.getElementById("shotClock30").classList.remove("clkd");
-		document.getElementById("shotClock60").classList.remove("clkd");
-	}
-	document.getElementById("stopClockDiv").classList.replace("blue28", "obs28");
-	document.getElementById("stopClockDiv").classList.add("hover");
-}
-
-function resetExtensions() {
-	if (confirm("Click OK to confirm extension reset")) {
-		resetExt('p1', 'noflash');
-		resetExt('p2', 'noflash');
-	} else { }
-}
-
-function add30(player) {
-	var playermsgx = player;
-	bc.postMessage({ clockDisplay: playermsgx + 'extension' });
-	document.getElementById(player + "extensionBtn").setAttribute("onclick", "resetExt('" + player + "')");
-	document.getElementById(player + "extensionBtn").classList.add("clkd");
-	document.getElementById(player + "extensionBtn").style.background = "red";
-	document.getElementById(player + "extensionBtn").style.color = "black";
-	
-	var playerName = document.getElementById(player + "Name").value.split(" ")[0] || player.toUpperCase();
-	document.getElementById(player + "extensionBtn").innerHTML = "Reset " + playerName.substring(0, 9) + "'s Ext";
-	
-	setStorageItem(player + "Extension", "enabled");
-	
-	clockDisplay("hide");
-}
-
-function resetExt(player, flash) {
-	var playermsgx = player;
-	bc.postMessage({ clockDisplay: playermsgx + 'ExtReset' });
-	
-	document.getElementById(player + "extensionBtn").setAttribute("onclick", "add30('" + player + "')");
-	document.getElementById(player + "extensionBtn").style.border = "2px solid black";
-	document.getElementById(player + "extensionBtn").classList.remove("clkd");
-	document.getElementById(player + "extensionBtn").style.background = "green";
-	
-	var playerName = document.getElementById(player + "Name").value.split(" ")[0] || player.toUpperCase();
-	document.getElementById(player + "extensionBtn").innerHTML = playerName.substring(0, 9) + "'s Extension";
-	
-	// if (flash != "noflash") {
-	// 	document.getElementById(player + "extensionBtn").style.border = "2px solid blue";
-	// }
-
-	setStorageItem(player + "Extension", "disabled");
-
-}
-
-function customLogoSetting() {
-    const checkbox = document.getElementById("customLogo1");
-    const isImageLoaded = getStorageItem("customLogo1") !== null;
-
-    // Initially disable the checkbox if no image is loaded
-    checkbox.disabled = !isImageLoaded;
-
-    if (!checkbox.checked) {
-        bc.postMessage({ clockDisplay: 'hidecustomLogo' });
-        setStorageItem("useCustomLogo", "no");
-    } else {
-        bc.postMessage({ clockDisplay: 'showcustomLogo' });
-        setStorageItem("useCustomLogo", "yes");
-    }
-
-    // Add event listener for checkbox toggle
-    checkbox.addEventListener('change', function() {
-        // Disable the checkbox immediately
-        checkbox.disabled = true;
-
-        // Handle the checkbox state
-        if (checkbox.checked) {
-            bc.postMessage({ clockDisplay: 'showcustomLogo' });
-            setStorageItem("useCustomLogo", "yes");
-        } else {
-            bc.postMessage({ clockDisplay: 'hidecustomLogo' });
-            setStorageItem("useCustomLogo", "no");
-        }
-
-        // Re-enable after timeout
-        setTimeout(() => {
-            checkbox.disabled = false; // Re-enable after timeout
-        }, 1100); // 1100 ms delay
-    });
-}
-
-function customLogoSetting2() {
-    const checkbox = document.getElementById("customLogo2");
-    const isImageLoaded = getStorageItem("customLogo2") !== null;
-
-    // Initially disable the checkbox if no image is loaded
-    checkbox.disabled = !isImageLoaded;
-
-    if (!checkbox.checked) {
-        bc.postMessage({ clockDisplay: 'hidecustomLogo2' });
-        setStorageItem("useCustomLogo2", "no");
-    } else {
-        bc.postMessage({ clockDisplay: 'showcustomLogo2' });
-        setStorageItem("useCustomLogo2", "yes");
-    }
-
-    // Add event listener for checkbox toggle
-    checkbox.addEventListener('change', function() {
-        // Disable the checkbox immediately
-        checkbox.disabled = true;
-
-        // Handle the checkbox state
-        if (checkbox.checked) {
-            bc.postMessage({ clockDisplay: 'showcustomLogo2' });
-            setStorageItem("useCustomLogo2", "yes");
-        } else {
-            bc.postMessage({ clockDisplay: 'hidecustomLogo2' });
-            setStorageItem("useCustomLogo2", "no");
-        }
-
-        // Re-enable after timeout
-        setTimeout(() => {
-            checkbox.disabled = false; // Re-enable after timeout
-        }, 1100); // 1100 ms delay
-    });
-}
-
-function togglePlayer(isChecked) {
-	const activePlayer = isChecked
-	const player = isChecked ? 1 : 2; // Determine active player based on checkbox state
-	const useToggleCheckbox = document.getElementById("useToggleSetting");
-	if (useToggleCheckbox.checked){
-		bc.postMessage({ clockDisplay: 'toggleActivePlayer', player: activePlayer }); 	// Send a message to the broadcast channel with the active player
-	} else {
-		console.log(`Not changing visual player indicator UI, due to useToggleSetting being disabled`);
-	}
-	setStorageItem("activePlayer", player);
-	setStorageItem("toggleState", activePlayer);
-    console.log(`Player ${player} is active`); // Log the active player
 }
 
 function obsThemeChange() {
@@ -1084,8 +892,14 @@ function resetScores() {
 		resetExt('p1', 'noflash');
 		resetExt('p2', 'noflash');
 		resetBallTracker();
+		resetBallSet();
 	} else { }
 }
+
+function resetBallSet() {
+	document.getElementById('p1colorOpen').checked = true;
+	bc.postMessage({ playerBallSet: 'p1Open' });
+}	
 
 function resetBallTracker() {
     // Retrieve the saved ball state from localStorage
@@ -1237,7 +1051,7 @@ function checkForUpdate() {
     const updateStatus = document.getElementById('updateStatus');
     updateStatus.textContent = "Checking for updates...";
     
-    fetch('https://api.github.com/repos/iainsmacleod/CueSport-Scoreboard/releases/latest')
+    fetch('https://api.github.com/repos/ratava/PoolStat-Scoreboard/releases/latest')
         .then(response => {
             if (!response.ok) {
                 throw new Error(`GitHub API request failed: ${response.status}`);

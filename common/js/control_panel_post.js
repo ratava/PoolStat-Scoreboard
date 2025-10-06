@@ -73,6 +73,15 @@ var pColormsg;
 // onload stuff
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+function genPsRigId() {
+    return 'xxxx-xxxx-xxxx'
+    .replace(/[xy]/g, function (c) {
+        const r = Math.random() * 16 | 0, 
+            v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
 window.onload = function() {
 	// Set local storage values if not previously configured
 	if (getStorageItem("usePlayer1") === null) {
@@ -86,32 +95,21 @@ window.onload = function() {
 		setStorageItem("scoreDisplay", "yes");
 	}
 
-	if (getStorageItem("usePlayerToggle")==="yes" || getStorageItem("usePlayerToggle") === null) {
-		document.getElementById("useToggleSetting").checked = true;
-		setStorageItem("usePlayerToggle", "yes");
-		toggleSetting();
-	} else {
-		document.getElementById("useToggleSetting").checked = false;
-		setStorageItem("usePlayerToggle", "no");
-		toggleSetting();
-	}
+	if (getStorageItem("usePoolStatTicker")==="yes" || getStorageItem("usePoolStatTicker") === null) {
+		document.getElementById("poolStatConfigTickerCheckbox").checked = true;
+		setStorageItem("usePoolStatTicker", "yes");
 
-	if (getStorageItem("usePlayer1") === "yes" && getStorageItem("usePlayer2") === "yes" && getStorageItem("usePlayerToggle") === "yes"){
-		console.log(`We should be showing active player identifier`);
-		const activePlayer = getStorageItem("activePlayer") === "2" ? "2" : "1";
-		setStorageItem("activePlayer", activePlayer);
-		document.getElementById("playerToggleCheckbox").checked = activePlayer === "1";
-		setStorageItem("toggleState", activePlayer === "1");
-		console.log(`activePlayer: ${activePlayer}`);
-		bc.postMessage({ clockDisplay: 'showActivePlayer', player: activePlayer });
-	}
-
-	if (getStorageItem("scoreDisplay") === "yes") {
-		document.getElementById("scoreDisplay").checked = true;
-		scoreDisplaySetting();
 	} else {
-		document.getElementById("scoreDisplay").checked = false;
-		scoreDisplaySetting();
+		document.getElementById("poolStatConfigTickerCheckbox").checked = false;
+		setStorageItem("usePoolStatTicker", "no");
+	}
+	
+	if (getStorageItem("usePoolStatBreakingPlayer")==="yes" || getStorageItem("usePoolStatBreakingPlayer") === null) {
+		document.getElementById("poolStatConfigBreakingPlayerCheckbox").checked = true;
+		setStorageItem("usePoolStatBreakingPlayer", "yes");
+	} else {
+		document.getElementById("poolStatConfigBreakingPlayerCheckbox").checked = false;
+		setStorageItem("usePoolStatBreakingPlayer", "no");
 	}
 
 	if (getStorageItem("p1Score") === null) {
@@ -119,11 +117,6 @@ window.onload = function() {
 	}
 	if (getStorageItem("p2Score") === null) {
 		setStorageItem("p2Score", "0");
-	}
-
-	if (getStorageItem("gameType") === null) {
-		setStorageItem("gameType", "game1");
-		document.getElementById("gameType").value = getStorageItem("gameType");
 	}
 
 	var savedOpacity = getStorageItem('overlayOpacity');
@@ -138,65 +131,28 @@ window.onload = function() {
 		document.getElementById('sliderUiScalingValue').innerText = savedScaling + '%'; // Update displayed value
 	}
 
-	if (getStorageItem("enableBallTracker") === "true"){
-		document.getElementById("ballTrackerCheckbox").checked = true;
-		document.getElementById("ballTracker").classList.remove("noShow");
-		document.getElementById("ballTrackerDirection").classList.remove("noShow");
-		document.getElementById("ballTrackerLabel").classList.remove("noShow");
-		// Show ball style toggle button on load when enabled
-		var bs = document.getElementById("ballSelection");
-		if (bs) { bs.classList.remove("noShow"); }
-		console.log(`Ball tracker enabled`);
-		bc.postMessage({ displayBallTracker: true });
-	} else {
-		document.getElementById("ballTrackerCheckbox").checked = false;
-		setStorageItem("enableBallTracker", "false");
-		document.getElementById("ballTracker").classList.add("noShow");
-		document.getElementById("ballTrackerDirection").classList.add("noShow");
-		document.getElementById("ballTrackerLabel").classList.add("noShow");		
-		// Hide ball style toggle button on load when disabled
-		var bs2 = document.getElementById("ballSelection");
-		if (bs2) { bs2.classList.add("noShow"); }
-		console.log(`Ball tracker disabled`);
-		bc.postMessage({ displayBallTracker: false });
+	if (getStorageItem("usePoolStatTicker") === null) {
+		setStorageItem("usePoolStatTicker", "no");
+		console.log ('PoolStat Ticker initalised')
 	}
 
-	if (getStorageItem("ballTrackerDirection") === null) {
-		// Initialize with default value if not set
-		setStorageItem("ballTrackerDirection", "vertical");
-		setStorageItem("ballSelection", "american");
-		document.getElementById("ballTrackerDirection").innerHTML = "Vertical Ball Tracker";
-		var bsTxt = document.getElementById("ballSelection");
-		if (bsTxt) { bsTxt.innerHTML = "American Balls"; }
-		bc.postMessage({ ballTracker: "vertical" });
-		bc.postMessage({ ballSelection: "american" });
-		console.log(`Ball tracker initialized vertical`);
-		console.log(`Ball selection initialized american`);
-	} else {
-		// Use existing stored value
-		const direction = getStorageItem("ballTrackerDirection");
-		document.getElementById("ballTrackerDirection").innerHTML = direction === "vertical" ? "Vertical Ball Tracker" : "Horizontal Ball Tracker";
-		const selection = getStorageItem("ballSelection");
-		var bsTxt2 = document.getElementById("ballSelection");
-		if (bsTxt2) { bsTxt2.innerHTML = selection === "american" ? "American Balls" : "International Balls"; }
-		bc.postMessage({ ballSelection: selection });
-		bc.postMessage({ ballTracker: direction });
-		console.log(`Ball tracker initialized ${direction}`);
+	if (getStorageItem("usePoolStatBreakingPlayer") === null) {
+		setStorageItem("usePoolStatBreakingPlayer", "yes");
+		console.log ('PoolStat Breaking Player initalised')
 	}
 
-	// Call the visibility functions based on the checkbox states
-    setPlayerVisibility(1);
-    setPlayerVisibility(2);
-	applySavedBallStates();
+	if (getStorageItem("PoolStatRigID") === null) {
+		const psRigId = genPsRigId();
+		setStorageItem("PoolStatRigID", psRigId);
+		console.log ('PoolStat Rig ID: ' + psRigId)
+		document.getElementById("psRigId").textContent = psRigId;
+	} else {
+		console.log('PS Rig ID: ' + getStorageItem("PoolStatRigID"));
+		document.getElementById("psRigIdTxt").textContent = getStorageItem("PoolStatRigID");
+	}	
 	
-	// Initialize control panel ball images
-	const ballSelection = getStorageItem("ballSelection") || "american";
-	updateControlPanelBallImages(ballSelection);
-
 	// Initialize the logo and extension status for each logo (players + slideshow logos) and player
-	initializeLogoStatus();
-	initializeExtensionButtonStatus();
-	console.log(`Print: ${INSTANCE_ID}`)
+	console.log(`Instance: ${INSTANCE_ID}`)
 };
 
 function initializeLogoStatus() {
@@ -301,47 +257,17 @@ function initializeExtensionButtonStatus() {
     }
 }
 
-slider.oninput = function () {
-	sliderValue = this.value / 100;
-	document.getElementById("sliderValue").innerHTML = this.value + "%";  // Add this line
-	bc.postMessage({ opacity: sliderValue });
-}
+// slider.oninput = function () {
+// 	sliderValue = this.value / 100;
+// 	document.getElementById("sliderValue").innerHTML = this.value + "%";  // Add this line
+// 	bc.postMessage({ opacity: sliderValue });
+// }
 
 uiScalingSlider.oninput = function () {
 	sliderUiScalingValue = this.value / 100;
 	document.getElementById("sliderUiScalingValue").innerHTML = this.value + "%";  // Add this line
 	bc.postMessage({ scaling: sliderUiScalingValue });
 }
-
-document.getElementById('uploadCustomLogo').onclick = function () {
-	// document.getElementById('uploadCustomLogo').style.border = "2px solid blue";
-	document.getElementById('FileUploadL1').click();
-	//setTimeout(rst_scr_btn, 100);
-};
-
-document.getElementById('uploadCustomLogo2').onclick = function () {
-	//document.getElementById('uploadCustomLogo2').style.border = "2px solid blue";
-	document.getElementById('FileUploadL2').click();
-	//setTimeout(rst_scr_btn, 100);
-};
-
-document.getElementById('logoSsImg3').onclick = function () {
-	//document.getElementById('logoSsImg3').style.border = "2px solid blue";
-	document.getElementById('FileUploadL3').click();
-	//setTimeout(rst_scr_btn, 100);
-};
-
-document.getElementById('logoSsImg4').onclick = function () {
-	//document.getElementById('logoSsImg4').style.border = "2px solid blue";
-	document.getElementById('FileUploadL4').click();
-	//setTimeout(rst_scr_btn, 100);
-};
-
-document.getElementById('logoSsImg5').onclick = function () {
-	//document.getElementById('logoSsImg5').style.border = "2px solid blue";
-	document.getElementById('FileUploadL5').click();
-	//setTimeout(rst_scr_btn, 100);
-};
 
 if (getStorageItem('p1colorSet') !== null) {
 	var cvalue = getStorageItem('p1colorSet');
@@ -355,7 +281,6 @@ if (getStorageItem('p1colorSet') !== null) {
         }
     }
 	document.getElementById('p1colorDiv').style.background = getStorageItem('p1colorSet');
-	document.getElementById('p1Name').style.background = `linear-gradient(to right, ${getStorageItem('p1colorSet')}, white)`;
 	document.getElementsByTagName("select")[0].options[0].value = cvalue;
 	if (cvalue == "white" || cvalue == "") { document.getElementById("p1colorDiv").style.color = "black"; document.getElementById("p1colorDiv").style.textShadow = "none"; 
 	} else { document.getElementById("p1colorDiv").style.color = "white"; };
@@ -376,7 +301,6 @@ if (getStorageItem('p2colorSet') !== null) {
         }
     }
 	document.getElementById('p2colorDiv').style.background = getStorageItem('p2colorSet');
-	document.getElementById('p2Name').style.background = `linear-gradient(to left, ${getStorageItem('p2colorSet')}, white)`;
 	if (cvalue == "white" || cvalue == "") { document.getElementById("p2colorDiv").style.color = "black"; document.getElementById("p2colorDiv").style.textShadow = "none"; 
 	} else { document.getElementById("p2colorDiv").style.color = "white"; };
 }
@@ -405,41 +329,6 @@ if (getStorageItem('p2ScoreCtrlPanel') > 0 || getStorageItem('p2ScoreCtrlPanel')
 	bc.postMessage(msg);
 }
 
-if (getStorageItem("useCustomLogo") == "yes") {
-	console.log("customLogo1 = TRUE");
-	document.getElementById("customLogo1").checked = true;
-	customLogoSetting();
-} else {
-	customLogoSetting()
-}
-
-if (getStorageItem("useCustomLogo2") == "yes") {
-	console.log("customLogo2 = TRUE");
-	document.getElementById("customLogo2").checked = true;	
-	customLogoSetting2();
-} else {
-	customLogoSetting2()
-}
-
-if (getStorageItem("useClock") == "yes") {
-	console.log("Clock enabled");
-	document.getElementById("useClockSetting").checked = true;
-	clockSetting();
-} else {
-	console.log("Clock disabled");
-	clockSetting()
-}
-
-if (getStorageItem("winAnimation") === "no" || getStorageItem("winAnimation") === null) {
-	console.log("Win animation disabled");
-	document.getElementById("winAnimation").checked = false;
-	setStorageItem("winAnimation", "no");
-} else {
-	console.log("Win animation enabled");
-	document.getElementById("winAnimation").checked = true;
-	setStorageItem("winAnimation", "yes");
-}
-
 function setPlayerVisibility(playerNumber) {
 	const usePlayer = getStorageItem(`usePlayer${playerNumber}`) == "yes";
 	const checkbox = document.getElementById(`usePlayer${playerNumber}Setting`);
@@ -450,50 +339,13 @@ function setPlayerVisibility(playerNumber) {
 	playerSetting(playerNumber);
 }
 
-if (getStorageItem("customLogo1") != null) { document.getElementById("l1Img").src = getStorageItem("customLogo1"); } else { document.getElementById("l1Img").src = "./common/images/placeholder.png"; };
-if (getStorageItem("customLogo2") != null) { document.getElementById("l2Img").src = getStorageItem("customLogo2"); } else { document.getElementById("l2Img").src = "./common/images/placeholder.png"; };
-if (getStorageItem("customLogo3") != null) { document.getElementById("l3Img").src = getStorageItem("customLogo3"); } else { document.getElementById("l3Img").src = "./common/images/placeholder.png"; };
-if (getStorageItem("customLogo4") != null) { document.getElementById("l4Img").src = getStorageItem("customLogo4"); } else { document.getElementById("l4Img").src = "./common/images/placeholder.png"; };
-if (getStorageItem("customLogo5") != null) { document.getElementById("l5Img").src = getStorageItem("customLogo5"); } else { document.getElementById("l5Img").src = "./common/images/placeholder.png"; };
-if (getStorageItem("slideShow") == "yes") { document.getElementById("logoSlideshowChk").checked = true; logoSlideshow(); };
 if (getStorageItem("obsTheme") == "28") { document.getElementById("obsTheme").value = "28"; }
-// if (getStorageItem("b_style") == "1") { document.getElementById("bsStyle").value = "1"; }
-// if (getStorageItem("b_style") == "2") { document.getElementById("bsStyle").value = "2"; }
-// if (getStorageItem("b_style") == "3") { document.getElementById("bsStyle").value = "3"; }
-if (getStorageItem("clogoNameStored") != null) { cLogoName = getStorageItem("clogoNameStored"); }
-if (getStorageItem("clogoName2Stored") != null) { cLogoName2 = getStorageItem("clogoName2Stored"); }
-document.getElementById("logoName").innerHTML = cLogoName.substring(0, 13);
-document.getElementById("logoName2").innerHTML = cLogoName2.substring(0, 13);
-document.getElementById("p1Name").value = getStorageItem("p1NameCtrlPanel");
-document.getElementById("p1Score").value = getStorageItem("p1ScoreCtrlPanel");
-document.getElementById("p2Name").value = getStorageItem("p2NameCtrlPanel");
-document.getElementById("p2Score").value = getStorageItem("p2ScoreCtrlPanel");
-document.getElementById("gameType").value = getStorageItem("gameType");
-if (getStorageItem("gameType") === "game3"){
-	document.getElementById("ball 10").classList.add("noShow");
-	document.getElementById("ball 11").classList.add("noShow");
-	document.getElementById("ball 12").classList.add("noShow");
-	document.getElementById("ball 13").classList.add("noShow");
-	document.getElementById("ball 14").classList.add("noShow");
-	document.getElementById("ball 15").classList.add("noShow");
-} else if (getStorageItem("gameType") === "game4"){
-	document.getElementById("ball 10").classList.remove("noShow");
-	document.getElementById("ball 11").classList.add("noShow");
-	document.getElementById("ball 12").classList.add("noShow");
-	document.getElementById("ball 13").classList.add("noShow");
-	document.getElementById("ball 14").classList.add("noShow");
-	document.getElementById("ball 15").classList.add("noShow");
-} else {
-	document.getElementById("ball 10").classList.remove("noShow");
-	document.getElementById("ball 11").classList.remove("noShow");
-	document.getElementById("ball 12").classList.remove("noShow");
-	document.getElementById("ball 13").classList.remove("noShow");
-	document.getElementById("ball 14").classList.remove("noShow");
-	document.getElementById("ball 15").classList.remove("noShow");
-}
+document.getElementById("p1NameTxt").value = getStorageItem("p1NameCtrlPanel");
+document.getElementById("p2NameTxt").value = getStorageItem("p2NameCtrlPanel");
 document.getElementById("raceInfoTxt").value = getStorageItem("raceInfo");
 document.getElementById("gameInfoTxt").value = getStorageItem("gameInfo");
 document.getElementById("verNum").innerHTML = versionNum;
+// document.getElementById("psVerNum").innerHTML = psVersionNum;
 postNames(); postInfo(); startThemeCheck();
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
