@@ -227,92 +227,108 @@ free to use and modify and use as long as this copyright statment remains intact
             </div> <!-- General Settings Tab-->
             <!-- Position Config Tab -->
             <div id="PositionConfig" class="tabcontent">  
-                All Positions and Font size are in px (pixels). Positions refer to the center of the object.
+                All Positions and Font size are in px (pixels). Additional CSS must be in valid CSS format e.g. border: none;
                 <div class="section-header" id="uiSettingLabel">Race Info</div>               
                 <div class="column">
-                    <div><text id="raceInfoLeft">Left&nbsp</text><input type="text" id="raceInfoLeftTxt" style="width:80px;" onchange="positionConfigChange(this)"></div>
-                    <div><text id="raceInfoTop">Top&nbsp</text><input type="text" id="raceInfoTopTxt"" style="width:80px;" onchange="positionConfigChange(this)"></div>
-                    <div><text id="raceInfoHeight">Height&nbsp</text><input type="text" id="raceInfoHeightTxt" style="width:80px;" onchange="positionConfigChange(this)"></div>
-                    <div><text id="raceInfoFont">Font Size&nbsp</text><input type="text" id="raceInfoFontTxt" style="width:80px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="raceInfoLeft">Centre&nbsp</text><input type="text" id="raceInfoLeftTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="raceInfoTop">Top&nbsp</text><input type="text" id="raceInfoTopTxt"" style="width:50px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="raceInfoHeight">Height&nbsp</text><input type="text" id="raceInfoHeightTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="raceInfoWidth">Width&nbsp</text><input type="text" id="raceInfoWidthTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="raceInfoFont">Font Size&nbsp</text><input type="text" id="raceInfoFontTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
                 </div>
                 <div class="column">
                     <div><text id="raceInfoCSS">Additional CSS&nbsp</text><input type="text" id="raceInfoCSSTxt" style="width: 100px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="raceInfoFG">Foreground Colour&nbsp</text><input type="color" id="raceInfoFGTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"></div>
                     <div><text id="raceInfoBG">Background Colour&nbsp</text><input type="color" id="raceInfoBGTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"></div>
-                    <div><label for="raceInfoBGNoneCB" id="raceInfoBGNone">No Background&nbsp</label><input type="checkbox" id="raceInfoBGNoneCB" onchange="positionConfigChange(this)"></div>
+                    <div><label for="raceInfoBGNoneCB" id="raceInfoBGNone">No BG&nbsp</label><input type="checkbox" id="raceInfoBGNoneCB" onchange="positionConfigChange(this)"></div>
                 </div>
                 <div class="section-header" id="uiSettingLabel">Game Info</div>
                 <div class="column">
-                    <div><text id="gameInfoLeft">Left&nbsp</text><input type="text" id="gameInfoLeftTxt" style="width:80px;" onchange="positionConfigChange(this)"></div>
-                    <div><text id="gameInfoTop">Top&nbsp</text><input type="text" id="gameInfoTopTxt" style="width:80px;" onchange="positionConfigChange(this)"></div>
-                    <div><text id="gameInfoHeight">Height&nbsp</text><input type="text" id="gameInfoHeightTxt"style="width:80px;" onchange="positionConfigChange(this)"></div>
-                    <div><text id="gameInfoFont">Font Size&nbsp</text><input type="text" id="gameInfoFontTxt" style="width:80px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="gameInfoLeft">Centre&nbsp</text><input type="text" id="gameInfoLeftTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="gameInfoTop">Top&nbsp</text><input type="text" id="gameInfoTopTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="gameInfoHeight">Height&nbsp</text><input type="text" id="gameInfoHeightTxt"style="width:50px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="gameInfoWidth">Width&nbsp</text><input type="text" id="gameInfoWidthTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="gameInfoFont">Font Size&nbsp</text><input type="text" id="gameInfoFontTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
                 </div>
                 <div class="column">
                     <div><text id="gameInfoCSS">Additional CSS&nbsp</text><input type="text" id="gameInfoCSSTxt" style="width: 100px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="gameInfoFG">Foreground Colour&nbsp</text><input type="color" id="gameInfoFGTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"></div>
                     <div><text id="gameInfoBG">Background Colour&nbsp</text><input type="color" id="gameInfoBGTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"></div>
-                    <div><label for="gameInfoBGNoneCB" id="gameInfoBGNone">No Background&nbsp</label><input type="checkbox" id="gameInfoBGNoneCB" onchange="positionConfigChange(this)" onchange="positionConfigChange(this)"></div>
+                    <div><label for="gameInfoBGNoneCB" id="gameInfoBGNone">No BG&nbsp</label><input type="checkbox" id="gameInfoBGNoneCB" onchange="positionConfigChange(this)" onchange="positionConfigChange(this)"></div>
                 </div> 
                 <div class="section-header" id="uiSettingLabel">Ticker</div>
                 <div class="column">
-                    <div><text id="tickerLeft">Left&nbsp</text><input type="text" id="tickerLeftTxt" style="width:80px;" onchange="positionConfigChange(this)"></div>
-                    <div><text id="tickerTop">Top&nbsp</text><input type="text" id="tickerTopTxt"style="width:80px;" onchange="positionConfigChange(this)"></div>
-                    <div><text id="tickerHeight">Height&nbsp</text><input type="text" id="tickerHeightTxt" style="width:80px;" onchange="positionConfigChange(this)"></div>
-                    <div><text id="tickerFont">Font Size&nbsp</text><input type="text" id="tickerFontTxt" style="width:80px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="tickerLeft">Centre&nbsp</text><input type="text" id="tickerLeftTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="tickerTop">Top&nbsp</text><input type="text" id="tickerTopTxt"style="width:50px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="tickerHeight">Height&nbsp</text><input type="text" id="tickerHeightTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="tickerWidth">Width&nbsp</text><input type="text" id="tickerWidthTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="tickerFont">Font Size&nbsp</text><input type="text" id="tickerFontTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
                 </div>
                 <div class="column">
                     <div><text id="tickerCSS">Additional CSS&nbsp</text><input type="text" id="tickerCSSTxt" style="width: 100px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="tickerFG">Foreground Colour&nbsp</text><input type="color" id="tickerFGTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"></div>
                     <div><label for="tickerBGTxt" id="tickerBG">Background Colour&nbsp</label><input type="color" id="tickerBGTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"></div>
-                    <div><label for="tickerBGNoneCB" id="tickerBGNone">No Background&nbsp</label><input type="checkbox" id="tickerBGNoneCB" onchange="positionConfigChange(this)"></div>
+                    <div><label for="tickerBGNoneCB" id="tickerBGNone">No BG&nbsp</label><input type="checkbox" id="tickerBGNoneCB" onchange="positionConfigChange(this)"></div>
                 </div>                                
                 <div class="section-header" id="uiSettingLabel">Home Player Name</div>
                 <div class="column">
-                    <div><text id="hpNameLeft">Left&nbsp</text><input type="text" id="hpNameLeftTxt" style="width:80px;" onchange="positionConfigChange(this)"></div>
-                    <div><text id="hpNameTop">Top&nbsp</text><input type="text" id="hpNameTopTxt"style="width:80px;" onchange="positionConfigChange(this)"></div>
-                    <div><text id="hpNameHeight">Height&nbsp</text><input type="text" id="hpNameHeightTxt" style="width:80px;" onchange="positionConfigChange(this)"></div>
-                    <div><text id="hpNameFont">Font Size&nbsp</text><input type="text" id="hpNameFontTxt" style="width:80px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="hpNameLeft">Left&nbsp</text><input type="text" id="hpNameLeftTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="hpNameTop">Top&nbsp</text><input type="text" id="hpNameTopTxt"style="width:50px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="hpNameHeight">Height&nbsp</text><input type="text" id="hpNameHeightTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="hpNameWidth">Width&nbsp</text><input type="text" id="hpNameWidthTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="hpNameFont">Font Size&nbsp</text><input type="text" id="hpNameFontTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
                 </div>
                 <div class="column">
                     <div><text id="hpNameCSS">Additional CSS&nbsp</text><input type="text" id="hpNameCSSTxt" style="width: 100px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="hpNameFG">Foreground Colour&nbsp</text><input type="color" id="hpNameFGTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"></div>
                     <div><label for="hpNameBGTxt" id="hpNameBG">Background Colour&nbsp</label><input type="color" id="hpNameBGTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"></div>
-                    <div><label for="hpNameBGNoneCB" id="hpNameBGNone">No Background&nbsp</label><input type="checkbox" id="hpNameBGNoneCB" onchange="positionConfigChange(this)"></div>
+                </div> 
+                <div class="column">
+                    <div><label for="hpNameBGNoneCB" id="hpNameBGNone">No BG&nbsp</label><input type="checkbox" id="hpNameBGNoneCB" onchange="positionConfigChange(this)"></div>
                     <div><label for="hpNameBGGradientCB" id="hpNameBGGradient">Gradient&nbsp</label><input type="checkbox" id="hpNameBGGradientCB" onchange="positionConfigChange(this)"></div>
                 </div> 
                 <div class="section-header" id="uiSettingLabel">Away Player Name</div>
                 <div class="column">
-                    <div><text id="apNameLeft">Left&nbsp</text><input type="text" id="apNameLeftTxt" style="width:80px;" onchange="positionConfigChange(this)"></div>
-                    <div><text id="apNameTop">Top&nbsp</text><input type="text" id="apNameTopTxt"style="width:80px;" onchange="positionConfigChange(this)"></div>
-                    <div><text id="apNameHeight">Height&nbsp</text><input type="text" id="apNameHeightTxt" style="width:80px;" onchange="positionConfigChange(this)"></div>
-                    <div><text id="apNameFont">Font Size&nbsp</text><input type="text" id="apNameFontTxt" style="width:80px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="apNameLeft">Left&nbsp</text><input type="text" id="apNameLeftTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="apNameTop">Top&nbsp</text><input type="text" id="apNameTopTxt"style="width:50px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="apNameHeight">Height&nbsp</text><input type="text" id="apNameHeightTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="apNameWidth">Width&nbsp</text><input type="text" id="apNameWidthTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="apNameFont">Font Size&nbsp</text><input type="text" id="apNameFontTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
                 </div>
                 <div class="column">
                     <div><text id="apNameCSS">Additional CSS&nbsp</text><input type="text" id="apNameCSSTxt" style="width: 100px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="apNameFG">Foreground Colour&nbsp</text><input type="color" id="apNameFGTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"></div>
                     <div><label for="apNameBGTxt" id="apNameBG">Background Colour&nbsp</label><input type="color" id="apNameBGTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"></div>
-                    <div><label for="apNameBGNoneCB" id="apNameBGNone">No Background&nbsp</label><input type="checkbox" id="apNameBGNoneCB" onchange="positionConfigChange(this)"></div>
+                    <div><label for="apNameBGNoneCB" id="apNameBGNone">No BG&nbsp</label><input type="checkbox" id="apNameBGNoneCB" onchange="positionConfigChange(this)"></div>
                     <div><label for="apNameBGGradientCB" id="apNameBGGradient">Gradient&nbsp</label><input type="checkbox" id="apNameBGGradientCB" onchange="positionConfigChange(this)"></div>
                 </div>                 
                 <div class="section-header" id="uiSettingLabel">Home Player Score</div>
                 <div class="column">
-                    <div><text id="hpScoreLeft">Left&nbsp</text><input type="text" id="hpScoreLeftTxt" style="width:80px;" onchange="positionConfigChange(this)"></div>
-                    <div><text id="hpScoreTop">Top&nbsp</text><input type="text" id="hpScoreTopTxt"style="width:80px;" onchange="positionConfigChange(this)"></div>
-                    <div><text id="hpScoreHeight">Height&nbsp</text><input type="text" id="hpScoreHeightTxt" style="width:80px;" onchange="positionConfigChange(this)"></div>
-                    <div><text id="hpScoreFont">Font Size&nbsp</text><input type="text" id="hpScoreFontTxt" style="width:80px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="hpScoreLeft">Left&nbsp</text><input type="text" id="hpScoreLeftTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="hpScoreTop">Top&nbsp</text><input type="text" id="hpScoreTopTxt"style="width:50px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="hpScoreHeight">Height&nbsp</text><input type="text" id="hpScoreHeightTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="hpScoreWidth">Width&nbsp</text><input type="text" id="hpScoreWidthTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="hpScoreFont">Font Size&nbsp</text><input type="text" id="hpScoreFontTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
                 </div>
                 <div class="column">
                     <div><text id="hpScoreCSS">Additional CSS&nbsp</text><input type="text" id="hpScoreCSSTxt" style="width: 100px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="hpScoreFG">Foreground Colour&nbsp</text><input type="color" id="hpScoreFGTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"></div>
                     <div><label for="hpScoreBGTxt" id="hpScoreBG">Background Colour&nbsp</label><input type="color" id="hpScoreBGTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"></div>
-                    <div><label for="hpScoreBGNoneCB" id="hpScoreBGNone">No Background&nbsp</label><input type="checkbox" id="hpScoreBGNoneCB" onchange="positionConfigChange(this)"></div>
+                    <div><label for="hpScoreBGNoneCB" id="hpScoreBGNone">No BG&nbsp</label><input type="checkbox" id="hpScoreBGNoneCB" onchange="positionConfigChange(this)"></div>
                 </div>                                
                 <div class="section-header" id="uiSettingLabel">Away Player Score</div>
                 <div class="column">
-                    <div><text id="apScoreLeft">Left&nbsp</text><input type="text" id="apScoreLeftTxt" style="width:80px;" onchange="positionConfigChange(this)"></div>
-                    <div><text id="apScoreTop">Top&nbsp</text><input type="text" id="apScoreTopTxt"style="width:80px;" onchange="positionConfigChange(this)"></div>
-                    <div><text id="apScoreHeight">Height&nbsp</text><input type="text" id="apScoreHeightTxt" style="width:80px;" onchange="positionConfigChange(this)"></div>
-                    <div><text id="apScoreFont">Font Size&nbsp</text><input type="text" id="apScoreFontTxt" style="width:80px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="apScoreLeft">Left&nbsp</text><input type="text" id="apScoreLeftTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="apScoreTop">Top&nbsp</text><input type="text" id="apScoreTopTxt"style="width:50px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="apScoreHeight">Height&nbsp</text><input type="text" id="apScoreHeightTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="apScoreWidth">Width&nbsp</text><input type="text" id="hpScoreWidthTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="apScoreFont">Font Size&nbsp</text><input type="text" id="apScoreFontTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
                 </div>
                 <div class="column">
                     <div><text id="apScoreCSS">Additional CSS&nbsp</text><input type="text" id="apScoreCSSTxt" style="width: 100px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="apScoreFG">Foreground Colour&nbsp</text><input type="color" id="apScoreFGTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"></div>
                     <div><label for="apScoreBGTxt" id="apScoreBG">Background Colour&nbsp</label><input type="color" id="apScoreBGTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"></div>
-                    <div><label for="apScoreBGNoneCB" id="apScoreBGNone">No Background&nbsp</label><input type="checkbox" id="apScoreBGNoneCB" onchange="positionConfigChange(this)"></div>
+                    <div><label for="apScoreBGNoneCB" id="apScoreBGNone">No BG&nbsp</label><input type="checkbox" id="apScoreBGNoneCB" onchange="positionConfigChange(this)"></div>
                 </div> 
 
 
