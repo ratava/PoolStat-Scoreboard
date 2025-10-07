@@ -19,34 +19,14 @@
 let client = null;
 const extraDebug = true;
 
-function updateTabVisibility() {
-    // Get the state of the player settings
-    // const player1Enabled = document.getElementById("usePlayer1Setting").checked;
-    // const player2Enabled = document.getElementById("usePlayer2Setting").checked;
-	// const clockEnabled = document.getElementById("useClockSetting").checked;
-	// const poolStatEnabled = document.getElementById("poolStatCheckbox").checked;
-
-    // Determine if both players are enabled
-    // const bothPlayersEnabled = player1Enabled && player2Enabled;
-
-    // Get tab elements
-    // const scoringTab = document.getElementById("scoringTab");
-	// const poolStatTab = document.getElementById("poolStatTab");
-
-    // // Show or hide the scoring tab
-    // scoringTab.style.display = bothPlayersEnabled ? "inline-block" : "none";
-	// scoringTab.style.display = poolStatEnabled ? "none" : "inline-block";
-	// poolStatTab.style.display = poolStatEnabled ? "inline-block" : "none";
-}
 
 // Call updateTabVisibility on page load to set initial tab visibility
-document.addEventListener("DOMContentLoaded", function() {
-	updateTabVisibility();
-	//check if we are using PoolStat Live Stream and connect if setup.
-	if (getStorageItem("PoolStatRigID") != null) {
-		connectPSLiveStream();
-	}
-});
+// document.addEventListener("DOMContentLoaded", function() {
+// 	//check if we are using PoolStat Live Stream and connect if setup.
+// 	if (getStorageItem("PoolStatRigId") != null) {
+// 		connectPSLiveStream();
+// 	}
+// });
 
 //main function to update scoreboard from PoolStat Live Stream
 function poolstatUpdate(updateJSON) {
@@ -329,7 +309,7 @@ function stopOBSStream() {
 //main function to connect to PoolStat Live Stream
 //including handling messages
 function connectPSLiveStream() {
-	const psRigId = getStorageItem("PoolStatRigID");
+	const psRigId = getStorageItem("PoolStatRigId");
 	console.log(psRigId);
     const host = 'wss://btim.brellahost.com.au:9001/'
     const options = {
@@ -438,7 +418,25 @@ document.addEventListener("DOMContentLoaded", function() {
         // Otherwise default to the first tab
         document.querySelector(".tablinks").click();
     }
+	if (getStorageItem("PoolStatRigId") != null) {
+		connectPSLiveStream();
+	}	
 });
+
+//document.addEventListener("change", positionConfigChange(data));
+
+function positionConfigChange(inputElement){
+	console.log(inputElement.value + " " + inputElement.id);
+	if (inputElement.id.includes('CB')) {
+		if (inputElement.checked) {
+			setStorageItem(inputElement.id, "true");
+		} else {
+			setStorageItem(inputElement.id, "false");
+		}
+	} else {
+		setStorageItem(inputElement.id, inputElement.value);
+	}
+}
 
 // Function to save the opacity value to localStorage
 function saveOpacity() {
@@ -587,19 +585,37 @@ function playerSetting(player) {
     updateTabVisibility();
 }
 
+function poolStatConfigRaceInfo() {
+    var usePoolStatConfigRaceInfo = document.getElementById("raceInfoEnableCB");
+    var isChecked = usePoolStatConfigRaceInfo.checked;
+    var storageValue = isChecked ? "true" : "false";
+    
+	console.log(`Show Race Info ${isChecked}`);
+    setStorageItem("useRaceInfo", storageValue);
+}
+
+function poolStatConfigGameInfo() {
+    var usePoolStatConfigGameInfo = document.getElementById("gameInfoEnableCB");
+    var isChecked = usePoolStatConfigGameInfo.checked;
+    var storageValue = isChecked ? "true" : "false";
+    
+	console.log(`Show Game Info ${isChecked}`);
+    setStorageItem("useGameInfo", storageValue);
+}
+
 function poolStatConfigTicker() {
-    var usePoolStatConfigTicker = document.getElementById("poolStatConfigTickerCheckbox");
+    var usePoolStatConfigTicker = document.getElementById("tickerEnableCB");
     var isChecked = usePoolStatConfigTicker.checked;
-    var storageValue = isChecked ? "yes" : "no";
+    var storageValue = isChecked ? "true" : "false";
     
 	console.log(`Use PoolStat Ticker ${isChecked}`);
     setStorageItem("usePoolStatTicker", storageValue);
 }
 
 function poolStatConfigBreakingPlayer() {
-    var usePoolStatConfigBreakingPlayer = document.getElementById("poolStatConfigBreakingPlayerCheckbox");
+    var usePoolStatConfigBreakingPlayer = document.getElementById("bpEnableCB");
     var isChecked = usePoolStatConfigBreakingPlayer.checked;
-    var storageValue = isChecked ? "yes" : "no";
+    var storageValue = isChecked ? "true" : "false";
     
 	console.log(`Use PoolStat Breaking Player ${isChecked}`);
     setStorageItem("usePoolStatBreakingPlayer", storageValue);
@@ -641,8 +657,8 @@ function clearGame() {
 function postNames(p1namemsg, p2namemsg) {
 	console.log('p1: ' + p1namemsg);
 	console.log('p2: ' + p2namemsg);
-	bc.postMessage({ player: '1', name: p1namemsg });
-	bc.postMessage({ player: '2', name: p2namemsg });
+	//bc.postMessage({ player: '1', name: p1namemsg });
+	//bc.postMessage({ player: '2', name: p2namemsg });
 	setStorageItem("p1NameCtrlPanel", p1namemsg);
 	setStorageItem("p2NameCtrlPanel", p2namemsg);
 }
@@ -650,8 +666,8 @@ function postNames(p1namemsg, p2namemsg) {
 function postInfo(racemsg, gamemsg) {
 	if (extraDebug) {console.log('racemsg: ' + racemsg);}
 	if (extraDebug) {console.log('gamemsg: ' + gamemsg);}
-	bc.postMessage({ race: racemsg });
-	bc.postMessage({ game: gamemsg });	
+	//bc.postMessage({ race: racemsg });
+	//bc.postMessage({ game: gamemsg });	
 	setStorageItem("raceInfo", raceInfoTxt.value);
 	setStorageItem("gameInfo", gameInfoTxt.value);
 }

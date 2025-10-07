@@ -10,57 +10,6 @@ html, body {
     /* background: #333232;  For testing */
 }
 
-/* Slideshow container */
-#logoSlideshowDiv {
-    position: fixed;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 5;
-    width: fit-content;
-    height: fit-content;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-}
-
-.mySlides {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-}
-
-#customLogo3, #customLogo4, #customLogo5 {
-    height: 50vh;
-    width: auto;
-    max-width: 80vw;
-    object-fit: contain;
-    position: relative;
-}
-
-#videoContainer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Win animation */
-.webm-animation {
-    position: relative;
-    width: 50%;
-    height: 50%;
-    background: transparent;
-}
 
 #gameInfoWrapper {
     position: flex;
@@ -70,7 +19,7 @@ html, body {
 }
 
 #gameInfo {
-    position: flex;
+    position: fixed;
     text-align: center;
     background: #3679dd;
     font-size: calc(var(--small-font-size) * var(--ui-scaling));
@@ -85,7 +34,7 @@ html, body {
 }
 
 #raceInfo {
-    position: flex;
+    position: fixed;
     text-align: center;
     background: #3679dd;
     font-size: calc(var(--small-font-size) * var(--ui-scaling));
@@ -99,31 +48,19 @@ html, body {
     max-width: max-content;
 }
 
-
-#ballTrackerWorld, #ballTrackerInternational {
+#ticker {
     position: fixed;
-    padding: 4px;
-    top: 15%;
-    right: 1%; 
-    z-index: 3;
-    background-color: rgba(128, 128, 128, 0.7); /* Opaque grey with 70% opacity */
+    text-align: center;
+    background: #3679dd;
+    font-size: calc(var(--small-font-size) * var(--ui-scaling));
+    font-weight: bold;
+    color: white;
+    -webkit-text-stroke: 1px black;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.6);
+    padding: 5px 10px;
+    margin: 0 5px 0 5px;
     border: 2px solid black;
-    border-radius: 30px;
-    min-width: fit-content;
-    max-width: fit-content;
-}
-
-.ball {
-    padding: 4px;
-    display: flex;
-    align-items: center;
-    line-height: 1;
-    vertical-align: top;
-}
-
-.ball img {
-    /* display: block; */
-    width: calc(41px * var(--ui-scaling));
+    max-width: max-content;
 }
 
 /* Main container */
@@ -141,56 +78,9 @@ html, body {
     margin-right: auto;
 }
 
-/* Add this new class */
-.shotclock-container {
-    display: flex;
-    flex-direction: column; /* Stack shotClock and shotClockVis vertically */
-    align-items: center;
-    width: calc(85% * var(--ui-scaling));
-    margin-bottom: calc(5px * var(--ui-scaling));; /* Space between shotclock-container and scoreBoard */
-}
-
-/* Update shotClock styling */
-#shotClock {
-    display: flex;
-    justify-content: center;
-    background: rgba(255,255,255,1);
-    font-size: calc(var(--small-font-size) * var(--ui-scaling));
-    font-weight: bold;
-    text-align: center;
-    border: 1px solid black;
-    padding: 0 10px;
-    margin-bottom: calc(5px * var(--ui-scaling));;
-    align-items: center;
-    width: fit-content;
-}
-
-/* Update shotclockvis styling */
-#shotClockVis {
-    height: 3px;
-    background: #fff;
-    border-radius: 5px;
-}
-
-.startTimer {
-    width: 0 !important;
-    transition: width 30s linear !important;
-    transform-origin: left center;
-}
-
-.start60 {
-    width: 0 !important;
-    transition: width 60s linear !important;
-    transform-origin: left center;
-}
-
-.shotRed {
-    color:white;
-}
-
 /* Scoreboard layout */
 #scoreBoard {
-    position: relative;
+    /* position: fixed; */
     display: flex;
     flex-direction: row; /* Keep the row layout for player sections */
     justify-content: flex-start;
@@ -203,31 +93,30 @@ html, body {
 /* Player containers */
 .player-container {
     display: flex;
-    position: relative;
+    /* position: fixed; */
     flex-direction: row;
     align-items: center;
 }
 
 .player-container.left {
     justify-content: flex-end;
-    /* margin-right: 5px; */
 }
 
 .player-container.right {
     justify-content: flex-start;
-    /* margin-left: 5px; */
 }
 
 /* Player names */
-#player1Name, #player2Name {
-    position: relative;
-    background: rgba(255,255,255,1);
-    text-shadow: 1px 1px 2px black, 0 0 25px black, 0 0 5px black;
+#hpName, #apName {
+    position: fixed;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    /* text-shadow: 1px 1px 2px black, 0 0 25px black, 0 0 5px black; */
     -webkit-text-stroke: 1px black;
-    font-size: calc(var(--standard-font-size) * var(--ui-scaling));
-    /* font-size: calc(32px * var(--ui-scaling)); */
     color: white;
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.6);
+    /* box-shadow: 0 8px 16px 0 rgba(0,0,0,0.6); */
     font-weight: bold;
     text-align: center;
     width: calc(550px * var(--ui-scaling));
@@ -237,20 +126,17 @@ html, body {
     z-index: 2;
 }
 
-#player1Name {
-    background-image: linear-gradient(to left, white, steelblue);
+/* #hpName {
     padding: 5px 15px;
 }
 
-#player2Name {
-    background-image: linear-gradient(to right, white, steelblue);
+#apName {
     padding: 5px 15px;
-}
+} */
 
 .score-logo-container {
     position: relative;
     display: inline-block;
-
 }
 
 .score-ball-container {
@@ -262,29 +148,31 @@ html, body {
 }
 
 /* Scores */
-#player1Score, #player2Score {
-    position: relative;
-    text-align: center;
-    background: #ed4e54;
-    font-size: calc(var(--standard-font-size) * var(--ui-scaling));
+#hpScore, #apScore {
+    position: fixed;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    /* background: #ed4e54; */
+    /* font-size: calc(var(--standard-font-size) * var(--ui-scaling)); */
     font-weight: bold;
     color: white;
     -webkit-text-stroke: 1px black;
-    padding: 5px 10px;
+    /* padding: 5px 10px; */
     border: solid black;
-    z-index: 2;
+    z-index: 3;
 }
 
-#player1Score {
-    border-width:2px 2px 2px 0; /* No left border */
-    margin: 0 5px 0 0;
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.6);
+#hpScore {
+    border-width:2px 2px 2px 2px; /* No left border */
+    /* box-shadow: 0 8px 16px 0 rgba(0,0,0,0.6); */
 }
 
-#player2Score {
-    border-width:2px 0 2px 2px; /* No right border */
-    margin: 0 0 0 5px;
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.6);
+#apScore {
+    border-width:2px 2px 2px 2px; /* No right border */
+
+    /* box-shadow: 0 8px 16px 0 rgba(0,0,0,0.6); */
 }
 
 /* Custom logos */
@@ -315,7 +203,7 @@ html, body {
     display: inline-block;
 }
 /* Extension icons */
-#p1ExtIcon, #p2ExtIcon {
+#hpExtIcon, #apExtIcon {
     background: green;
     border: solid black;
     color: white;
