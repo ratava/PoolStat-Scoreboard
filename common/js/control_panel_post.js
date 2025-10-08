@@ -229,7 +229,17 @@ function intiializePositionConfig() {
 		"apScoreCSSTxt",
 		"apScoreFGTxt",
 		"apScoreBGTxt",
-		"apScoreBGNoneCB"
+		"apScoreBGNoneCB",
+		"hpImageLeftTxt",
+		"hpImageTopTxt",
+		"hpImageHeightTxt",
+		"hpImageWidthTxt",
+		"hpImageCSSTxt",
+		"apImageLeftTxt",
+		"apImageTopTxt",
+		"apImageHeightTxt",
+		"apImageWidthTxt",
+		"apImageCSSTxt"
 	];
 
 	configArray.forEach(function(item) {
@@ -240,10 +250,14 @@ function intiializePositionConfig() {
 				if (getStorageItem("raceInfoTopTxt") == null) {setStorageItem("raceInfoTopTxt", "20px")}
 			case "raceInfoHeightTxt":
 				if (getStorageItem("raceInfoHeightTxt") == null) {setStorageItem("raceInfoHeightTxt", "40px")}
+			case "raceInfoWidthTxt":
+				if (getStorageItem("raceInfoWidthTxt") == null) {setStorageItem("raceInfoWidthTxt", "300px")}				
 			case "raceInfoFontTxt":
 				if (getStorageItem("raceInfoFontTxt") == null) {setStorageItem("raceInfoFontTxt", "32px")}
 			case "raceInfoCSSTxt":
 				if (getStorageItem("raceInfoCSSTxt") == null) {setStorageItem("raceInfoCSSTxt", "")}
+			case "raceInfoFGTxt":
+				if (getStorageItem("raceInfoFGTxt") == null) {setStorageItem("raceInfoFGTxt", "#ffffff")}
 			case "raceInfoBGTxt":
 				if (getStorageItem("raceInfoBGTxt") == null) {setStorageItem("raceInfoBGTxt", "#3679dd")}
 			case "raceInfoBGNoneCB":
@@ -254,10 +268,14 @@ function intiializePositionConfig() {
 				if (getStorageItem("gameInfoTopTxt") == null) {setStorageItem("gameInfoTopTxt", "20px")}
 			case "gameInfoHeightTxt":
 				if (getStorageItem("gameInfoHeightTxt") == null) {setStorageItem("gameInfoHeightTxt", "40px")}
+			case "gameInfoWidthTxt":
+				if (getStorageItem("gameInfoWidthTxt") == null) {setStorageItem("gameInfoWidthTxt", "300px")}				
 			case "gameInfoFontTxt":
 				if (getStorageItem("gameInfoFontTxt") == null) {setStorageItem("gameInfoFontTxt", "32px")}
 			case "gameInfoCSSTxt":
 				if (getStorageItem("gameInfoCSSTxt") == null) {setStorageItem("gameInfoCSSTxt", "")}
+			case "gameInfoFGTxt":
+				if (getStorageItem("gameInfoFGTxt") == null) {setStorageItem("gameInfoFGTxt", "#ffffff")}
 			case "gameInfoBGTxt":
 				if (getStorageItem("gameInfoBGTxt") == null) {setStorageItem("gameInfoBGTxt", "#3679dd")}
 			case "gameInfoBGNoneCB":
@@ -268,10 +286,16 @@ function intiializePositionConfig() {
 				if (getStorageItem("tickerTopTxt") == null) {setStorageItem("tickerTopTxt", "80px")}
 			case "tickerHeightTxt":
 				if (getStorageItem("tickerHeightTxt") == null) {setStorageItem("tickerHeightTxt", "40px")}
+			case "tickerWidthTxt":
+				if (getStorageItem("tickerWidthTxt") == null) {setStorageItem("tickerWidthTxt", "40px")}				
+			case "tickerWidthTxt":
+				if (getStorageItem("tickerInfoWidthTxt") == null) {setStorageItem("tickerInfoWidthTxt", "300px")}				
 			case "tickerFontTxt":
 				if (getStorageItem("tickerFontTxt") == null) {setStorageItem("tickerFontTxt", "32px")}
 			case "tickerCSSTxt":
 				if (getStorageItem("tickerCSSTxt") == null) {setStorageItem("tickerCSSTxt", "")}
+			case "tickerFGTxt":
+				if (getStorageItem("tickerFGTxt") == null) {setStorageItem("tickerFGTxt", "#ffffff")}
 			case "tickerBGTxt":
 				if (getStorageItem("tickerBGTxt") == null) {setStorageItem("tickerBGTxt", "#3679dd")}
 			case "tickerBGNoneCB":
@@ -282,10 +306,14 @@ function intiializePositionConfig() {
 				if (getStorageItem("hpNameTopTxt") == null) {setStorageItem("hpNameTopTxt", "1010px")}
 			case "hpNameHeightTxt":
 				if (getStorageItem("hpNameHeightTxt") == null) {setStorageItem("hpNameHeightTxt", "60px")}
+			case "hpNameWidthTxt":
+				if (getStorageItem("hpNameWidthTxt") == null) {setStorageItem("hpNameWidthTxt", "550px")}				
 			case "hpNameFontTxt":
-				if (getStorageItem("hpNameFontTxt") == null) {setStorageItem("hpNameFontTxt", "32px")}
+				if (getStorageItem("hpNameFontTxt") == null) {setStorageItem("hpNameFontTxt", "50px")}
 			case "hpNameCSSTxt":
 				if (getStorageItem("hpNameCSSTxt") == null) {setStorageItem("hpNameCSSTxt", "")}
+			case "hpNameFGTxt":
+				if (getStorageItem("hpNameFGTxt") == null) {setStorageItem("hpNameFGTxt", "#ffffff")}
 			case "hpNameBGTxt":
 				if (getStorageItem("hpNameBGTxt") == null) {setStorageItem("hpNameBGTxt", "#f72696")}
 			case "hpNameBGNoneCB":
@@ -298,10 +326,14 @@ function intiializePositionConfig() {
 				if (getStorageItem("apNameTopTxt") == null) {setStorageItem("apNameTopTxt", "1010px")}
 			case "apNameHeightTxt":
 				if (getStorageItem("apNameHeightTxt") == null) {setStorageItem("apNameHeightTxt", "60px")}
+			case "apNameWidthTxt":
+				if (getStorageItem("apNameWidthTxt") == null) {setStorageItem("apNameWidthTxt", "550px")}	
 			case "apNameFontTxt":
-				if (getStorageItem("apNameFontTxt") == null) {setStorageItem("apNameFontTxt", "32px")}
+				if (getStorageItem("apNameFontTxt") == null) {setStorageItem("apNameFontTxt", "50px")}
 			case "apNameCSSTxt":
 				if (getStorageItem("apNameCSSTxt") == null) {setStorageItem("apNameCSSTxt", "")}
+			case "apNameFGTxt":
+				if (getStorageItem("apNameFGTxt") == null) {setStorageItem("apNameFGTxt", "#ffffff")}
 			case "apNameBGTxt":
 				if (getStorageItem("apNameBGTxt") == null) {setStorageItem("apNameBGTxt", "#e7f708")}
 			case "apNameBGNoneCB":
@@ -313,11 +345,15 @@ function intiializePositionConfig() {
 			case "hpScoreTopTxt":
 				if (getStorageItem("hpScoreTopTxt") == null) {setStorageItem("hpScoreTopTxt", "1010px")}
 			case "hpScoreHeightTxt":
-				if (getStorageItem("hpScoreHeightTxt") == null) {setStorageItem("hpScoreHeightTxt", "40px")}
+				if (getStorageItem("hpScoreHeightTxt") == null) {setStorageItem("hpScoreHeightTxt", "80px")}
+			case "hpScoreWidthTxt":
+				if (getStorageItem("hpScoreWidthTxt") == null) {setStorageItem("hpScoreWidthTxt", "80px")}	
 			case "hpScoreFontTxt":
-				if (getStorageItem("hpScoreFontTxt") == null) {setStorageItem("hpScoreFontTxt", "32px")}
+				if (getStorageItem("hpScoreFontTxt") == null) {setStorageItem("hpScoreFontTxt", "70px")}
 			case "hpScoreCSSTxt":
 				if (getStorageItem("hpScoreCSSTxt") == null) {setStorageItem("hpScoreCSSTxt", "")}
+			case "hpScoreGTxt":
+				if (getStorageItem("hpScoreFGTxt") == null) {setStorageItem("hpScoreFGTxt", "#ffffff")}
 			case "hpScoreBGTxt":
 				if (getStorageItem("hpScoreBGTxt") == null) {setStorageItem("hpScoreBGTxt", "#f75555")}
 			case "hpScoreBGNoneCB":
@@ -328,14 +364,38 @@ function intiializePositionConfig() {
 				if (getStorageItem("apScoreTopTxt") == null) {setStorageItem("apScoreTopTxt", "1010px")}
 			case "apScoreHeightTxt":
 				if (getStorageItem("apScoreHeightTxt") == null) {setStorageItem("apScoreHeightTxt", "80px")}
+			case "apScoreWidthTxt":
+				if (getStorageItem("apScoreWidthTxt") == null) {setStorageItem("apScoreWidthTxt", "80px")}	
 			case "apScoreFontTxt":
-				if (getStorageItem("apScoreFontTxt") == null) {setStorageItem("apScoreFontTxt", "32px")}
+				if (getStorageItem("apScoreFontTxt") == null) {setStorageItem("apScoreFontTxt", "70px")}
 			case "apScoreCSSTxt":
 				if (getStorageItem("apScoreCSSTxt") == null) {setStorageItem("apScoreCSSTxt", "")}
+			case "apScoreFGTxt":
+				if (getStorageItem("apScoreFGTxt") == null) {setStorageItem("apScoreFGTxt", "#ffffff")}
 			case "apScoreBGTxt":
 				if (getStorageItem("apScoreBGTxt") == null) {setStorageItem("apScoreBGTxt", "#f75555")}
 			case "apScoreBGNoneCB":
 				if (getStorageItem("apScoreBGNoneCB") == null) {setStorageItem("apScoreBGNoneCB", "false")}					
+			case "hpImageLeftTxt":
+				if (getStorageItem("hpImageLeftTxt") == null) {setStorageItem("hpImageLeftTxt", "false")}					
+			case "hpImageTopTxt":
+				if (getStorageItem("hpImageTopTxt") == null) {setStorageItem("hpImageTopTxt", "false")}					
+			case "hpImageHeightTxt":
+				if (getStorageItem("hpImageHeightTxt") == null) {setStorageItem("hpImageHeightTxt", "false")}					
+			case "hpImagewidthTxt":
+				if (getStorageItem("hpImageWidthTxt") == null) {setStorageItem("hpImageWidthTxt", "false")}					
+			case "hpImageCSSTxt":
+				if (getStorageItem("hpImageCSSTxt") == null) {setStorageItem("hpImageCSSTxt", "false")}					
+			case "apImageLeftTxt":
+				if (getStorageItem("hpImageLeftTxt") == null) {setStorageItem("hpImageLeftTxt", "false")}					
+			case "apImageTopTxt":
+				if (getStorageItem("hpImageTopTxt") == null) {setStorageItem("hpImageTopTxt", "false")}					
+			case "apImageHeightTxt":
+				if (getStorageItem("hpImageHeightTxt") == null) {setStorageItem("hpImageHeightTxt", "false")}					
+			case "apImagewidthTxt":
+				if (getStorageItem("apImageWidthTxt") == null) {setStorageItem("apImageWidthTxt", "false")}					
+			case "apImageCSSTxt":
+				if (getStorageItem("apImageCSSTxt") == null) {setStorageItem("apImageCSSTxt", "false")}					
 		}
 	});
 	
@@ -358,8 +418,10 @@ function intiializePositionConfig() {
 		"raceInfoLeftTxt": getStorageItem("raceInfoLeftTxt"),
 		"raceInfoTopTxt": getStorageItem("raceInfoTopTxt"),
 		"raceInfoHeightTxt": getStorageItem("raceInfoHeightTxt"),
+		"raceInfoWidthTxt": getStorageItem("raceInfoWidthTxt"),
 		"raceInfoFontTxt": getStorageItem("raceInfoFontTxt"),
 		"raceInfoCSSTxt": getStorageItem("raceInfoCSSTxt"),
+		"raceInfoFGTxt": getStorageItem("raceInfoFGTxt"),
 		"raceInfoBGTxt": getStorageItem("raceInfoBGTxt"),
 		"raceInfoBGNoneCB":getStorageItem("raceInfoBGNoneCB")
 	};
@@ -370,8 +432,10 @@ function intiializePositionConfig() {
 		"gameInfoLeftTxt": getStorageItem("gameInfoLeftTxt"),
 		"gameInfoTopTxt": getStorageItem("gameInfoTopTxt"),
 		"gameInfoHeightTxt": getStorageItem("gameInfoHeightTxt"),
+		"gameInfoWidthTxt": getStorageItem("gameInfoWidthTxt"),
 		"gameInfoFontTxt": getStorageItem("gameInfoFontTxt"),
 		"gameInfoCSSTxt": getStorageItem("gameInfoCSSTxt"),
+		"gameInfoFGTxt": getStorageItem("gameInfoFGTxt"),
 		"gameInfoBGTxt": getStorageItem("gameInfoBGTxt"),
 		"gameInfoBGNoneCB": getStorageItem("gameInfoBGNoneCB")
 	};
@@ -382,8 +446,10 @@ function intiializePositionConfig() {
 		"tickerLeftTxt": getStorageItem("tickerLeftTxt"),
 		"tickerTopTxt": getStorageItem("tickerTopTxt"),
 		"tickerHeightTxt": getStorageItem("tickerHeightTxt"),
+		"tickerWidthTxt": getStorageItem("tickerWidthTxt"),
 		"tickerFontTxt": getStorageItem("tickerFontTxt"),
 		"tickerCSSTxt": getStorageItem("tickerCSSTxt"),
+		"tickerFGTxt": getStorageItem("tickerFGTxt"),
 		"tickerBGTxt": getStorageItem("tickerBGTxt"),
 		"tickerBGNoneCB": getStorageItem("tickerBGNoneCB")
 	};
@@ -393,8 +459,10 @@ function intiializePositionConfig() {
 		"hpNameLeftTxt": getStorageItem("hpNameLeftTxt"),
 		"hpNameTopTxt": getStorageItem("hpNameTopTxt"),
 		"hpNameHeightTxt": getStorageItem("hpNameHeightTxt"),
+		"hpNameWidthTxt": getStorageItem("hpNameWidthTxt"),
 		"hpNameFontTxt": getStorageItem("hpNameFontTxt"),
 		"hpNameCSSTxt": getStorageItem("hpNameCSSTxt"),
+		"hpNameFGTxt": getStorageItem("hpNameFGTxt"),
 		"hpNameBGTxt": getStorageItem("hpNameBGTxt"),
 		"hpNameBGNoneCB": getStorageItem("hpNameBGNoneCB"),
 		"hpNameBGGradientCB": getStorageItem("hpNameBGGradientCB")
@@ -405,8 +473,10 @@ function intiializePositionConfig() {
 		"apNameLeftTxt": getStorageItem("apNameLeftTxt"),
 		"apNameTopTxt": getStorageItem("apNameTopTxt"),
 		"apNameHeightTxt": getStorageItem("apNameHeightTxt"),
+		"apNameWidthTxt": getStorageItem("apNameWidthTxt"),
 		"apNameFontTxt": getStorageItem("apNameFontTxt"),
 		"apNameCSSTxt": getStorageItem("apNameCSSTxt"),
+		"apNameFGTxt": getStorageItem("apNameFGTxt"),
 		"apNameBGTxt": getStorageItem("apNameBGTxt"),
 		"apNameBGNoneCB": getStorageItem("apNameBGNoneCB"),
 		"apNameBGGradientCB": getStorageItem("apNameBGGradientCB")
@@ -417,8 +487,10 @@ function intiializePositionConfig() {
 		"hpScoreLeftTxt": getStorageItem("hpScoreLeftTxt"),
 		"hpScoreTopTxt": getStorageItem("hpScoreTopTxt"),
 		"hpScoreHeightTxt": getStorageItem("hpScoreHeightTxt"),
+		"hpScoreWidthTxt": getStorageItem("hpScoreWidthTxt"),
 		"hpScoreFontTxt": getStorageItem("hpScoreFontTxt"),
 		"hpScoreCSSTxt": getStorageItem("hpScoreCSSTxt"),
+		"hpScoreFGTxt": getStorageItem("hpScoreFGTxt"),
 		"hpScoreBGTxt": getStorageItem("hpScoreBGTxt"),
 		"hpScoreBGNoneCB": getStorageItem("hpScoreBGNoneCB")
 	};
@@ -428,12 +500,34 @@ function intiializePositionConfig() {
 		"apScoreLeftTxt": getStorageItem("apScoreLeftTxt"),
 		"apScoreTopTxt": getStorageItem("apScoreTopTxt"),
 		"apScoreHeightTxt": getStorageItem("apScoreHeightTxt"),
+		"apScoreWidthTxt": getStorageItem("apScoreWidthTxt"),
 		"apScoreFontTxt": getStorageItem("apScoreFontTxt"),
 		"apScoreCSSTxt": getStorageItem("apScoreCSSTxt"),
+		"apScoreFGTxt": getStorageItem("apScoreFGTxt"),
 		"apScoreBGTxt": getStorageItem("apScoreBGTxt"),
 		"apScoreBGNoneCB": getStorageItem("apScoreBGNoneCB")
 	};
 	bc.postMessage({"apScore": apScoreObject});
+
+	const hpImageObject = {
+		"hpImageLeftTxt": getStorageItem("hpImageLeftTxt"),
+		"hpImageTopTxt": getStorageItem("hpImageTopTxt"),
+		"hpImageHeightTxt": getStorageItem("hpImageHeightTxt"),
+		"hpImageWidthTxt": getStorageItem("hpImageWidthTxt"),
+		"hpImageFontTxt": getStorageItem("hpImageFontTxt"),
+		"hpImageCSSTxt": getStorageItem("hpImageCSSTxt")
+	};
+	bc.postMessage({"hpImage": hpImageObject});
+
+		const apImageObject = {
+		"apImageLeftTxt": getStorageItem("apImageLeftTxt"),
+		"apImageTopTxt": getStorageItem("apImageTopTxt"),
+		"apImageHeightTxt": getStorageItem("apImageHeightTxt"),
+		"apImageWidthTxt": getStorageItem("apImageWidthTxt"),
+		"apImageFontTxt": getStorageItem("apImageFontTxt"),
+		"apImageCSSTxt": getStorageItem("apImageCSSTxt")
+	};
+	bc.postMessage({"apImage": apImageObject}
 }
 
 function initializeLogoStatus() {

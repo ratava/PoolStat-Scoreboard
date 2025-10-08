@@ -657,8 +657,8 @@ function clearGame() {
 function postNames(p1namemsg, p2namemsg) {
 	console.log('p1: ' + p1namemsg);
 	console.log('p2: ' + p2namemsg);
-	//bc.postMessage({ player: '1', name: p1namemsg });
-	//bc.postMessage({ player: '2', name: p2namemsg });
+	bc.postMessage({ player: '1', name: p1namemsg });
+	bc.postMessage({ player: '2', name: p2namemsg });
 	setStorageItem("p1NameCtrlPanel", p1namemsg);
 	setStorageItem("p2NameCtrlPanel", p2namemsg);
 }
@@ -666,8 +666,8 @@ function postNames(p1namemsg, p2namemsg) {
 function postInfo(racemsg, gamemsg) {
 	if (extraDebug) {console.log('racemsg: ' + racemsg);}
 	if (extraDebug) {console.log('gamemsg: ' + gamemsg);}
-	//bc.postMessage({ race: racemsg });
-	//bc.postMessage({ game: gamemsg });	
+	bc.postMessage({ race: racemsg });
+	bc.postMessage({ game: gamemsg });	
 	setStorageItem("raceInfo", raceInfoTxt.value);
 	setStorageItem("gameInfo", gameInfoTxt.value);
 }
@@ -676,7 +676,6 @@ function postInfo(racemsg, gamemsg) {
 function pushScores(p1Score, p2Score) {
 	bc.postMessage({ player: '1', score: p1Score });
     bc.postMessage({ player: '2', score: p2Score });
-
 }
 
 function postScore(opt1, player) {

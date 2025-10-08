@@ -22,6 +22,7 @@ html, body {
     position: fixed;
     text-align: center;
     background: #3679dd;
+    transform: translateX(-50%);
     font-size: calc(var(--small-font-size) * var(--ui-scaling));
     font-weight: bold;
     color: white;
@@ -37,6 +38,7 @@ html, body {
     position: fixed;
     text-align: center;
     background: #3679dd;
+    transform: translateX(-50%);
     font-size: calc(var(--small-font-size) * var(--ui-scaling));
     font-weight: bold;
     color: white;
@@ -52,6 +54,7 @@ html, body {
     position: fixed;
     text-align: center;
     background: #3679dd;
+    transform: translateX(-50%);
     font-size: calc(var(--small-font-size) * var(--ui-scaling));
     font-weight: bold;
     color: white;
@@ -113,10 +116,10 @@ html, body {
     flex-wrap: wrap;
     align-content: center;
     justify-content: center;
-    /* text-shadow: 1px 1px 2px black, 0 0 25px black, 0 0 5px black; */
+    text-shadow: 1px 1px 2px black, 0 0 25px black, 0 0 5px black;
     -webkit-text-stroke: 1px black;
     color: white;
-    /* box-shadow: 0 8px 16px 0 rgba(0,0,0,0.6); */
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.6);
     font-weight: bold;
     text-align: center;
     width: calc(550px * var(--ui-scaling));

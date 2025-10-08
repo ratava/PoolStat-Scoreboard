@@ -56,16 +56,20 @@ const handlers = {
         } else {
             document.getElementById("raceInfo").classList.add("noShow");
         }
-
         document.getElementById("raceInfo").style.left = data.raceInfo.raceInfoLeftTxt;
         document.getElementById("raceInfo").style.top = data.raceInfo.raceInfoTopTxt;
         document.getElementById("raceInfo").style.height = data.raceInfo.raceInfoHeightTxt;
+        document.getElementById("raceInfo").style.width = data.raceInfo.raceInfoWidthTxt;
         document.getElementById("raceInfo").style.fontSize = data.raceInfo.raceInfoFontTxt;
         if (data.raceInfo.raceInfoBGNoneCB === "true") { // no background
             document.getElementById("raceInfo").style.backgroundColor = '';
+            document.getElementById("raceInfo").style.border = 'none';
+            document.getElementById("raceInfo").style.boxShadow = 'none';
+            document.getElementById("raceInfo").style.textShadow = 'none';
         } else {
             document.getElementById("raceInfo").style.backgroundColor = data.raceInfo.raceInfoBGTxt;
         }
+        document.getElementById("raceInfo").style.color = data.raceInfo.raceInfoFGTxt;
         document.getElementById("raceInfo").style.cssText = document.getElementById("raceInfo").style.cssText + " " + data.raceInfo.raceInfoCSSTxt;
     },
 
@@ -79,14 +83,18 @@ const handlers = {
         document.getElementById("gameInfo").style.left = data.gameInfo.gameInfoLeftTxt;
         document.getElementById("gameInfo").style.top = data.gameInfo.gameInfoTopTxt;
         document.getElementById("gameInfo").style.height = data.gameInfo.gameInfoHeightTxt;
+        document.getElementById("gameInfo").style.width = data.gameInfo.gameInfoWidthTxt;        
         document.getElementById("gameInfo").style.fontSize = data.gameInfo.gameInfoFontTxt;
         if (data.gameInfo.gameInfoLeftTxt === "true") { // no background
             document.getElementById("gameInfo").style.backgroundColor = '';
+            document.getElementById("gameInfo").style.border = 'none';
+            document.getElementById("gameInfo").style.boxShadow = 'none';
+            document.getElementById("gameInfo").style.textShadow = 'none';
         } else {
             document.getElementById("gameInfo").style.backgroundColor = data.gameInfo.gameInfoBGTxt;
         }
+        document.getElementById("gameInfo").style.color = data.gameInfo.gameInfoFGTxt;
         document.getElementById("gameInfo").style.cssText = document.getElementById("gameInfo").style.cssText + " " + data.gameInfo.gameInfoCSSTxt;
-
     },
 
     ticker(data) {
@@ -99,12 +107,18 @@ const handlers = {
         document.getElementById("ticker").style.left = data.ticker.tickerLeftTxt;
         document.getElementById("ticker").style.top = data.ticker.tickerTopTxt;
         document.getElementById("ticker").style.height = data.ticker.tickerHeightTxt;
+        document.getElementById("ticker").style.width = data.ticker.tickerWidthTxt;
         document.getElementById("ticker").style.fontSize = data.ticker.tickerFontTxt;
         if (data.ticker.tickerLeftTxt === "true") { // no background
             document.getElementById("ticker").style.backgroundColor = '';
+            document.getElementById("ticker").style.border = 'none';
+            document.getElementById("ticker").style.boxShadow = 'none';
+            document.getElementById("ticker").style.textShadow = 'none';
+
         } else {
             document.getElementById("ticker").style.backgroundColor = data.ticker.tickerBGTxt;
         }
+        document.getElementById("ticker").style.color = data.ticker.tickerFGTxt;
         document.getElementById("ticker").style.cssText = document.getElementById("ticker").style.cssText + " " + data.ticker.tickerCSSTxt;
     },
 
@@ -113,10 +127,14 @@ const handlers = {
         document.getElementById("hpName").style.left = data.hpName.hpNameLeftTxt;
         document.getElementById("hpName").style.top = data.hpName.hpNameTopTxt;
         document.getElementById("hpName").style.height = data.hpName.hpNameHeightTxt;
+        document.getElementById("hpName").style.width = data.hpName.hpNameWidthTxt;        
         document.getElementById("hpName").style.fontSize = data.hpName.hpNameFontTxt;
         if (data.hpName.hpNameBGNoneCB === "true") { // no background
             document.getElementById("hpName").style.backgroundColor = '';
             document.getElementById("hpName").style.backgroundImage = '';
+            document.getElementById("hpName").style.border = 'none';
+            document.getElementById("hpName").style.boxShadow = 'none';
+            document.getElementById("hpName").style.textShadow = 'none';
         } else {
             document.getElementById("hpName").style.backgroundColor = data.hpName.hpNameBGTxt;
         }
@@ -124,7 +142,7 @@ const handlers = {
             document.getElementById("hpName").style.backgroundColor = '';
             document.getElementById("hpName").style.backgroundImage = `linear-gradient(to left, white, ${data.hpName.hpNameBGTxt})`;
         }
-
+        document.getElementById("hpName").style.color = data.hpName.hpNameFGTxt;
         document.getElementById("hpName").style.cssText = document.getElementById("hpName").style.cssText + " " + data.hpName.hpNameCSSTxt;
     },
 
@@ -133,10 +151,14 @@ const handlers = {
         document.getElementById("apName").style.right = data.apName.apNameLeftTxt;
         document.getElementById("apName").style.top = data.apName.apNameTopTxt;
         document.getElementById("apName").style.height = data.apName.apNameHeightTxt;
+        document.getElementById("apName").style.width = data.apName.apNameWidthTxt;
         document.getElementById("apName").style.fontSize = data.apName.apNameFontTxt;
         if (data.apName.apNameBGNoneCB === "true") { // no background
             document.getElementById("apName").style.backgroundColor = '';
             document.getElementById("apName").style.backgroundImage = '';
+            document.getElementById("apName").style.border = 'none';
+            document.getElementById("apName").style.boxShadow = 'none';
+            document.getElementById("apName").style.textShadow = 'none';
         } else {
             document.getElementById("apName").style.backgroundColor = data.apName.apNameBGTxt;
         }
@@ -144,6 +166,7 @@ const handlers = {
             document.getElementById("apName").style.backgroundColor = '';
             document.getElementById("apName").style.backgroundImage = `linear-gradient(to right, white, ${data.apName.apNameBGTxt})`;
         }
+        document.getElementById("apName").style.color = data.apName.apNameFGTxt;
         document.getElementById("apName").style.cssText = document.getElementById("apName").style.cssText + " " + data.apName.apNameCSSTxt;
     },
 
@@ -152,12 +175,17 @@ const handlers = {
         document.getElementById("hpScore").style.left = data.hpScore.hpScoreLeftTxt;
         document.getElementById("hpScore").style.top = data.hpScore.hpScoreTopTxt;
         document.getElementById("hpScore").style.height = data.hpScore.hpScoreHeightTxt;
+        document.getElementById("hpScore").style.width = data.hpScore.hpScoreWidthTxt;
         document.getElementById("hpScore").style.fontSize = data.hpScore.hpScoreFontTxt;
         if (data.hpScore.hpScoreBGNoneCB === "true") { // no background
             document.getElementById("hpScore").style.backgroundColor = '';
+            document.getElementById("hpScore").style.border = 'none';
+            document.getElementById("hpScore").style.boxShadow = 'none';
+            document.getElementById("hpScore").style.textShadow = 'none';
         } else {
             document.getElementById("hpScore").style.backgroundColor = data.hpScore.hpScoreBGTxt;
         }
+        document.getElementById("hpScore").style.color = data.hpScore.hpScoreFGTxt;
         document.getElementById("hpScore").style.cssText = document.getElementById("hpScore").style.cssText + " " + data.hpScore.hpScoreCSSTxt;
     },
     
@@ -166,12 +194,17 @@ const handlers = {
         document.getElementById("apScore").style.right = data.apScore.apScoreLeftTxt;
         document.getElementById("apScore").style.top = data.apScore.apScoreTopTxt;
         document.getElementById("apScore").style.height = data.apScore.apScoreHeightTxt;
+        document.getElementById("apScore").style.width = data.apScore.apScoreWidthTxt;
         document.getElementById("apScore").style.fontSize = data.apScore.apScoreFontTxt;
         if (data.apScore.apScoreBGNoneCB === "true") { // no background
             document.getElementById("apScore").style.backgroundColor = '';
+            document.getElementById("apScore").style.border = 'none';
+            document.getElementById("apScore").style.boxShadow = 'none';
+            document.getElementById("apScore").style.textShadow = 'none';            
         } else {
             document.getElementById("apScore").style.backgroundColor = data.apScore.apScoreBGTxt;
         }
+        document.getElementById("apScore").style.color = data.apScore.apScoreFGTxt;
         document.getElementById("apScore").style.cssText = document.getElementById("apScore").style.cssText + " " + data.apScore.apScoreCSSTxt;
     },
         
@@ -220,19 +253,11 @@ const handlers = {
         }
     },
 
-    color(data) {
-        console.log("Player: " + data.player + " using color: " + data.color);
-        if (data.player == "1") { document.getElementById("player" + data.player + "Name").style.background = "linear-gradient(to left, white, " + data.color; };
-        if (data.player == "2") { document.getElementById("player" + data.player + "Name").style.background = "linear-gradient(to right, white, " + data.color; };
-    },
-
     name(data) {
         console.log("Player/Team: " + data.player + " named " + data.name);
-        if (!data.name == "") {
-            document.getElementById("player" + data.player + "Name").innerHTML = data.name;
-        } else {
-            document.getElementById("player" + data.player + "Name").innerHTML = "Player " + data.player;
-        }
+        if (data.player == 1) {data.player = "hpName";}
+        if (data.player == 2) {data.player = "apName";}
+        document.getElementById(data.player).innerHTML = data.name;
     },
 
     playerDisplay(data) {
