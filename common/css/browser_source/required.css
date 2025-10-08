@@ -53,9 +53,6 @@ html, body {
 #ticker {
     position: fixed;
     text-align: center;
-    background: #3679dd;
-    transform: translateX(-50%);
-    font-size: calc(var(--small-font-size) * var(--ui-scaling));
     font-weight: bold;
     color: white;
     -webkit-text-stroke: 1px black;
@@ -64,6 +61,7 @@ html, body {
     margin: 0 5px 0 5px;
     border: 2px solid black;
     max-width: max-content;
+    transform: translate(-50%);
 }
 
 /* Main container */
@@ -233,24 +231,12 @@ html, body {
 }
 
 /* Player images */
-#player1Image, #player2Image {
-    position: absolute;
-    top: 0;
-    background-color: red;
+#hpImage, #apImage {
+    position: fixed;
     border: 2px solid black;
     box-sizing: border-box; /* Includes border in the height calculation */
-    height: 100%;
-    width: 20%;
     z-index: 4;
     /* top: 50%; */
-}
-
-#player1Image {
-    left: 100%;
-}
-
-#player2Image {
-    right: 100%;
 }
 
 /* Animation classes */
@@ -266,10 +252,35 @@ html, body {
     transition: visibility 0s 1s, opacity 1s linear;
 }
 
+.ticker-container {
+  display: flex;
+  overflow: hidden;
+  user-select: none; /* Prevent text selection */
+}
+
+.ticker-content {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-around;
+  min-width: 100%;
+  animation: scroll 7s linear infinite; /* Adjust duration as needed */
+}
+
+
 /* Fading animation */
 .fade {
     animation-name: fade;
     animation-duration: 1.5s;
+}
+
+
+@keyframes scroll {
+  0% {
+    transform: translateX(100%); /* Start off-screen to the right */
+  }
+  100% {
+    transform: translateX(-100%); /* End off-screen to the left */
+  }
 }
 
 @keyframes fade {

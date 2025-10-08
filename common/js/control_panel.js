@@ -17,23 +17,15 @@
 
 // declare mqtt client variable
 let client = null;
-const extraDebug = true;
+const extraDebug = false;
 
-
-// Call updateTabVisibility on page load to set initial tab visibility
-// document.addEventListener("DOMContentLoaded", function() {
-// 	//check if we are using PoolStat Live Stream and connect if setup.
-// 	if (getStorageItem("PoolStatRigId") != null) {
-// 		connectPSLiveStream();
-// 	}
-// });
 
 //main function to update scoreboard from PoolStat Live Stream
 function poolstatUpdate(updateJSON) {
 	if (Object.keys(updateJSON).length == 18) {
 		console.log('Update Received');
-		if (updateJSON["compId"].length > 1) {setStorageItem("compId", updateJSON["compId"]);}
-		if (updateJSON["matchId"].length > 1) {setStorageItem("matchId", updateJSON["matchId"]);}
+		if (updateJSON["compId"] > 1) {setStorageItem("compId", updateJSON["compId"]);}
+		if (updateJSON["matchId"] > 1) {setStorageItem("matchId", updateJSON["matchId"]);}
 		if (updateJSON["obsProfileName"].length > 1) {setStorageItem("obsProfileName", updateJSON["obsProfileName"]);}
 			
 		
@@ -60,6 +52,14 @@ function poolstatUpdate(updateJSON) {
 		postNames(document.getElementById("p1NameTxt").textContent, document.getElementById("p2NameTxt").textContent);
 		pushScores(updateJSON["homePlayerScore"], updateJSON["awayPlayerScore"]);	
 	}	
+}
+
+function updateTickerMessage(updateJSON) {
+	if (Object.keys(updateJSON).length == 18) {
+		console.log('Ticker Update Received');
+		let tickerMessage = `${updateJSON['homePlayer']} ${updateJSON['homePlayerScore']} : ${updateJSON['awayPlayerScore']} ${updateJSON['awayPlayer']}`;
+		bc.postMessage({"tickerMessage" : tickerMessage})
+	}
 }
 
 // OBS WebSocket functions
@@ -360,6 +360,11 @@ function connectPSLiveStream() {
                     } else {
                         //it is not ours so check if it matches our CompetitionID and if it does process it for 
                         //Ticker display
+						console.log('compid ' + typeof getStorageItem('compId'));
+						if (messageJSON['compId'] == getStorageItem('compId')) {
+							console.log('ticker check')
+							updateTickerMessage(JSON.parse(message.toString()));
+						}
                     }
                 }
                 break;

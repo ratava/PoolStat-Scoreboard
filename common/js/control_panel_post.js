@@ -18,35 +18,9 @@ const urlParams = new URLSearchParams(window.location.search);
 const INSTANCE_ID = urlParams.get('instance') || '';
 const bc = new BroadcastChannel(`main_${INSTANCE_ID}`);
 const bcr = new BroadcastChannel(`recv_${INSTANCE_ID}`); // return channel from browser_source 
-var hotkeyP1ScoreUp;
-var hotkeyP1ScoreDown;
-var hotkeyP2ScoreUp;
-var hotkeyP2ScoreDown;
-var hotkeyScoreReset;
-var hotkeyP1Extension;
-var hotkeyP2Extension;
-var hotkey30Clock;
-var hotkey60Clock;
-var hotkeyStopClock;
-var hotkeySwap;
-var hotkeyPlayerToggle;
-var hotkeyP1ScoreUpOld = hotkeyP1ScoreUp;
-var hotkeyP2ScoreUpOld = hotkeyP2ScoreUp;
-var hotkeyP1ScoreDownOld = hotkeyP1ScoreDown;
-var hotkeyP2ScoreDownOld = hotkeyP2ScoreDown;
-var hotkeyScoreResetOld = hotkeyScoreReset;
-var hotkeyP1ExtensionOld = hotkeyP1Extension;
-var hotkeyP2ExtensionOld = hotkeyP2Extension;
-var hotkey30ClockOld = hotkey30Clock;
-var hotkey60ClockOld = hotkey60Clock;
-var hotkeyStopClockOld = hotkeyStopClock;
-var hotkeySwapOld = hotkeySwap;
-var hotkeyPlayerToggleOld = hotkeyPlayerToggle; // Track old state
 var tev;
 var p1ScoreValue;
 var p2ScoreValue;
-var warningBeep = new Audio("./common/sound/beep2.mp3");
-var foulSound = new Audio("./common/sound/buzz.mp3");
 var timerIsRunning;
 var msg;
 var msg2;
@@ -377,25 +351,25 @@ function intiializePositionConfig() {
 			case "apScoreBGNoneCB":
 				if (getStorageItem("apScoreBGNoneCB") == null) {setStorageItem("apScoreBGNoneCB", "false")}					
 			case "hpImageLeftTxt":
-				if (getStorageItem("hpImageLeftTxt") == null) {setStorageItem("hpImageLeftTxt", "false")}					
+				if (getStorageItem("hpImageLeftTxt") == null) {setStorageItem("hpImageLeftTxt", "100px")}					
 			case "hpImageTopTxt":
-				if (getStorageItem("hpImageTopTxt") == null) {setStorageItem("hpImageTopTxt", "false")}					
+				if (getStorageItem("hpImageTopTxt") == null) {setStorageItem("hpImageTopTxt", "970px")}					
 			case "hpImageHeightTxt":
-				if (getStorageItem("hpImageHeightTxt") == null) {setStorageItem("hpImageHeightTxt", "false")}					
+				if (getStorageItem("hpImageHeightTxt") == null) {setStorageItem("hpImageHeightTxt", "60px")}					
 			case "hpImagewidthTxt":
-				if (getStorageItem("hpImageWidthTxt") == null) {setStorageItem("hpImageWidthTxt", "false")}					
+				if (getStorageItem("hpImageWidthTxt") == null) {setStorageItem("hpImageWidthTxt", "60px")}					
 			case "hpImageCSSTxt":
-				if (getStorageItem("hpImageCSSTxt") == null) {setStorageItem("hpImageCSSTxt", "false")}					
+				if (getStorageItem("hpImageCSSTxt") == null) {setStorageItem("hpImageCSSTxt", "")}					
 			case "apImageLeftTxt":
-				if (getStorageItem("hpImageLeftTxt") == null) {setStorageItem("hpImageLeftTxt", "false")}					
+				if (getStorageItem("hpImageLeftTxt") == null) {setStorageItem("hpImageLeftTxt", "100px")}					
 			case "apImageTopTxt":
-				if (getStorageItem("hpImageTopTxt") == null) {setStorageItem("hpImageTopTxt", "false")}					
+				if (getStorageItem("hpImageTopTxt") == null) {setStorageItem("hpImageTopTxt", "970px")}					
 			case "apImageHeightTxt":
-				if (getStorageItem("hpImageHeightTxt") == null) {setStorageItem("hpImageHeightTxt", "false")}					
+				if (getStorageItem("hpImageHeightTxt") == null) {setStorageItem("hpImageHeightTxt", "60px")}					
 			case "apImagewidthTxt":
-				if (getStorageItem("apImageWidthTxt") == null) {setStorageItem("apImageWidthTxt", "false")}					
+				if (getStorageItem("apImageWidthTxt") == null) {setStorageItem("apImageWidthTxt", "60px")}					
 			case "apImageCSSTxt":
-				if (getStorageItem("apImageCSSTxt") == null) {setStorageItem("apImageCSSTxt", "false")}					
+				if (getStorageItem("apImageCSSTxt") == null) {setStorageItem("apImageCSSTxt", "60px")}					
 		}
 	});
 	
@@ -527,7 +501,9 @@ function intiializePositionConfig() {
 		"apImageFontTxt": getStorageItem("apImageFontTxt"),
 		"apImageCSSTxt": getStorageItem("apImageCSSTxt")
 	};
-	bc.postMessage({"apImage": apImageObject}
+	bc.postMessage({"apImage": apImageObject});
+	postNames("","");
+	postInfo("","");
 }
 
 function initializeLogoStatus() {
@@ -721,38 +697,27 @@ document.getElementById("raceInfoTxt").value = getStorageItem("raceInfo");
 document.getElementById("gameInfoTxt").value = getStorageItem("gameInfo");
 document.getElementById("verNum").innerHTML = versionNum;
 // document.getElementById("psVerNum").innerHTML = psVersionNum;
-postNames(); postInfo(); startThemeCheck();
+postNames("", ""); postInfo(); startThemeCheck();
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // broadcast channel events from browser_source
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////			
 
+const handlers = {
+
+    refresh(data) {
+		console.log('browser_source refreshed');
+		intiializePositionConfig();
+    },
+}
+
 bcr.onmessage = (event) => {
-	const clockDisplay = document.getElementById("clockLocalDisplay");
-    clockDisplay.style.background = "green";
-	clockDisplay.style.border = "2px solid black";
-    clockDisplay.innerHTML = event.data + "s";
-	tev = event.data;
-	console.log(tev);
-	if (tev > 20) { document.getElementById("clockLocalDisplay").style.color = "white"; };
-	if (tev > 5 && tev < 21) { document.getElementById("clockLocalDisplay").style.color = "black"; };
-	if (tev < 21) { document.getElementById("clockLocalDisplay").style.background = "orange"; };
-	if (tev < 16) { document.getElementById("clockLocalDisplay").style.background = "yellow"; };
-	if (tev < 11) { document.getElementById("clockLocalDisplay").style.background = "tomato"; };
-	if (tev == 10) {
-		document.getElementById("shotClockShow").setAttribute("onclick", "clockDisplay('hide')");
-		document.getElementById("shotClockShow").innerHTML = "Hide Clock";
-		document.getElementById("shotClockShow").style.border = "2px solid black";
-	}
-	if (tev < 6 && tev > 0) {    //tev > 0   this prevents both sounds from playing at 0.
-		document.getElementById("clockLocalDisplay").style.background = "red";
-		document.getElementById("clockLocalDisplay").style.color = "white";
-		warningBeep.loop = false;
-		warningBeep.play();
-	}
-	if (tev == 0) {
-		foulSound.loop = false;
-		foulSound.play();
-		setTimeout("stopClock()", 1000);
-	}
+    console.log('Received event data:', event.data);
+
+    // Process each property in the event data
+    Object.entries(event.data).forEach(([key, value]) => {
+        if (value != null && handlers[key]) {
+            handlers[key](event.data);
+        }
+    });
 }

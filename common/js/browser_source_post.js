@@ -21,6 +21,7 @@ const INSTANCE_ID = urlParams.get('instance') || '';
 const bcr = new BroadcastChannel(`recv_${INSTANCE_ID}`); // browser_source -> control_panel channel 
 const bc = new BroadcastChannel(`main_${INSTANCE_ID}`);
 var playerNumber;
+const tickerMessageArray = [];
 
 // Set default values immediately
 function initializeDefaults() {
@@ -207,7 +208,26 @@ const handlers = {
         document.getElementById("apScore").style.color = data.apScore.apScoreFGTxt;
         document.getElementById("apScore").style.cssText = document.getElementById("apScore").style.cssText + " " + data.apScore.apScoreCSSTxt;
     },
-        
+
+    hpImage(data) {
+        console.log("HP Image data: " + data.hpImage);
+        document.getElementById("hpImage").style.left = data.hpImage.hpImageLeftTxt;
+        document.getElementById("hpImage").style.top = data.hpImage.hpImageTopTxt;
+        document.getElementById("hpImage").style.height = data.hpImage.hpImageHeightTxt;
+        document.getElementById("hpImage").style.width = data.hpImage.hpImageWidthTxt;
+        document.getElementById("hpImage").style.cssText = document.getElementById("hpImage").style.cssText + " " + data.hpImage.hpImageCSSTxt;
+    },
+    
+    apImage(data) {
+        console.log("HP Image data: " + data.apImage);
+        document.getElementById("apImage").style.right = data.apImage.apImageLeftTxt;
+        document.getElementById("apImage").style.top = data.apImage.apImageTopTxt;
+        document.getElementById("apImage").style.height = data.apImage.apImageHeightTxt;
+        document.getElementById("apImage").style.width = data.apImage.apImageWidthTxt;
+        document.getElementById("apImage").style.cssText = document.getElementById("apImage").style.cssText + " " + data.apImage.apImageCSSTxt;
+    },
+
+    
     score(data) {
         console.log(`Player: ${data.player}, Score: ${data.score}`);
         if (data.player == 1) {data.player = "hpScore";}
@@ -257,6 +277,7 @@ const handlers = {
         console.log("Player/Team: " + data.player + " named " + data.name);
         if (data.player == 1) {data.player = "hpName";}
         if (data.player == 2) {data.player = "apName";}
+        if (data.name === null || data.name === undefined) {console.log('foobar'); data.name = " "};
         document.getElementById(data.player).innerHTML = data.name;
     },
 
@@ -337,6 +358,13 @@ const handlers = {
             }
         }
     },
+
+    tickerMessage(data) {
+        console.log('a ' + data);
+        tickerMessageArray.push(data.tickerMessage);
+        console.log(tickerMessageArray)
+
+    },
  
 };
 
@@ -357,28 +385,47 @@ bc.onmessage = (event) => {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 $(document).ready(function() {
-    // Initialize draggable elements
-    // $("#scoreBoard").draggable();
-    // $("#gameInfo").draggable();
+    
+    bcr.postMessage({"refresh":"now"});
+
 });
 
-// Setting defaults in storage so functions execute correctly, in the event values are not being retrieved from storage successfully due to initialization or similar
-if (getStorageItem("usePlayer1") === null) {
-    setStorageItem("usePlayer1", "yes");
-}
-if (getStorageItem("usePlayer2") === null) {
-    setStorageItem("usePlayer2", "yes");
-}
-if (getStorageItem("usePlayerToggle") === null) {
-    setStorageItem("usePlayerToggle", "yes");
-}
-if (getStorageItem("activePlayer") === null) {
-    setStorageItem("activePlayer", "1");
+function clearTicker() {
+    document.getElementById("ticker").classList.remove("fadeInElm");
+    document.getElementById("ticker").classList.add("fadeOutElm");
+    document.getElementById("tickerContent").innerHTML = "";    
 }
 
-if (getStorageItem("poolStat") === null) {
-    setStorageItem("poolStat", "yes");
+function displayTickerMessage() {
+    while (tickerMessageArray.length > 0) {
+        var message = tickerMessageArray.shift();
+        document.getElementById("ticker").classList.remove("fadeOutElm");
+        document.getElementById("ticker").classList.add("fadeInElm");
+        document.getElementById("tickerContent").insertAdjacentHTML('beforeend',message);
+        setTimeout(clearTicker, 7000)
+
+    }
 }
+setInterval(displayTickerMessage, 7500);
+    
+
+// Setting defaults in storage so functions execute correctly, in the event values are not being retrieved from storage successfully due to initialization or similar
+// if (getStorageItem("usePlayer1") === null) {
+//     setStorageItem("usePlayer1", "yes");
+// }
+// if (getStorageItem("usePlayer2") === null) {
+//     setStorageItem("usePlayer2", "yes");
+// }
+// if (getStorageItem("usePlayerToggle") === null) {
+//     setStorageItem("usePlayerToggle", "yes");
+// }
+// if (getStorageItem("activePlayer") === null) {
+//     setStorageItem("activePlayer", "1");
+// }
+
+// if (getStorageItem("poolStat") === null) {
+//     setStorageItem("poolStat", "yes");
+// }
 
 // setCustomLogo("customLogo1", "useCustomLogo", "usePlayer1");
 // setCustomLogo("customLogo2", "useCustomLogo2", "usePlayer2");
