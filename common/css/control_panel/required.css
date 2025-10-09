@@ -285,6 +285,15 @@ input {
 	height:fit-content;
 }
 
+.column-right {
+	display: flex;
+	justify-content: right;
+	padding: 10px 0 10px 0;
+	clear: both;
+	width: 650px;
+	height:fit-content;
+}
+
 .column-center-close {
 	display: flex;
 	justify-content: center;

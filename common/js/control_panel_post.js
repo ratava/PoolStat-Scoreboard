@@ -504,6 +504,7 @@ function intiializePositionConfig() {
 	bc.postMessage({"apImage": apImageObject});
 	postNames("","");
 	postInfo("","");
+
 }
 
 function initializeLogoStatus() {

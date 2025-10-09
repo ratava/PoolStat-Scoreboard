@@ -52,8 +52,42 @@ function poolstatUpdate(updateJSON) {
 		postNames(document.getElementById("p1NameTxt").textContent, document.getElementById("p2NameTxt").textContent);
 		pushScores(updateJSON["homePlayerScore"], updateJSON["awayPlayerScore"]);	
 	}	
+
+	if (updateJSON["homePlayerLogo"] !== "") {
+		updatePlayerImage("homePlayerLogo", updateJSON['homePlayerLogo'])
+	}
+
+	if (updateJSON["awayPlayerLogo"] !== "") {
+		updatePlayerImage("awayPlayerLogo", updateJSON['awayPlayerLogo'])
+	}
+
 }
 
+function generateImageTag(imageSource) {
+  // Check if the string is a base64 image
+  const isBase64 = /^data:image\/(png|jpeg|jpg|gif|webp);base64,/.test(imageSource);
+
+  // Check if the string is a valid URL
+  const isURL = /^https?:\/\//.test(imageSource);
+
+  if (isBase64 || isURL) {
+    return imageSource;
+  } else {
+    return 'Invalid image source';
+  }
+}
+
+function updatePlayerImage(player, image) {
+	var imagetag = generateImageTag(image);
+	console.log(player);
+	if (player === "homePlayerLogo"){
+		bc.postMessage({homePlayerLogo : imagetag})
+	} else {
+		bc.postMessage({awayPlayerLogo : imagetag})
+	}
+}
+
+// Example usage:
 function updateTickerMessage(updateJSON) {
 	if (Object.keys(updateJSON).length == 18) {
 		console.log('Ticker Update Received');

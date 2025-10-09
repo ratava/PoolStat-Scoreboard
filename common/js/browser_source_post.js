@@ -365,6 +365,18 @@ const handlers = {
         console.log(tickerMessageArray)
 
     },
+
+    homePlayerLogo(data) {
+        document.getElementById("hpImageDiv").classList.remove("fadeOutElm");
+        document.getElementById("hpImageDiv").classList.add("fadeInElm");
+        document.getElementById("hpImage").src = data.homePlayerLogo;
+    },
+
+    awayPlayerLogo(data) {
+        document.getElementById("apImageDiv").classList.remove("fadeOutElm");
+        document.getElementById("apImageDiv").classList.add("fadeInElm");
+        document.getElementById("apImage").src = data.awayPlayerLogo;
+    },
  
 };
 
