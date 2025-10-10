@@ -113,48 +113,8 @@ free to use and modify and use as long as this copyright statment remains intact
                 <div class="column">
                     Player/Team 1 Name:
                     <text id="p1NameTxt"></text>
-                    <!-- <input type="text" id="p1Name"  value="Player 1" maxlength="20"/> -->
                     Player/Team 2 Name:
                     <text id="p2NameTxt"></text>
-                    <!-- <input type="text" id="p2Name" value="Player 2" maxlength="20"/> -->
-                </div>
-                <div class="column" id="gameInfo">
-                    <label id="p1ColorLabel" for="p1colorDiv">Player/Team 1 Color:</label>
-                    <select name="p1Colors" id="p1colorDiv" onchange="playerColorChange(1)">
-                        <option value="" default>--Choose--</option>
-                        <option value="grey">Grey</option>
-                        <option value="steelblue">Steel Blue</option>
-                        <option value="cadetblue">Cadet Blue</option>
-                        <option value="blue">Blue</option>
-                        <option value="tomato">Tomato</option>
-                        <option value="red">Red</option>
-                        <option value="orangered">Orange-Red</option>
-                        <option value="orange">Orange</option>
-                        <option value="khaki">Khaki</option>
-                        <option value="green">Green</option>
-                        <option value="lightgreen">Light Green</option>
-                        <option value="lightseagreen">Sea Green</option>
-                        <option value="purple">Purple</option>
-                        <option value="white">White</option>
-                    </select>
-                    <label id="p2ColorLabel" for="p2colorDiv">Player/Team 2 Color:</label>
-                    <select name="p2Colors" id="p2colorDiv" onchange="playerColorChange(2)">
-                        <option value="" default>--Choose--</option>
-                        <option value="grey">Grey</option>
-                        <option value="steelblue">Steel Blue</option>
-                        <option value="cadetblue">Cadet Blue</option>
-                        <option value="blue">Blue</option>
-                        <option value="tomato">Tomato</option>
-                        <option value="red">Red</option>
-                        <option value="orangered">Orange-Red</option>
-                        <option value="orange">Orange</option>
-                        <option value="khaki">Khaki</option>
-                        <option value="green">Green</option>
-                        <option value="lightgreen">Light Green</option>
-                        <option value="lightseagreen">Sea Green</option>
-                        <option value="purple">Purple</option>
-                        <option value="white">White</option>
-                  </select>
                 </div>
                 <div class="column" id="colorSwap">
                     <div class="hover obs28" id="clearButton" onclick="clearGame()">
@@ -216,6 +176,19 @@ free to use and modify and use as long as this copyright statment remains intact
                 <div class="section-header" id="localDataSettingLabel">
                     Local Data Settings
                 </div>
+
+                <div class="column">
+                    <div class="hover obs28" onclick="downloadPositionData()" id="downloadPositionDataBtn" style="color: white">
+                        Download Position Config
+                    </div>
+                    <div class="hover obs28" onclick="downloadAll()" id="downloadAllDataBtn" style="color: white">
+                        Download All Config
+                    </div>
+                    <div class="hover obs28" onclick="uploadConfig()" id="uploadConfigBtn" style="color: white">
+                        Upload and apply
+                    </div>                    
+                </div>
+                            
                 <div class="column">
                     <div class="hover obs28" onclick="resetInstance()" id="resetDataBtn" style="color: white">
                         Clear Instance Data
@@ -227,7 +200,11 @@ free to use and modify and use as long as this copyright statment remains intact
             </div> <!-- General Settings Tab-->
             <!-- Position Config Tab -->
             <div id="PositionConfig" class="tabcontent">  
-                All Positions and Font size are in px (pixels). Additional CSS must be in valid CSS format e.g. border: none;
+                <p>
+                    <li>All Positions and Font size are in px (pixels). 
+                    <li>Additional CSS must be in valid CSS format e.g. border: none;
+                    <li>Auto Name move will automatically move the name field if a player image is specified by PoolStat.
+                </p>
                 <div class="section-header" id="uiSettingLabel">Race Info</div>               
                 <div class="column">
                     <div><text id="raceInfoLeft">Centre&nbsp</text><input type="text" id="raceInfoLeftTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
@@ -338,15 +315,21 @@ free to use and modify and use as long as this copyright statment remains intact
                     <div><text id="hpImageTop">Top&nbsp</text><input type="text" id="hpImageTopTxt"style="width:50px;" onchange="positionConfigChange(this)"></div>
                     <div><text id="hpImageHeight">Height&nbsp</text><input type="text" id="hpImageHeightTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
                     <div><text id="hpImageWidth">Width&nbsp</text><input type="text" id="hpImageWidthTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
+                </div>
+                <div class="column">
                     <div><text id="hpImageCSS">Additional CSS&nbsp</text><input type="text" id="hpImageCSSTxt" style="width: 100px;" onchange="positionConfigChange(this)"></div>
+                    <div><label for="hpImageAutoMoveCB" id="hpImageAutoMove">Auto Name Move&nbsp</label><input type="checkbox" id="hpImageAutoMoveCB" onchange="positionConfigChange(this)"></div>
                 </div> 
                 <div class="section-header" id="uiSettingLabel">Away Player Image</div>
                 <div class="column">
                     <div><text id="apImageLeft">Right&nbsp</text><input type="text" id="apImageLeftTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
                     <div><text id="apImageTop">Top&nbsp</text><input type="text" id="apImageTopTxt"style="width:50px;" onchange="positionConfigChange(this)"></div>
                     <div><text id="apImageHeight">Height&nbsp</text><input type="text" id="apImageHeightTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
-                    <div><text id="apImageWidth">Width&nbsp</text><input type="text" id="apImageWidthTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
+                    <div><text id="apImageWidth">Width&nbsp</text><input type="text" id="apImageWidthTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>                  
+                </div>
+                <div class="column">
                     <div><text id="apImageCSS">Additional CSS&nbsp</text><input type="text" id="apImageCSSTxt" style="width: 100px;" onchange="positionConfigChange(this)"></div>
+                    <div><label for="apImageAutoMoveCB" id="apImageAutoMove">Auto Name Move&nbsp</label><input type="checkbox" id="apImageAutoMoveCB" onchange="positionConfigChange(this)"></div>
                 </div> 
 
             </div>

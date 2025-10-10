@@ -39,6 +39,87 @@ var playerx;
 var c1value;
 var c2value;
 var pColormsg;
+//master list of all position config fields
+const positionConfigArray = [
+	"raceInfoLeftTxt",
+	"raceInfoTopTxt",
+	"raceInfoHeightTxt",
+	"raceInfoWidthTxt",
+	"raceInfoFontTxt",
+	"raceInfoCSSTxt",
+	"raceInfoFGTxt",
+	"raceInfoBGTxt",
+	"raceInfoBGNoneCB",
+	"gameInfoLeftTxt",
+	"gameInfoTopTxt",
+	"gameInfoHeightTxt",
+	"gameInfoWidthTxt",
+	"gameInfoFontTxt",
+	"gameInfoCSSTxt",
+	"gameInfoFGTxt",
+	"gameInfoBGTxt",
+	"gameInfoBGNoneCB",
+	"tickerLeftTxt",
+	"tickerTopTxt",
+	"tickerHeightTxt",
+	"tickerWidthTxt",
+	"tickerFontTxt",
+	"tickerCSSTxt",
+	"tickerFGTxt",
+	"tickerBGTxt",
+	"tickerBGNoneCB",
+	"hpNameLeftTxt",
+	"hpNameTopTxt",
+	"hpNameHeightTxt",
+	"hpNameWidthTxt",
+	"hpNameFontTxt",
+	"hpNameCSSTxt",
+	"hpNameFGTxt",
+	"hpNameBGTxt",
+	"hpNameBGNoneCB",
+	"hpNameBGGradientCB",
+	"apNameLeftTxt",
+	"apNameTopTxt",
+	"apNameHeightTxt",
+	"apNameWidthTxt",
+	"apNameFontTxt",
+	"apNameCSSTxt",
+	"apNameFGTxt",
+	"apNameBGTxt",
+	"apNameBGNoneCB",
+	"apNameBGGradientCB",
+	"hpScoreLeftTxt",
+	"hpScoreTopTxt",
+	"hpScoreHeightTxt",
+	"hpScoreWidthTxt",
+	"hpScoreFontTxt",
+	"hpScoreCSSTxt",
+	"hpScoreFGTxt",
+	"hpScoreBGTxt",
+	"hpScoreBGNoneCB",
+	"apScoreLeftTxt",
+	"apScoreTopTxt",
+	"apScoreHeightTxt",
+	"apScoreWidthTxt",
+	"apScoreFontTxt",
+	"apScoreCSSTxt",
+	"apScoreFGTxt",
+	"apScoreBGTxt",
+	"apScoreBGNoneCB",
+	"hpImageLeftTxt",
+	"hpImageTopTxt",
+	"hpImageHeightTxt",
+	"hpImageWidthTxt",
+	"hpImageCSSTxt",
+	"apImageLeftTxt",
+	"apImageTopTxt",
+	"apImageHeightTxt",
+	"apImageWidthTxt",
+	"apImageCSSTxt",
+	"hpImageAutoMoveCB",
+	"apImageAutoMoveCB"
+];
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // onload stuff
@@ -138,85 +219,8 @@ window.onload = function() {
 };
 
 function intiializePositionConfig() {
-	const configArray = [
-		"raceInfoLeftTxt",
-		"raceInfoTopTxt",
-		"raceInfoHeightTxt",
-		"raceInfoWidthTxt",
-		"raceInfoFontTxt",
-		"raceInfoCSSTxt",
-		"raceInfoFGTxt",
-		"raceInfoBGTxt",
-		"raceInfoBGNoneCB",
-		"gameInfoLeftTxt",
-		"gameInfoTopTxt",
-		"gameInfoHeightTxt",
-		"gameInfoWidthTxt",
-		"gameInfoFontTxt",
-		"gameInfoCSSTxt",
-		"gameInfoFGTxt",
-		"gameInfoBGTxt",
-		"gameInfoBGNoneCB",
-		"tickerLeftTxt",
-		"tickerTopTxt",
-		"tickerHeightTxt",
-		"tickerWidthTxt",
-		"tickerFontTxt",
-		"tickerCSSTxt",
-		"tickerFGTxt",
-		"tickerBGTxt",
-		"tickerBGNoneCB",
-		"hpNameLeftTxt",
-		"hpNameTopTxt",
-		"hpNameHeightTxt",
-		"hpNameWidthTxt",
-		"hpNameFontTxt",
-		"hpNameCSSTxt",
-		"hpNameFGTxt",
-		"hpNameBGTxt",
-		"hpNameBGNoneCB",
-		"hpNameBGGradientCB",
-		"apNameLeftTxt",
-		"apNameTopTxt",
-		"apNameHeightTxt",
-		"apNameWidthTxt",
-		"apNameFontTxt",
-		"apNameCSSTxt",
-		"apNameFGTxt",
-		"apNameBGTxt",
-		"apNameBGNoneCB",
-		"apNameBGGradientCB",
-		"hpScoreLeftTxt",
-		"hpScoreTopTxt",
-		"hpScoreHeightTxt",
-		"hpScoreWidthTxt",
-		"hpScoreFontTxt",
-		"hpScoreCSSTxt",
-		"hpScoreFGTxt",
-		"hpScoreBGTxt",
-		"hpScoreBGNoneCB",
-		"apScoreLeftTxt",
-		"apScoreTopTxt",
-		"apScoreHeightTxt",
-		"apScoreWidthTxt",
-		"apScoreFontTxt",
-		"apScoreCSSTxt",
-		"apScoreFGTxt",
-		"apScoreBGTxt",
-		"apScoreBGNoneCB",
-		"hpImageLeftTxt",
-		"hpImageTopTxt",
-		"hpImageHeightTxt",
-		"hpImageWidthTxt",
-		"hpImageCSSTxt",
-		"apImageLeftTxt",
-		"apImageTopTxt",
-		"apImageHeightTxt",
-		"apImageWidthTxt",
-		"apImageCSSTxt"
-	];
 
-	configArray.forEach(function(item) {
+	positionConfigArray.forEach(function(item) {
 		switch (item) {
 			case "raceInfoLeftTxt":
 				if (getStorageItem("raceInfoLeftTxt") == null) {setStorageItem("raceInfoLeftTxt", "340px")}
@@ -370,10 +374,14 @@ function intiializePositionConfig() {
 				if (getStorageItem("apImageWidthTxt") == null) {setStorageItem("apImageWidthTxt", "60px")}					
 			case "apImageCSSTxt":
 				if (getStorageItem("apImageCSSTxt") == null) {setStorageItem("apImageCSSTxt", "60px")}					
+			case "hpImageAutoMoveCB":
+				if (getStorageItem("hpImageAutoMoveCB") == null) {setStorageItem("hpImageAutoMoveCB", "false")}		
+			case "apImageAutoMoveCB":
+				if (getStorageItem("apImageAutoMoveCB") == null) {setStorageItem("apImageAutoMoveCB", "false")}										
 		}
 	});
 	
-	configArray.forEach(function(item) {
+	positionConfigArray.forEach(function(item) {
 		let storedItem = getStorageItem(item);
 		if (extraDebug) {console.log ('Config: ' + item + " " + storedItem);}
 		if (!item.includes('CB')) { //Not checkbox
@@ -489,17 +497,19 @@ function intiializePositionConfig() {
 		"hpImageHeightTxt": getStorageItem("hpImageHeightTxt"),
 		"hpImageWidthTxt": getStorageItem("hpImageWidthTxt"),
 		"hpImageFontTxt": getStorageItem("hpImageFontTxt"),
-		"hpImageCSSTxt": getStorageItem("hpImageCSSTxt")
+		"hpImageCSSTxt": getStorageItem("hpImageCSSTxt"),
+		"hpImageAutoMoveCB": getStorageItem("hpImageAutoMoveCB")
 	};
 	bc.postMessage({"hpImage": hpImageObject});
 
-		const apImageObject = {
+	const apImageObject = {
 		"apImageLeftTxt": getStorageItem("apImageLeftTxt"),
 		"apImageTopTxt": getStorageItem("apImageTopTxt"),
 		"apImageHeightTxt": getStorageItem("apImageHeightTxt"),
 		"apImageWidthTxt": getStorageItem("apImageWidthTxt"),
 		"apImageFontTxt": getStorageItem("apImageFontTxt"),
-		"apImageCSSTxt": getStorageItem("apImageCSSTxt")
+		"apImageCSSTxt": getStorageItem("apImageCSSTxt"),
+		"apImageAutoMoveCB": getStorageItem("apImageAutoMoveCB")
 	};
 	bc.postMessage({"apImage": apImageObject});
 	postNames("","");
@@ -507,107 +517,137 @@ function intiializePositionConfig() {
 
 }
 
-function initializeLogoStatus() {
-	// Loop through the logos (in this example logos 1 through 5)
-	for (let xL = 1; xL <= 5; xL++) {
-		let savedLogo = getStorageItem("customLogo" + xL);
-		let containerId;
-		if (xL === 1) {
-			containerId = "uploadCustomLogo";
-		} else if (xL === 2) {
-			containerId = "uploadCustomLogo2";
-		} else {
-			containerId = "logoSsImg" + xL;
-		}
-		let container = document.getElementById(containerId);
-		let fileInput = document.getElementById("FileUploadL" + xL);
-		let label  = document.getElementById("FileUploadLText" + xL);
-		let imgElem = document.getElementById("l" + xL + "Img");
+function downloadPositionData() {
+  // Assume positionConfigArray is defined globally or passed in
+  const positionData = {};
 
-		if (savedLogo) {
-			// A custom logo exists for this slot.
-			// Update the preview image.
-			if (imgElem) {
-				imgElem.src = savedLogo;
-			}
-			// Display "Clear" on the label
-			if (label) {
-				label.textContent = "Clear";
-			}
-			// Bind the container's click to call clearLogo.
-			if (container && fileInput) {
-				container.onclick = function(e) {
-					e.preventDefault();
-					clearLogo(xL);
-				};
-				// Change styling to indicate clear mode (red background, light text)
-				container.style.backgroundColor = "red";
-				container.style.color = "white";
-			}
-		} else {
-			// No custom logo; restore default settings.
-			if (imgElem) {
-				imgElem.src = "./common/images/placeholder.png";
-			}
-			if (label) {
-				label.textContent = (xL === 1) ? "Upload Player 1 Logo" :
-									(xL === 2) ? "Upload Player 2 Logo" : "L" + (xL-2);
-			}
-			if (container && fileInput) {
-				container.onclick = function(e) {
-					// e.preventDefault();
-					fileInput.click();
-				};
-				// Reset any inline styles applied previously.
-				container.style.backgroundColor = "";
-				container.style.color = "";
-			}
-		}
-	}
+  // Iterate through each ID in the array
+  for (const id of positionConfigArray) {
+    // Get the value using the provided function
+    const value = getStorageItem(id); // returns a string
+    positionData[id] = value;
+  }
+
+  // Convert the object to a JSON string
+  const jsonString = JSON.stringify(positionData, null, 2);
+
+  // Create a Blob from the JSON string
+  const blob = new Blob([jsonString], { type: 'application/json' });
+
+  // Create a temporary anchor element to trigger the download
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'positionData.json';
+  document.body.appendChild(a);
+  a.click();
+
+  // Clean up
+  document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
 }
 
-function initializeExtensionButtonStatus() {
-    // Player 1 Extension Button
-    let extBtn1 = document.getElementById("p1extensionBtn");
-    // Use a key to store if the extension is enabled. Here "enabled" means it is active.
-    // If the key is not present, then consider it not enabled.
-    let extStatus1 = getStorageItem("p1Extension"); // e.g., "enabled" or "disabled"
-    if (extBtn1) {
-        if (extStatus1 && extStatus1 === "enabled") {
-            // When enabled, show Reset
-            //extBtn1.textContent = "Reset";
-			document.getElementById("p1extensionBtn").setAttribute("onclick", "resetExt('p1')");
-			document.getElementById("p1extensionBtn").classList.add("clkd");
-			var playerName = document.getElementById("p1Name").value.split(" ")[0] || "P1";
-			document.getElementById("p1extensionBtn").innerHTML = "Reset " + playerName.substring(0, 9) + "'s Ext";
-            extBtn1.style.backgroundColor = "red";
-            extBtn1.style.color = "black";
-        } else {
-            //extBtn1.textContent = "Extend";
-            extBtn1.style.backgroundColor = "";
-            extBtn1.style.color = "";
-        }
-    }
 
-    // Player 2 Extension Button
-    let extBtn2 = document.getElementById("p2extensionBtn");
-    let extStatus2 = getStorageItem("p2Extension");
-    if (extBtn2) {
-        if (extStatus2 && extStatus2 === "enabled") {
-            //extBtn2.textContent = "Reset";
-			document.getElementById("p2extensionBtn").setAttribute("onclick", "resetExt('p2')");
-			document.getElementById("p2extensionBtn").classList.add("clkd");
-			var playerName = document.getElementById("p2Name").value.split(" ")[0] || "P1";
-			document.getElementById("p2extensionBtn").innerHTML = "Reset " + playerName.substring(0, 9) + "'s Ext";
-            extBtn2.style.backgroundColor = "red";
-            extBtn2.style.color = "black";
-        } else {
-            //extBtn2.textContent = "Extend";
-            extBtn2.style.backgroundColor = "";
-            extBtn2.style.color = "";
-        }
-    }
-}
+// function initializeLogoStatus() {
+// 	// Loop through the logos (in this example logos 1 through 5)
+// 	for (let xL = 1; xL <= 5; xL++) {
+// 		let savedLogo = getStorageItem("customLogo" + xL);
+// 		let containerId;
+// 		if (xL === 1) {
+// 			containerId = "uploadCustomLogo";
+// 		} else if (xL === 2) {
+// 			containerId = "uploadCustomLogo2";
+// 		} else {
+// 			containerId = "logoSsImg" + xL;
+// 		}
+// 		let container = document.getElementById(containerId);
+// 		let fileInput = document.getElementById("FileUploadL" + xL);
+// 		let label  = document.getElementById("FileUploadLText" + xL);
+// 		let imgElem = document.getElementById("l" + xL + "Img");
+
+// 		if (savedLogo) {
+// 			// A custom logo exists for this slot.
+// 			// Update the preview image.
+// 			if (imgElem) {
+// 				imgElem.src = savedLogo;
+// 			}
+// 			// Display "Clear" on the label
+// 			if (label) {
+// 				label.textContent = "Clear";
+// 			}
+// 			// Bind the container's click to call clearLogo.
+// 			if (container && fileInput) {
+// 				container.onclick = function(e) {
+// 					e.preventDefault();
+// 					clearLogo(xL);
+// 				};
+// 				// Change styling to indicate clear mode (red background, light text)
+// 				container.style.backgroundColor = "red";
+// 				container.style.color = "white";
+// 			}
+// 		} else {
+// 			// No custom logo; restore default settings.
+// 			if (imgElem) {
+// 				imgElem.src = "./common/images/placeholder.png";
+// 			}
+// 			if (label) {
+// 				label.textContent = (xL === 1) ? "Upload Player 1 Logo" :
+// 									(xL === 2) ? "Upload Player 2 Logo" : "L" + (xL-2);
+// 			}
+// 			if (container && fileInput) {
+// 				container.onclick = function(e) {
+// 					// e.preventDefault();
+// 					fileInput.click();
+// 				};
+// 				// Reset any inline styles applied previously.
+// 				container.style.backgroundColor = "";
+// 				container.style.color = "";
+// 			}
+// 		}
+// 	}
+// }
+
+// function initializeExtensionButtonStatus() {
+//     // Player 1 Extension Button
+//     let extBtn1 = document.getElementById("p1extensionBtn");
+//     // Use a key to store if the extension is enabled. Here "enabled" means it is active.
+//     // If the key is not present, then consider it not enabled.
+//     let extStatus1 = getStorageItem("p1Extension"); // e.g., "enabled" or "disabled"
+//     if (extBtn1) {
+//         if (extStatus1 && extStatus1 === "enabled") {
+//             // When enabled, show Reset
+//             //extBtn1.textContent = "Reset";
+// 			document.getElementById("p1extensionBtn").setAttribute("onclick", "resetExt('p1')");
+// 			document.getElementById("p1extensionBtn").classList.add("clkd");
+// 			var playerName = document.getElementById("p1Name").value.split(" ")[0] || "P1";
+// 			document.getElementById("p1extensionBtn").innerHTML = "Reset " + playerName.substring(0, 9) + "'s Ext";
+//             extBtn1.style.backgroundColor = "red";
+//             extBtn1.style.color = "black";
+//         } else {
+//             //extBtn1.textContent = "Extend";
+//             extBtn1.style.backgroundColor = "";
+//             extBtn1.style.color = "";
+//         }
+//     }
+
+//     // Player 2 Extension Button
+//     let extBtn2 = document.getElementById("p2extensionBtn");
+//     let extStatus2 = getStorageItem("p2Extension");
+//     if (extBtn2) {
+//         if (extStatus2 && extStatus2 === "enabled") {
+//             //extBtn2.textContent = "Reset";
+// 			document.getElementById("p2extensionBtn").setAttribute("onclick", "resetExt('p2')");
+// 			document.getElementById("p2extensionBtn").classList.add("clkd");
+// 			var playerName = document.getElementById("p2Name").value.split(" ")[0] || "P1";
+// 			document.getElementById("p2extensionBtn").innerHTML = "Reset " + playerName.substring(0, 9) + "'s Ext";
+//             extBtn2.style.backgroundColor = "red";
+//             extBtn2.style.color = "black";
+//         } else {
+//             //extBtn2.textContent = "Extend";
+//             extBtn2.style.backgroundColor = "";
+//             extBtn2.style.color = "";
+//         }
+//     }
+// }
 
 // slider.oninput = function () {
 // 	sliderValue = this.value / 100;
@@ -621,45 +661,45 @@ uiScalingSlider.oninput = function () {
 	bc.postMessage({ scaling: sliderUiScalingValue });
 }
 
-if (getStorageItem('p1colorSet') !== null) {
-	var cvalue = getStorageItem('p1colorSet');
-	var selectElement = document.getElementById('p1colorDiv');
+// if (getStorageItem('p1colorSet') !== null) {
+// 	var cvalue = getStorageItem('p1colorSet');
+// 	var selectElement = document.getElementById('p1colorDiv');
     
-    // Set the selected option
-    for (var i = 0; i < selectElement.options.length; i++) {
-        if (selectElement.options[i].value === cvalue) {
-            selectElement.selectedIndex = i;
-            break;
-        }
-    }
-	document.getElementById('p1colorDiv').style.background = getStorageItem('p1colorSet');
-	document.getElementsByTagName("select")[0].options[0].value = cvalue;
-	if (cvalue == "white" || cvalue == "") { document.getElementById("p1colorDiv").style.color = "black"; document.getElementById("p1colorDiv").style.textShadow = "none"; 
-	} else { document.getElementById("p1colorDiv").style.color = "white"; };
-} else {
-	document.getElementById("p1colorDiv").style.color = "black";
-	document.getElementById("p1colorDiv").style.textShadow = "none"; 
-}
+//     // Set the selected option
+//     for (var i = 0; i < selectElement.options.length; i++) {
+//         if (selectElement.options[i].value === cvalue) {
+//             selectElement.selectedIndex = i;
+//             break;
+//         }
+//     }
+// 	document.getElementById('p1colorDiv').style.background = getStorageItem('p1colorSet');
+// 	document.getElementsByTagName("select")[0].options[0].value = cvalue;
+// 	if (cvalue == "white" || cvalue == "") { document.getElementById("p1colorDiv").style.color = "black"; document.getElementById("p1colorDiv").style.textShadow = "none"; 
+// 	} else { document.getElementById("p1colorDiv").style.color = "white"; };
+// } else {
+// 	document.getElementById("p1colorDiv").style.color = "black";
+// 	document.getElementById("p1colorDiv").style.textShadow = "none"; 
+// }
 
-if (getStorageItem('p2colorSet') !== null) {
-	var cvalue = getStorageItem('p2colorSet');
-	var selectElement = document.getElementById('p2colorDiv');
+// if (getStorageItem('p2colorSet') !== null) {
+// 	var cvalue = getStorageItem('p2colorSet');
+// 	var selectElement = document.getElementById('p2colorDiv');
     
-    // Set the selected option
-    for (var i = 0; i < selectElement.options.length; i++) {
-        if (selectElement.options[i].value === cvalue) {
-            selectElement.selectedIndex = i;
-            break;
-        }
-    }
-	document.getElementById('p2colorDiv').style.background = getStorageItem('p2colorSet');
-	if (cvalue == "white" || cvalue == "") { document.getElementById("p2colorDiv").style.color = "black"; document.getElementById("p2colorDiv").style.textShadow = "none"; 
-	} else { document.getElementById("p2colorDiv").style.color = "white"; };
-}
-else {
-	document.getElementById("p2colorDiv").style.color = "black";
-	document.getElementById("p2colorDiv").style.textShadow = "none";
-}
+//     // Set the selected option
+//     for (var i = 0; i < selectElement.options.length; i++) {
+//         if (selectElement.options[i].value === cvalue) {
+//             selectElement.selectedIndex = i;
+//             break;
+//         }
+//     }
+// 	document.getElementById('p2colorDiv').style.background = getStorageItem('p2colorSet');
+// 	if (cvalue == "white" || cvalue == "") { document.getElementById("p2colorDiv").style.color = "black"; document.getElementById("p2colorDiv").style.textShadow = "none"; 
+// 	} else { document.getElementById("p2colorDiv").style.color = "white"; };
+// }
+// else {
+// 	document.getElementById("p2colorDiv").style.color = "black";
+// 	document.getElementById("p2colorDiv").style.textShadow = "none";
+// }
 
 if (getStorageItem('p1ScoreCtrlPanel') > 0 || getStorageItem('p1ScoreCtrlPanel') == "") {
 	p1ScoreValue = getStorageItem('p1ScoreCtrlPanel');
@@ -681,24 +721,26 @@ if (getStorageItem('p2ScoreCtrlPanel') > 0 || getStorageItem('p2ScoreCtrlPanel')
 	bc.postMessage(msg);
 }
 
-function setPlayerVisibility(playerNumber) {
-	const usePlayer = getStorageItem(`usePlayer${playerNumber}`) == "yes";
-	const checkbox = document.getElementById(`usePlayer${playerNumber}Setting`);
-	checkbox.checked = usePlayer;
-	if (usePlayer) {
-		console.log(`Enable player/team ${playerNumber}`);
-	}
-	playerSetting(playerNumber);
-}
+// function setPlayerVisibility(playerNumber) {
+// 	const usePlayer = getStorageItem(`usePlayer${playerNumber}`) == "yes";
+// 	const checkbox = document.getElementById(`usePlayer${playerNumber}Setting`);
+// 	checkbox.checked = usePlayer;
+// 	if (usePlayer) {
+// 		console.log(`Enable player/team ${playerNumber}`);
+// 	}
+// 	playerSetting(playerNumber);
+// }
 
-if (getStorageItem("obsTheme") == "28") { document.getElementById("obsTheme").value = "28"; }
-document.getElementById("p1NameTxt").value = getStorageItem("p1NameCtrlPanel");
-document.getElementById("p2NameTxt").value = getStorageItem("p2NameCtrlPanel");
-document.getElementById("raceInfoTxt").value = getStorageItem("raceInfo");
-document.getElementById("gameInfoTxt").value = getStorageItem("gameInfo");
-document.getElementById("verNum").innerHTML = versionNum;
+// if (getStorageItem("obsTheme") == "28") { document.getElementById("obsTheme").value = "28"; }
+// document.getElementById("p1NameTxt").value = getStorageItem("p1NameCtrlPanel");
+// document.getElementById("p2NameTxt").value = getStorageItem("p2NameCtrlPanel");
+// document.getElementById("raceInfoTxt").value = getStorageItem("raceInfo");
+// document.getElementById("gameInfoTxt").value = getStorageItem("gameInfo");
+// document.getElementById("verNum").innerHTML = versionNum;
 // document.getElementById("psVerNum").innerHTML = psVersionNum;
-postNames("", ""); postInfo(); startThemeCheck();
+postNames("", ""); 
+postInfo(); 
+startThemeCheck();
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // broadcast channel events from browser_source
