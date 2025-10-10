@@ -53,13 +53,13 @@ function poolstatUpdate(updateJSON) {
 		pushScores(updateJSON["homePlayerScore"], updateJSON["awayPlayerScore"]);	
 	}	
 
-	if (updateJSON["homePlayerLogo"] !== "") {
+	// if (updateJSON["homePlayerLogo"] !== "") {
 		updatePlayerImage("homePlayerLogo", updateJSON['homePlayerLogo'])
-	}
+	// }
 
-	if (updateJSON["awayPlayerLogo"] !== "") {
+	// if (updateJSON["awayPlayerLogo"] !== "") {
 		updatePlayerImage("awayPlayerLogo", updateJSON['awayPlayerLogo'])
-	}
+	// }
 
 }
 

@@ -216,6 +216,8 @@ const handlers = {
         document.getElementById("hpImage").style.height = data.hpImage.hpImageHeightTxt;
         document.getElementById("hpImage").style.width = data.hpImage.hpImageWidthTxt;
         document.getElementById("hpImage").style.cssText = document.getElementById("hpImage").style.cssText + " " + data.hpImage.hpImageCSSTxt;
+        var domRoot = document.querySelector(':root');
+        domRoot.style.setProperty('--hp-Image-width', data.hpImage.hpImageWidthTxt);
     },
     
     apImage(data) {
@@ -225,6 +227,8 @@ const handlers = {
         document.getElementById("apImage").style.height = data.apImage.apImageHeightTxt;
         document.getElementById("apImage").style.width = data.apImage.apImageWidthTxt;
         document.getElementById("apImage").style.cssText = document.getElementById("apImage").style.cssText + " " + data.apImage.apImageCSSTxt;
+        var domRoot = document.querySelector(':root');
+        domRoot.style.setProperty('--ap-Image-width', '-' + data.apImage.apImageWidthTxt);
     },
 
     
@@ -367,17 +371,30 @@ const handlers = {
     },
 
     homePlayerLogo(data) {
-        document.getElementById("hpImageDiv").classList.remove("fadeOutElm");
-        document.getElementById("hpImageDiv").classList.add("fadeInElm");
-        document.getElementById("hpImage").src = data.homePlayerLogo;
+        if (data.homePlayerLogo.length > 0 && data.homePlayerLogo !== 'Invalid image source') {
+            document.getElementById("hpName").style.transform = '';
+            document.getElementById("hpImageDiv").classList.remove("fadeOutElm");
+            document.getElementById("hpImageDiv").classList.add("fadeInElm");
+            document.getElementById("hpImage").src = data.homePlayerLogo;
+        } else {
+            document.getElementById("hpName").style.transform = 'translateX(var(--hp-Image-width))';
+            document.getElementById("hpImageDiv").classList.remove("fadeInElm");
+            document.getElementById("hpImageDiv").classList.add("fadeOutElm");            
+        }
     },
 
     awayPlayerLogo(data) {
-        document.getElementById("apImageDiv").classList.remove("fadeOutElm");
-        document.getElementById("apImageDiv").classList.add("fadeInElm");
-        document.getElementById("apImage").src = data.awayPlayerLogo;
+        if (data.awayPlayerLogo.length > 0 && data.awayPlayerLogo !== 'Invalid image source') {
+            document.getElementById("apName").style.transform = '';
+            document.getElementById("apImageDiv").classList.remove("fadeOutElm");
+            document.getElementById("apImageDiv").classList.add("fadeInElm");
+            document.getElementById("apImage").src = data.awayPlayerLogo;
+        } else {
+            document.getElementById("apName").style.transform = 'translateX(var(--ap-Image-width))';
+            document.getElementById("apImageDiv").classList.remove("fadeInElm");
+            document.getElementById("apImageDiv").classList.add("fadeOutElm");
+        }
     },
- 
 };
 
 // Main event handler
