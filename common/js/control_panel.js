@@ -19,7 +19,6 @@
 let client = null;
 const extraDebug = false;
 
-
 //main function to update scoreboard from PoolStat Live Stream
 function poolstatUpdate(updateJSON) {
 	if (Object.keys(updateJSON).length == 18) {
@@ -43,24 +42,22 @@ function poolstatUpdate(updateJSON) {
 		if (updateJSON["awayPlayerLogo"] != null) {setStorageItem("awayPlayerLogo", updateJSON["awayPlayerLogo"]);}
 
 		if (updateJSON["matchFormat"].length > 1) {document.getElementById("raceInfoTxt").textContent  = updateJSON["matchFormat"];}
+		if (updateJSON["drawRound"].length > 1) {document.getElementById("drawRoundTxt").textContent  = updateJSON["drawRound"];}
 		if (updateJSON["eventName"].length > 1) {document.getElementById("gameInfoTxt").textContent  = updateJSON["eventName"];}
 		if (updateJSON["compId"] > 0) {document.getElementById("compIdTxt").textContent  = updateJSON["compId"];}
 		if (updateJSON["matchId"] > 0) {document.getElementById("matchIdTxt").textContent  = updateJSON["matchId"];}		
-		postInfo(document.getElementById("raceInfoTxt").textContent, document.getElementById("gameInfoTxt").textContent );
+		postInfo(document.getElementById("raceInfoTxt").textContent, document.getElementById("gameInfoTxt").textContent, document.getElementById('drawRoundTxt').textContent);
 		if (updateJSON["homePlayer"].length > 1) {document.getElementById("p1NameTxt").textContent = updateJSON["homePlayer"];}
 		if (updateJSON["awayPlayer"].length > 1) {document.getElementById("p2NameTxt").textContent = updateJSON["awayPlayer"];}
 		postNames(document.getElementById("p1NameTxt").textContent, document.getElementById("p2NameTxt").textContent);
 		pushScores(updateJSON["homePlayerScore"], updateJSON["awayPlayerScore"]);	
 	}	
 
-	// if (updateJSON["homePlayerLogo"] !== "") {
-		updatePlayerImage("homePlayerLogo", updateJSON['homePlayerLogo'])
-	// }
-
-	// if (updateJSON["awayPlayerLogo"] !== "") {
-		updatePlayerImage("awayPlayerLogo", updateJSON['awayPlayerLogo'])
-	// }
-
+		updatePlayerImage("homePlayerLogo", updateJSON['homePlayerLogo']);
+		updatePlayerImage("awayPlayerLogo", updateJSON['awayPlayerLogo']);
+		if (updateJSON['breakingPlayer'] != null) {
+			bc.postMessage({breakingPlayer : updateJSON['breakingPlayer']});
+		}
 }
 
 function generateImageTag(imageSource) {
@@ -462,8 +459,6 @@ document.addEventListener("DOMContentLoaded", function() {
 	}	
 });
 
-//document.addEventListener("change", positionConfigChange(data));
-
 function positionConfigChange(inputElement){
 	console.log(inputElement.value + " " + inputElement.id);
 	if (inputElement.id.includes('CB')) {
@@ -477,151 +472,9 @@ function positionConfigChange(inputElement){
 	}
 }
 
-// Function to save the opacity value to localStorage
-function saveOpacity() {
-	var opacityValue = document.getElementById('scoreOpacity').value;
-	setStorageItem('overlayOpacity', opacityValue);
-	document.getElementById('sliderValue').innerText = opacityValue + '%'; // Update displayed value
-}
-
-// Function to save the uiScaling localStorage
-function saveScaling() {
-	var scalingValue = document.getElementById('uiScaling').value;
-	setStorageItem('uiScalingValue', scalingValue);
-	document.getElementById('sliderUiScalingValue').innerText = scalingValue + '%';
-}
-
-function toggleCheckbox(checkboxId, inputElement) {
-    const checkbox = document.getElementById(checkboxId);
-	console.log(`File size ${inputElement.files.length}`);
-    checkbox.disabled = !inputElement.files.length; // Enable if file is selected, disable otherwise
-}
-
-function playerColorChange(player) {
-	var cvalue = document.getElementById("p" + player + "colorDiv").value;
-	if (player == 1) {
-		playerx = player;
-		pColormsg = document.getElementById("p" + player + "colorDiv").value;
-		bc.postMessage({ player: playerx, color: pColormsg });
-		var selectedColor = document.getElementById("p" + player + "colorDiv").value;
-		document.getElementById("p1colorDiv").style.background = `${selectedColor}`;
-		//document.getElementById("p1Name").style.background = `linear-gradient(to right, ${selectedColor}, white)`;
-
-		if (cvalue == "white" || cvalue == "") { document.getElementById("p1colorDiv").style.color = "black"; document.getElementById("p1colorDiv").style.textShadow = "none"; 
-		} else { document.getElementById("p1colorDiv").style.color = "white"; };
-		setStorageItem("p1colorSet", document.getElementById("p" + player + "colorDiv").value);
-		document.getElementsByTagName("select")[0].options[0].value = cvalue;
-	} else {
-		playerx = player;
-		pColormsg = document.getElementById("p" + player + "colorDiv").value;
-		bc.postMessage({ player: playerx, color: pColormsg });
-		var selectedColor = document.getElementById("p" + player + "colorDiv").value;
-		document.getElementById("p2colorDiv").style.background = `${selectedColor}`;
-
-		if (cvalue == "white" || cvalue == "") { document.getElementById("p2colorDiv").style.color = "black"; document.getElementById("p2colorDiv").style.textShadow = "none"; 
-		} else { document.getElementById("p2colorDiv").style.color = "white"; };
-		setStorageItem("p2colorSet", document.getElementById("p" + player + "colorDiv").value);
-		document.getElementsByTagName("select")[1].options[0].value = cvalue;
-	}
-}
-
-function playerSetting(player) {
-    var usePlayerSetting = document.getElementById("usePlayer" + player + "Setting");
-    var isChecked = usePlayerSetting.checked;
-    var action = isChecked ? "remove" : "add";
-    var storageValue = isChecked ? "yes" : "no";
-    var usePlayer = isChecked ? "showPlayer" : "hidePlayer";
-    
-    setStorageItem("usePlayer" + player, storageValue);
-    
-    // Handle player-specific elements
-    ["Name", "NameLabel", "colorDiv", "ColorLabel"].forEach(function(elem) {
-        document.getElementById("p" + player + elem).classList[action]("noShow");
-    });
-
-    // Check if both players are enabled
-    const player1Enabled = getStorageItem("usePlayer1") === "yes";
-    const player2Enabled = getStorageItem("usePlayer2") === "yes";
-    const bothPlayersEnabled = player1Enabled && player2Enabled;
-    const bothPlayersDisabled = !player1Enabled && !player2Enabled;
-    const anyPlayerDisabled = !player1Enabled || !player2Enabled;
-
-    // Handle score display checkbox
-    const scoreDisplayCheckbox = document.getElementById("scoreDisplay");
-    if (anyPlayerDisabled) {
-        scoreDisplayCheckbox.disabled = true;
-        scoreDisplayCheckbox.checked = false;
-        setStorageItem("scoreDisplay", "no");
-    } else {
-        scoreDisplayCheckbox.disabled = false;
-    }
-
-    // Handle clock, player toggle, and ball tracker checkboxes
-    const clockCheckbox = document.getElementById("useClockSetting");
-    const toggleCheckbox = document.getElementById("useToggleSetting");
-    const ballTrackerCheckbox = document.getElementById("ballTrackerCheckbox");
-
-    if (anyPlayerDisabled) {
-        // Disable and uncheck the checkboxes
-        clockCheckbox.disabled = true;
-        clockCheckbox.checked = false;
-        setStorageItem("useClock", "no");
-        
-        toggleCheckbox.disabled = true;
-        toggleCheckbox.checked = false;
-        setStorageItem("usePlayerToggle", "no");
-        
-        ballTrackerCheckbox.disabled = true;
-        ballTrackerCheckbox.checked = false;
-        setStorageItem("enableBallTracker", "no");
-
-        // Hide related elements
-        document.getElementById("clockInfo").classList.add("noShow");
-        document.getElementById("extensionControls").classList.add("noShow");
-        document.getElementById("clockControlLabel").classList.add("noShow");
-        document.getElementById("playerToggle").classList.add("noShow");
-        document.getElementById("playerToggleLabel").classList.add("noShow");
-        document.getElementById("ballTrackerDirectionDiv").classList.add("noShow");
-        document.getElementById("ballTrackerDirection").classList.add("noShow");
-        document.getElementById("ballTrackerLabel").classList.add("noShow");
-        document.getElementById("ballTrackerDiv").classList.add("noShow");
-		document.getElementById("internationalBallTracker").classList.add("noShow");
-		document.getElementById("worldBallTracker").classList.add("noShow");
-
-        // Send messages to hide these features
-        bc.postMessage({ clockDisplay: 'noClock' });
-        bc.postMessage({ clockDisplay: 'hideActivePlayer' });
-        bc.postMessage({ displayBallTracker: false });
-    } else {
-        // Enable the checkboxes
-        clockCheckbox.disabled = false;
-        toggleCheckbox.disabled = false;
-        ballTrackerCheckbox.disabled = false;
-    }
-    
-    // Show/hide  elements based on individual players being enabled
-    document.getElementById("logoName").classList[player1Enabled ? "remove" : "add"]("noShow");
-    document.getElementById("customLogo1").classList[player1Enabled ? "remove" : "add"]("noShow");
-    document.getElementById("uploadCustomLogo").classList[player1Enabled ? "remove" : "add"]("noShow");
-    document.getElementById("logoName2").classList[player2Enabled ? "remove" : "add"]("noShow");
-    document.getElementById("customLogo2").classList[player2Enabled ? "remove" : "add"]("noShow");
-    document.getElementById("uploadCustomLogo2").classList[player2Enabled ? "remove" : "add"]("noShow");
-
-    // Hide shared elements based on both players being enabled
-    document.getElementById("gameInfo").classList[bothPlayersDisabled ? "add" : "remove"]("noShow");
-    document.getElementById("teamInfo").classList[bothPlayersDisabled ? "add" : "remove"]("noShow");
-    document.getElementById("raceInfo").classList[bothPlayersDisabled ? "add" : "remove"]("noShow");
-    document.getElementById("raceInfoTxt").classList[bothPlayersDisabled ? "add" : "remove"]("noShow");
-    document.getElementById("sendPNames").classList[bothPlayersDisabled ? "add" : "remove"]("noShow");
-    document.getElementById("playerDetailLabel").classList[bothPlayersDisabled ? "add" : "remove"]("noShow");
-
-    // Hide Race info when any player is disabled
-    document.getElementById("raceInfo").classList[anyPlayerDisabled ? "add" : "remove"]("noShow");
-    document.getElementById("raceInfoTxt").classList[anyPlayerDisabled ? "add" : "remove"]("noShow");
-
-    bc.postMessage({playerDisplay: usePlayer, playerNumber: player});
-
-    updateTabVisibility();
+function saveTimerID(inputElement){
+	console.log(inputElement.value + " " + inputElement.id);
+	setStorageItem(inputElement.id, inputElement.value);
 }
 
 function poolStatConfigRaceInfo() {
@@ -702,13 +555,16 @@ function postNames(p1namemsg, p2namemsg) {
 	setStorageItem("p2NameCtrlPanel", p2namemsg);
 }
 
-function postInfo(racemsg, gamemsg) {
-	if (extraDebug) {console.log('racemsg: ' + racemsg);}
-	if (extraDebug) {console.log('gamemsg: ' + gamemsg);}
-	bc.postMessage({ race: racemsg });
-	bc.postMessage({ game: gamemsg });	
-	setStorageItem("raceInfo", raceInfoTxt.value);
-	setStorageItem("gameInfo", gameInfoTxt.value);
+function postInfo(raceMsg, gameMsg, drawRoundMsg) {
+	if (extraDebug) {console.log('racemsg: ' + raceMsg);}
+	if (extraDebug) {console.log('gamemsg: ' + gameMsg);}
+	if (extraDebug) {console.log('drawroundmsg: ' + drawRoundMsg);}
+	bc.postMessage({ race: raceMsg });
+	bc.postMessage({ game: gameMsg });	
+	bc.postMessage({ draw: drawRoundMsg });	
+	setStorageItem("raceInfo", raceMsg);
+	setStorageItem("gameInfo", gameMsg);
+	setStorageItem("drawRound", drawRoundMsg);
 }
 
 
@@ -770,141 +626,216 @@ function postScore(opt1, player) {
             document.getElementById("p"+player+"Score").value = p2ScoreValue;
         }
     }
-	resetBallTracker()
 }
 
-function obsThemeChange() {
-	if (document.getElementById("obsTheme").value == "28") {
-		setStorageItem("obsTheme", "28");
-		document.getElementById("obsTheme").value = "28";
-		document.getElementsByTagName("body")[0].style.background = "#2b2e38";
-		document.styleSheets[0].disabled = false;
-		document.styleSheets[1].disabled = true;
-		document.styleSheets[2].disabled = true;
-		document.styleSheets[3].disabled = true;
-		document.styleSheets[4].disabled = true;
-		document.styleSheets[5].disabled = true;
+var socket = null;
 
-	}
-	if (document.getElementById("obsTheme").value == "27") {
-		setStorageItem("obsTheme", "27");
-		document.getElementById("obsTheme").value = "27";
-		document.getElementsByTagName("body")[0].style.background = "#1f1e1f";
-		document.styleSheets[0].disabled = true;
-		document.styleSheets[1].disabled = false;
-		document.styleSheets[2].disabled = true;
-		document.styleSheets[3].disabled = true;
-		document.styleSheets[4].disabled = true;
-		document.styleSheets[5].disabled = true;
-	}
-	if (document.getElementById("obsTheme").value == "acri") {
-		setStorageItem("obsTheme", "acri");
-		document.getElementById("obsTheme").value = "acri";
-		document.getElementsByTagName("body")[0].style.background = "#181819";
-		document.styleSheets[0].disabled = true;
-		document.styleSheets[1].disabled = true;
-		document.styleSheets[2].disabled = false;
-		document.styleSheets[3].disabled = true;
-		document.styleSheets[4].disabled = true;
-		document.styleSheets[5].disabled = true;
-	}
-	if (document.getElementById("obsTheme").value == "grey") {
-		setStorageItem("obsTheme", "grey");
-		document.getElementById("obsTheme").value = "grey";
-		document.getElementsByTagName("body")[0].style.background = "#2f2f2f";
-		document.styleSheets[0].disabled = true;
-		document.styleSheets[1].disabled = true;
-		document.styleSheets[2].disabled = true;
-		document.styleSheets[3].disabled = false;
-		document.styleSheets[4].disabled = true;
-		document.styleSheets[5].disabled = true;
-	}
-	if (document.getElementById("obsTheme").value == "light") {
-		setStorageItem("obsTheme", "light");
-		document.getElementById("obsTheme").value = "light";
-		document.getElementsByTagName("body")[0].style.background = "#e5e5e5";
-		document.styleSheets[0].disabled = true;
-		document.styleSheets[1].disabled = true;
-		document.styleSheets[2].disabled = true;
-		document.styleSheets[3].disabled = true;
-		document.styleSheets[4].disabled = false;
-		document.styleSheets[5].disabled = true;
-	}
-	if (document.getElementById("obsTheme").value == "rachni") {
-		setStorageItem("obsTheme", "rachni");
-		document.getElementById("obsTheme").value = "rachni";
-		document.getElementsByTagName("body")[0].style.background = "#232629";
-		document.styleSheets[0].disabled = true;
-		document.styleSheets[1].disabled = true;
-		document.styleSheets[2].disabled = true;
-		document.styleSheets[3].disabled = true;
-		document.styleSheets[4].disabled = true;
-		document.styleSheets[5].disabled = false;
-	}
+function cueToolsConnectBtn() {
+	const socket = cueToolsConnect((data) => {
+	console.log('Received:', data);
+	console.log('Socket:', socket.id);
+	// Handle incoming data here
+	});
+
 }
+
+function cueToolsDisconnectBtn() {
+	cueToolsDisconnect(socket);
+}
+
+function cueToolsDisconnect(socket) {
+  if (socket && socket.connected) {
+    socket.disconnect();
+    console.log('🔌 Disconnected from CueTools server.');
+  } else {
+    console.warn('⚠️ No active connection to disconnect.');
+  }
+}
+
+function cueToolsConnect(onMessageCallback) {
+  // Ensure Socket.IO v4 client is available
+  if (typeof io === 'undefined') {
+    console.error('Socket.IO client library is not loaded.');
+    return;
+  }
+
+  socket = io('https://cuetools-timer-server.fly.dev', {
+    transports: ['websocket'],
+    upgrade: false,
+    reconnection: true,
+    timeout: 5000
+  });
+
+  // Handle successful connection
+  socket.on('connect', () => {
+    console.log('✅ Connected to CueTools server:', socket.id);
+	setStorageItem('socketID', socket.id);
+    // Example: Send a message to the server
+    socket.emit('join', getStorageItem('timerID'));
+
+
+  	const timerID = getStorageItem('timerID');
+  	const socketID = socket.id;
+
+	if (!timerID || !socketID) {
+		console.error('❌ Missing timerID or socketID.');
+		return;
+	}
+
+	socket.emit('getSettings', {
+		to: timerID,
+		from: socketID
+	});
+
+  console.log(`📤 Emitted getSettings to ${timerID} from ${socketID}`);	
+  });
+
+  // Handle incoming messages
+  socket.on('getArgs', (data) => {
+    console.log('Message from server:', data);
+    if (typeof onMessageCallback === 'function') {
+      //onMessageCallback(data);
+	  saveCueToolsSettings(data)
+    }
+  });
+
+  	socket.on('runFunction', (msg) => {
+  		handleRunFunctionMessage(msg);
+	});
+
+  // Handle disconnects
+  socket.on('disconnect', (reason) => {
+    console.warn('Disconnected from server:', reason);
+  });
+
+  // Handle connection errors
+  socket.on('connect_error', (error) => {
+    console.error('Connection error:', error.message);
+  });
+
+  return socket;
+}
+
+function saveCueToolsSettings(getArgsPayload) {
+  if (
+    !getArgsPayload ||
+    typeof getArgsPayload !== 'object' ||
+    !getArgsPayload.options?.detail ||
+    !Array.isArray(getArgsPayload.options.detail.socketAllowedSettings)
+  ) {
+    console.error('❌ Invalid getArgs payload structure.');
+    return;
+  }
+  const localTimerID = getStorageItem('timerID');
+  const incomingTo = getArgsPayload.to;
+
+  if (incomingTo !== localTimerID) {
+    //console.warn(`⚠️ Ignoring getArgs: to="${incomingTo}" does not match local timerID="${localTimerID}"`);
+    return;
+  }
+
+  const { socketAllowedSettings, ...settings } = getArgsPayload.options.detail;
+  const uniqueKeys = [...new Set(socketAllowedSettings)];
+  uniqueKeys.forEach((key) => {
+    if (key in settings) {
+      const value = settings[key];
+      const storageKey = `cueTools_${key}`;
+      setStorageItem(storageKey, value);
+      console.log(`✅ Stored ${storageKey}:`, value);
+    } else {
+      //console.warn(`⚠️ Key "${key}" not found in settings.`);
+    }
+  });
+}
+
+function handleRunFunctionMessage(messageObject) {
+	console.log('runFunction Message:', messageObject);
+    if (
+        !messageObject ||
+        typeof messageObject !== 'object' ||
+        !messageObject.options?.detail?.function
+    ) {
+        console.error('❌ Invalid runFunction message structure.');
+        return;
+    }
+
+    const localTimerID = getStorageItem('timerID');
+    const incomingTo = messageObject.to;
+
+    if (incomingTo !== localTimerID) {
+        console.warn(`⚠️ Ignoring runFunction: to="${incomingTo}" does not match local timerID="${localTimerID}"`);
+        return;
+    }
+
+    const func = messageObject.options.detail.function;
+    const value = messageObject.options.detail.value;
+
+    switch (func) {
+        case 'resume':
+            handleResume();
+            break;
+        case 'pause':
+            handlePause();
+            break;
+        case 'restart':
+            handleRestart();
+            break;
+        case 'extension':
+            handleExtension(value);
+            break;
+        case 'resetMatch':
+            handleResetMatch();
+            break;
+        default:
+            console.warn(`⚠️ Unknown function "${func}" received.`);
+    }
+}
+
+function handleResetMatch() {
+  console.log('🔄 Resetting match...');
+  // Add your resume logic here
+}
+
+function handleResume() {
+  console.log('▶️ Resuming timer...');
+  // Add your resume logic here
+}
+
+function handlePause() {
+  console.log('⏸️ Pausing timer...');
+  // Add your pause logic here
+}
+
+function handleRestart() {
+  console.log('🔄 Restarting timer...');
+  // Add your restart logic here
+}
+
+function handleExtension(player) {
+    if (!player) {
+        console.warn('⚠️ No player specified for extension.');
+        return;
+    }
+
+    console.log(`⏩ Extending time for player: ${player}`);
+    // Add your logic here to apply the extension to "one" or "two"
+}
+
+
+
+function cueToolsDisconnect(socket) {
+  if (socket && socket.connected) {
+    socket.disconnect();
+    console.log('🔌 Disconnected from CueTools server.');
+  } else {
+    console.warn('⚠️ No active connection to disconnect.');
+  }
+}
+
 
 function startThemeCheck() {
-	if (getStorageItem("obsTheme") == null) { setStorageItem("obsTheme", "27"); document.getElementById("obsTheme").value = "27"; };
-	if (getStorageItem("obsTheme") == "28") {
-		document.getElementById("obsTheme").value = "28";
-		document.getElementsByTagName("body")[0].style.background = "#2b2e38";
-		document.styleSheets[0].disabled = false;
-		document.styleSheets[1].disabled = true;
-		document.styleSheets[2].disabled = true;
-		document.styleSheets[3].disabled = true;
-		document.styleSheets[4].disabled = true;
-		document.styleSheets[5].disabled = true;
-	}
-	if (getStorageItem("obsTheme") == "27") {
-		document.getElementById("obsTheme").value = "27";
-		document.getElementsByTagName("body")[0].style.background = "#1f1e1f";
-		document.styleSheets[0].disabled = true;
-		document.styleSheets[1].disabled = false;
-		document.styleSheets[2].disabled = true;
-		document.styleSheets[3].disabled = true;
-		document.styleSheets[4].disabled = true;
-		document.styleSheets[5].disabled = true;
-	}
-	if (getStorageItem("obsTheme") == "acri") {
-		document.getElementById("obsTheme").value = "acri";
-		document.getElementsByTagName("body")[0].style.background = "#181819";
-		document.styleSheets[0].disabled = true;
-		document.styleSheets[1].disabled = true;
-		document.styleSheets[2].disabled = false;
-		document.styleSheets[3].disabled = true;
-		document.styleSheets[4].disabled = true;
-		document.styleSheets[5].disabled = true;
-	}
-	if (getStorageItem("obsTheme") == "grey") {
-		document.getElementById("obsTheme").value = "grey";
-		document.getElementsByTagName("body")[0].style.background = "#2f2f2f";
-		document.styleSheets[0].disabled = true;
-		document.styleSheets[1].disabled = true;
-		document.styleSheets[2].disabled = true;
-		document.styleSheets[3].disabled = false;
-		document.styleSheets[4].disabled = true;
-		document.styleSheets[5].disabled = true;
-	}
-	if (getStorageItem("obsTheme") == "light") {
-		document.getElementById("obsTheme").value = "light";
-		document.getElementsByTagName("body")[0].style.background = "#e5e5e5";
-		document.styleSheets[0].disabled = true;
-		document.styleSheets[1].disabled = true;
-		document.styleSheets[2].disabled = true;
-		document.styleSheets[3].disabled = true;
-		document.styleSheets[4].disabled = false;
-		document.styleSheets[5].disabled = true;
-	}
-	if (getStorageItem("obsTheme") == "rachni") {
-		document.getElementById("obsTheme").value = "rachni";
-		document.getElementsByTagName("body")[0].style.background = "#232629";
-		document.styleSheets[0].disabled = true;
-		document.styleSheets[1].disabled = true;
-		document.styleSheets[2].disabled = true;
-		document.styleSheets[3].disabled = true;
-		document.styleSheets[4].disabled = true;
-		document.styleSheets[5].disabled = false;
-	}
+	document.getElementsByTagName("body")[0].style.background = "#2b2e38";
+	document.styleSheets[0].disabled = false;
 }
 
 function cLogoNameChange() {
@@ -949,94 +880,6 @@ function resetScores() {
 	} else { }
 }
 
-function resetBallSet() {
-	document.getElementById('p1colorOpen').checked = true;
-	bc.postMessage({ playerBallSet: 'p1Open' });
-}	
-
-function resetBallTracker() {
-    // Retrieve the saved ball state from localStorage
-    let ballState = JSON.parse(getStorageItem('ballState') || '{}');
-
-    // Select all ball elements within the .ballTracker container
-    const ballElements = document.querySelectorAll('.ball');
-
-    ballElements.forEach(function(ball) {
-        // Remove the 'faded' class to reset the ball
-        ball.classList.remove('faded');
-        
-        // Update the ball state to false (not faded)
-        ballState[ball.id] = false;
-		bc.postMessage({ resetBall: ball.id });
-    });
-
-    // Save the updated state back to localStorage
-    setStorageItem('ballState', JSON.stringify(ballState));
-
-    console.log("All balls have been reset to their default condition.");
-}
-
-function clearLogo(xL) {
-    // Remove the custom logo from localStorage
-    localStorage.removeItem("customLogo" + xL);
-
-    // Clear the preview image source
-    var imgElem = document.getElementById("l" + xL + "Img");
-    if (imgElem) {
-        imgElem.src = "./common/images/placeholder.png";
-    }
-
-    // Reset the file input field so that a file can be re-selected
-    var fileInput = document.getElementById("FileUploadL" + xL);
-    if (fileInput) {
-        fileInput.value = "";
-    }
-
-    // Reset the label text to its default state
-    var defaultText = (xL === 1) ? "Upload Player 1 Logo" :
-                      (xL === 2) ? "Upload Player 2 Logo" :
-                      "L" + (xL-2);
-    var textElem = document.getElementById("FileUploadLText" + xL);
-    if (textElem) {
-        textElem.textContent = defaultText;
-    }
-
-	// For player logos (1 and 2), uncheck their associated checkbuttons
-    if (xL === 1 || xL === 2) {
-        var checkbox = document.getElementById("customLogo" + xL);
-        if (checkbox) {
-            checkbox.checked = false;
-        }
-		if (xL ===1) {
-			setStorageItem("useCustomLogo", "no");
-			customLogoSetting();
-		} else {
-			setStorageItem("useCustomLogo2","no");
-			customLogoSetting2();
-		}
-		var fileInput = document.getElementById("FileUploadL" + xL);
-		toggleCheckbox("customLogo"+ xL, fileInput)
-    }
-
-    // Rebind the container's click so that it triggers a file input click
-    var containerId;
-    if (xL === 1) {
-        containerId = "uploadCustomLogo";
-    } else if (xL === 2) {
-        containerId = "uploadCustomLogo2";
-    } else {
-        containerId = "logoSsImg" + xL;
-    }
-    var container = document.getElementById(containerId);
-    if (container && fileInput) {
-        container.onclick = function (e) {
-            fileInput.click();
-        };
-		// Restore original styling by removing inline styles
-        container.style.backgroundColor = "";
-        container.style.color = "";
-    }
-}
 
 function setStorageItem(key, value) {
     const prefix = INSTANCE_ID ? `${INSTANCE_ID}_` : '';

@@ -1,0 +1,53 @@
+<!doctype html>
+<!-- 
+PoolStat Scoreboard is a modified version of CueSport Scoreboard by Iain Macleod which was based on g4Scoreboard. The purpose of this modification is to provide an OBS interface for
+PoolStat. A Pool scoring system used in Australia. Data is provided by a live screaming portal.
+
+CueSport Scoreboard for OBS version 2.3.0 Copyright 2025 Iain Macleod
+G4ScoreBoard addon for OBS version 1.6.1 Copyright 2022-2023 Norman Gholson IV
+https://g4billiards.com http://www.g4creations.com
+this is a purely javascript/html/css driven scoreboard system for OBS Studio
+free to use and modify and use as long as this copyright statment remains intact. 
+-->
+
+<html>
+
+<head>
+	<script>
+        document.addEventListener('DOMContentLoaded', () => {
+        const codeBlock = document.getElementById('myCodeBlock');
+        const copyButton = document.querySelector('.copy-button');
+
+        if (copyButton && codeBlock) {
+            copyButton.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(codeBlock.innerText);
+                copyButton.textContent = 'Copied!';
+                setTimeout(() => {
+                copyButton.textContent = 'Copy Code';
+                }, 2000); // Revert button text after 2 seconds
+            } catch (err) {
+                console.error('Failed to copy: ', err);
+                copyButton.textContent = 'Error!';
+                setTimeout(() => {
+                copyButton.textContent = 'Copy Code';
+                }, 2000);
+            }
+            });
+        }
+        });
+    </script>
+    <link rel="stylesheet" href="download.css" />
+</head>
+
+<body>
+    <h2>Copy and Paste the following config code to a new text file in notepad. Save this file with a .json extention</h2>
+    <div class="code-container">
+        <button class="copy-button">Copy Config</button>        
+        <pre><code id="myCodeBlock">
+        
+        </code></pre>
+    </div>    
+</body>
+
+</html>

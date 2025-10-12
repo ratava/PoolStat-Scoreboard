@@ -98,6 +98,30 @@ const handlers = {
         document.getElementById("gameInfo").style.cssText = document.getElementById("gameInfo").style.cssText + " " + data.gameInfo.gameInfoCSSTxt;
     },
 
+    drawRound(data) {
+        console.log("Draw/Round data: " + data.drawRound);
+        if (data.drawRound.usedrawRound === "true") { //enabled
+            document.getElementById("drawRound").classList.remove("noShow");
+        } else {
+            document.getElementById("drawRound").classList.add("noShow");
+        }
+        document.getElementById("drawRound").style.left = data.drawRound.drawRoundLeftTxt;
+        document.getElementById("drawRound").style.top = data.drawRound.drawRoundTopTxt;
+        document.getElementById("drawRound").style.height = data.drawRound.drawRoundHeightTxt;
+        document.getElementById("drawRound").style.width = data.drawRound.drawRoundWidthTxt;        
+        document.getElementById("drawRound").style.fontSize = data.drawRound.drawRoundFontTxt;
+        if (data.drawRound.drawRoundLeftTxt === "true") { // no background
+            document.getElementById("drawRound").style.backgroundColor = '';
+            document.getElementById("drawRound").style.border = 'none';
+            document.getElementById("drawRound").style.boxShadow = 'none';
+            document.getElementById("drawRound").style.textShadow = 'none';
+        } else {
+            document.getElementById("drawRound").style.backgroundColor = data.drawRound.drawRoundBGTxt;
+        }
+        document.getElementById("drawRound").style.color = data.drawRound.drawRoundFGTxt;
+        document.getElementById("drawRound").style.cssText = document.getElementById("drawRound").style.cssText + " " + data.drawRound.drawRoundCSSTxt;
+    },
+
     ticker(data) {
         console.log("Ticker data: " + data.ticker);
         if (data.ticker.usePoolStatTicker === "true") { //enabled
@@ -217,7 +241,8 @@ const handlers = {
         document.getElementById("hpImage").style.width = data.hpImage.hpImageWidthTxt;
         document.getElementById("hpImage").style.cssText = document.getElementById("hpImage").style.cssText + " " + data.hpImage.hpImageCSSTxt;
         var domRoot = document.querySelector(':root');
-        domRoot.style.setProperty('--hp-Image-width', data.hpImage.hpImageWidthTxt);
+        var width=parseInt(data.hpImage.hpImageWidthTxt) * 2
+        domRoot.style.setProperty('--hp-Image-width', '-' + width.toString() + 'px');
     },
     
     apImage(data) {
@@ -228,28 +253,50 @@ const handlers = {
         document.getElementById("apImage").style.width = data.apImage.apImageWidthTxt;
         document.getElementById("apImage").style.cssText = document.getElementById("apImage").style.cssText + " " + data.apImage.apImageCSSTxt;
         var domRoot = document.querySelector(':root');
-        domRoot.style.setProperty('--ap-Image-width', '-' + data.apImage.apImageWidthTxt);
+        var width=parseInt(data.apImage.apImageWidthTxt) * 2
+        domRoot.style.setProperty('--ap-Image-width', width.toString() + 'px');
     },
 
-    
+    hpBPIcon(data) {
+        console.log("HP BP Icon data: " + data.hpBPIcon);
+        document.getElementById("hpBPIcon").style.left = data.hpBPIcon.bpLeftTxt;
+        document.getElementById("hpBPIcon").style.top = data.hpBPIcon.bpTopTxt;
+        document.getElementById("hpBPIcon").style.height = data.hpBPIcon.bpHeightTxt;
+        document.getElementById("hpBPIcon").style.width = data.hpBPIcon.bpWidthTxt;
+        document.getElementById("hpBPIcon").style.cssText = document.getElementById("hpBPIcon").style.cssText + " " + data.hpBPIcon.bpCSSTxt;
+        if (data.hpBPIcon.bpBGNoneCB === "true") { // no background
+            document.getElementById("hpBPIcon").style.backgroundColor = '';
+            document.getElementById("hpBPIcon").style.border = 'none';
+            document.getElementById("hpBPIcon").style.boxShadow = 'none';
+            document.getElementById("hpBPIcon").style.textShadow = 'none';            
+        } else {
+            document.getElementById("hpBPIcon").style.backgroundColor = data.hpBPIcon.bpBGTxt;
+        }
+    },
+
+    apBPIcon(data) {
+        console.log("AP BP Icon data: " + data.apBPIcon);
+        document.getElementById("apBPIcon").style.right = data.apBPIcon.bpLeftTxt;
+        document.getElementById("apBPIcon").style.top = data.apBPIcon.bpTopTxt;        
+        document.getElementById("apBPIcon").style.height = data.apBPIcon.bpHeightTxt;
+        document.getElementById("apBPIcon").style.width = data.apBPIcon.bpWidthTxt;
+        document.getElementById("apBPIcon").style.cssText = document.getElementById("apBPIcon").style.cssText + " " + data.apBPIcon.bpCSSTxt;
+        if (data.apBPIcon.bpBGNoneCB === "true") { // no background
+            document.getElementById("apBPIcon").style.backgroundColor = '';
+            document.getElementById("apBPIcon").style.border = 'none';
+            document.getElementById("apBPIcon").style.boxShadow = 'none';
+            document.getElementById("apBPIcon").style.textShadow = 'none';            
+        } else {
+            document.getElementById("apBPIcon").style.backgroundColor = data.apBPIcon.bpBGTxt;
+        }
+    },
+
     score(data) {
         console.log(`Player: ${data.player}, Score: ${data.score}`);
         if (data.player == 1) {data.player = "hpScore";}
         if (data.player == 2) {data.player = "apScore";}
         const scoreElement = document.getElementById(data.player);
-        // if (data.score > scoreElement.innerHTML) {
-        //     scoreElement.innerHTML = data.score;
-        //     scoreElement.classList.add("winBlink");
-        //     scoreElement.textContent = data.score;
-        //     setTimeout("clearWinBlink()", 500);
-        // } else {
             scoreElement.innerHTML = data.score;
-        // }
-    },
-
-    scaling(data) {
-        console.log(`Scaling setting: ${data.scaling}`);
-        document.documentElement.style.setProperty('--ui-scaling', data.scaling);
     },
 
     race(data) {
@@ -277,6 +324,18 @@ const handlers = {
         }
     },
 
+    draw(data) {
+        console.log("Draw info: " + data.draw);
+        if (data.race != "") {
+            document.getElementById("drawRound").classList.remove("noShow");
+            document.getElementById("drawRound").classList.add("fadeInElm");
+            document.getElementById("drawRound").innerHTML = data.draw;
+        } else {
+            document.getElementById("drawRound").classList.add("noShow");
+            document.getElementById("drawRound").classList.remove("fadeInElm");        
+        }
+    },
+
     name(data) {
         console.log("Player/Team: " + data.player + " named " + data.name);
         if (data.player == 1) {data.player = "hpName";}
@@ -285,89 +344,8 @@ const handlers = {
         document.getElementById(data.player).innerHTML = data.name;
     },
 
-    playerDisplay(data) {
-        // Code to assist with displaying active player image when only two players are enabled, on reload.
-        // const player1Enabled = "yes"
-        // const player2Enabled = "yes"
-        // const bothPlayersEnabled = true
-        // const playerToggleEnabled = false
-        // const useclockEnabled = false
-
-        // console.log(`Player States in playerDisplay:`, {
-        //     player1Enabled,
-        //     player2Enabled,
-        //     bothPlayersEnabled,
-        //     playerToggleEnabled,
-        //     useclockEnabled,
-        //     rawPlayer1: getStorageItem("usePlayer1"),
-        //     rawPlayer2: getStorageItem("usePlayer2")
-        // });
-               
-        // if (data.playerDisplay == "showPlayer") {
-        //     // Check if both players are enabled before fading in the player images
-        //     if (bothPlayersEnabled && playerToggleEnabled) {
-        //         const activePlayer = getStorageItem("activePlayer");
-        //         console.log(`Show player ${activePlayer} as active`);
-        //         document.getElementById("player1Image").classList.replace(activePlayer === "1" ? "fadeOutElm" : "fadeInElm", activePlayer === "1" ? "fadeInElm" : "fadeOutElm");
-        //         document.getElementById("player2Image").classList.replace(activePlayer === "2" ? "fadeOutElm" : "fadeInElm", activePlayer === "2" ? "fadeInElm" : "fadeOutElm");
-        //     }
-        //     if (player1Enabled && getStorageItem("useCustomLogo")=="yes") {
-        //         document.getElementById("customLogo1").classList.replace("fadeOutElm", "fadeInElm");
-        //     }
-        //     if (player2Enabled && getStorageItem("useCustomLogo2")=="yes") {
-        //         document.getElementById("customLogo2").classList.replace("fadeOutElm", "fadeInElm");
-        //     }
-        //     if (bothPlayersEnabled && getStorageItem("raceInfo") && getStorageItem("scoreDisplay") === "yes") {
-        //         document.getElementById("raceInfo").classList.replace("fadeOutElm", "fadeInElm");
-        //     }
-
-        //     showPlayer(data.playerNumber);
-
-        //     // Add a small delay to check after showPlayer has completed
-        //     setTimeout(() => {
-        //         // Debug logs
-        //         console.log("Display player 1:", getStorageItem("usePlayer1"));
-        //         console.log("Display player 2:", getStorageItem("usePlayer2"));
-        //         if (getStorageItem("usePlayer1") === "yes" && getStorageItem("usePlayer2") === "yes" && getStorageItem("scoreDisplay") === "yes") {
-        //             console.log("Both players enabled, so scores are enabled");
-        //             showScores();
-        //         } else {
-        //             console.log("Not all players enabled, scores remain hidden");
-        //         }
-        //     }, 50); // Small delay to ensure localStorage is updated
-        // };
-
-    },
-
-    scoreDisplay(data) {
-        // if (data.scoreDisplay == "yes") {
-        //     showScores();
-        // } else {
-        //     hideScores();
-        // }
-    },
-
-    toggle(data) {
-        // Check if the message contains a 'toggle' property
-        if (data.toggle) {
-            const elementId = data.toggle;
-            // Find the element on this page with the corresponding id
-            const elementToToggle = document.getElementById(elementId);
-            if (elementToToggle) {
-                // Toggle the 'faded' class on this element
-                elementToToggle.classList.toggle('faded');
-                console.log('Toggled element with id:', elementId, 'on browser_source.html');
-            } else {
-                console.log('Element with id', elementId, 'not found on browser_source.html');
-            }
-        }
-    },
-
     tickerMessage(data) {
-        console.log('a ' + data);
         tickerMessageArray.push(data.tickerMessage);
-        console.log(tickerMessageArray)
-
     },
 
     homePlayerLogo(data) {
@@ -376,10 +354,13 @@ const handlers = {
             document.getElementById("hpImageDiv").classList.remove("fadeOutElm");
             document.getElementById("hpImageDiv").classList.add("fadeInElm");
             document.getElementById("hpImage").src = data.homePlayerLogo;
-        } else {
             document.getElementById("hpName").style.transform = 'translateX(var(--hp-Image-width))';
+            document.getElementById("hpBPIcon").style.transform = 'translateX(var(--hp-Image-width))';
+        } else {
+            document.getElementById("hpName").style.transform = '';
+            document.getElementById("hpBPIcon").style.transform = '';
             document.getElementById("hpImageDiv").classList.remove("fadeInElm");
-            document.getElementById("hpImageDiv").classList.add("fadeOutElm");            
+            document.getElementById("hpImageDiv").classList.add("fadeOutElm");
         }
     },
 
@@ -389,12 +370,34 @@ const handlers = {
             document.getElementById("apImageDiv").classList.remove("fadeOutElm");
             document.getElementById("apImageDiv").classList.add("fadeInElm");
             document.getElementById("apImage").src = data.awayPlayerLogo;
-        } else {
             document.getElementById("apName").style.transform = 'translateX(var(--ap-Image-width))';
+            document.getElementById("apBPIcon").style.transform = 'translateX(var(--ap-Image-width))';            
+        } else {
+            document.getElementById("apName").style.transform = '';
+            document.getElementById("apBPIcon").style.transform = '';            
             document.getElementById("apImageDiv").classList.remove("fadeInElm");
             document.getElementById("apImageDiv").classList.add("fadeOutElm");
         }
     },
+
+    breakingPlayer(data) {
+        if (data.breakingPlayer == "hp") {
+            document.getElementById("apBPIcon").classList.remove("fadeInElm");
+            document.getElementById("apBPIcon").classList.add("fadeOutElm");            
+            document.getElementById("hpBPIcon").classList.remove("fadeOutElm");
+            document.getElementById("hpBPIcon").classList.add("fadeInElm");            
+        } else if (data.breakingPlayer == "ap") {
+            document.getElementById("hpBPIcon").classList.remove("fadeInElm");
+            document.getElementById("hpBPIcon").classList.add("fadeOutElm");            
+            document.getElementById("apBPIcon").classList.remove("fadeOutElm");
+            document.getElementById("apBPIcon").classList.add("fadeInElm");            
+        }
+    },
+
+    reload(data) {
+        window.location.reload();
+    }
+
 };
 
 // Main event handler
@@ -438,27 +441,6 @@ function displayTickerMessage() {
 setInterval(displayTickerMessage, 7500);
     
 
-// Setting defaults in storage so functions execute correctly, in the event values are not being retrieved from storage successfully due to initialization or similar
-// if (getStorageItem("usePlayer1") === null) {
-//     setStorageItem("usePlayer1", "yes");
-// }
-// if (getStorageItem("usePlayer2") === null) {
-//     setStorageItem("usePlayer2", "yes");
-// }
-// if (getStorageItem("usePlayerToggle") === null) {
-//     setStorageItem("usePlayerToggle", "yes");
-// }
-// if (getStorageItem("activePlayer") === null) {
-//     setStorageItem("activePlayer", "1");
-// }
-
-// if (getStorageItem("poolStat") === null) {
-//     setStorageItem("poolStat", "yes");
-// }
-
-// setCustomLogo("customLogo1", "useCustomLogo", "usePlayer1");
-// setCustomLogo("customLogo2", "useCustomLogo2", "usePlayer2");
-
 if (getStorageItem("p1NameCtrlPanel") != "" || getStorageItem("p1NameCtrlPanel") != null) {
 	document.getElementById("hpName").innerHTML = getStorageItem("p1NameCtrlPanel");
 }
@@ -473,57 +455,6 @@ if (getStorageItem("p2NameCtrlPanel") == "" || getStorageItem("p2NameCtrlPanel")
 	document.getElementById("apName").innerHTML = " ";
 }
 
-// Code to assist with displaying active player image when only two players are enabled, on reload.
-// const player1Enabled = getStorageItem("usePlayer1") === "yes";
-// const player2Enabled = getStorageItem("usePlayer2") === "yes";
-// const bothPlayersEnabled = player1Enabled && player2Enabled;
-// const playerToggleEnabled = getStorageItem("usePlayerToggle") === "yes";
-
-// // Add debug logging
-// console.log('Player States:', {
-//     player1Enabled,
-//     player2Enabled,
-//     bothPlayersEnabled,
-//     playerToggleEnabled,
-//     usePlayer1: getStorageItem("usePlayer1"),
-//     usePlayer2: getStorageItem("usePlayer2"),
-//     usePlayerToggle: getStorageItem("usePlayerToggle"),
-//     activePlayer: getStorageItem("activePlayer")
-// });
-
-// // Ensure we have valid values
-// if (player1Enabled === null || player2Enabled === null) {
-//     console.warn('Player states not properly initialized, reinitializing defaults');
-//     initializeDefaults();
-//     // Recheck values after initialization
-//     const player1Enabled = getStorageItem("usePlayer1") === "yes";
-//     const player2Enabled = getStorageItem("usePlayer2") === "yes";
-//     const bothPlayersEnabled = player1Enabled && player2Enabled;
-//     const playerToggleEnabled = getStorageItem("usePlayerToggle") === "yes";
-// }
-
-// if (bothPlayersEnabled && playerToggleEnabled) {
-//     const activePlayer = getStorageItem("activePlayer");
-//     console.log(`Show player image in autostart condition. PlayerToggle: ${playerToggleEnabled}. Players both enabled: ${bothPlayersEnabled}`);
-//     // Show active player image, hide inactive player image
-//     if (activePlayer === "1") {
-//         document.getElementById("player1Image").classList.remove("fadeOutElm");
-//         document.getElementById("player1Image").classList.add("fadeInElm");
-//         document.getElementById("player2Image").classList.remove("fadeInElm");
-//         document.getElementById("player2Image").classList.add("fadeOutElm");
-//     } else {
-//         document.getElementById("player1Image").classList.remove("fadeInElm");
-//         document.getElementById("player1Image").classList.add("fadeOutElm");
-//         document.getElementById("player2Image").classList.remove("fadeOutElm");
-//         document.getElementById("player2Image").classList.add("fadeInElm");
-//     }
-// } else {
-//     // Hide both players if not enabled
-//     document.getElementById("player1Image").classList.remove("fadeInElm");
-//     document.getElementById("player1Image").classList.add("fadeOutElm");
-//     document.getElementById("player2Image").classList.remove("fadeInElm");
-//     document.getElementById("player2Image").classList.add("fadeOutElm");
-// }
 
 if (getStorageItem("p1ScoreCtrlPanel") != null && getStorageItem("usePoolStat") != "yes") {
 	document.getElementById("hpScore").innerHTML = getStorageItem("p1ScoreCtrlPanel");
@@ -542,96 +473,45 @@ if (getStorageItem("p2ScoreCtrlPanel") != null && getStorageItem("usePoolStat") 
     }
 }
 
-// if (getStorageItem("gameInfo") != "" ) {
-// 	document.getElementById("gameInfo").classList.remove("noShow");
-//     document.getElementById("gameInfo").classList.add("fadeInElm");
-//     document.getElementById("gameInfo").innerHTML = getStorageItem("gameInfo");
-// } else {
-//     document.getElementById("gameInfo").classList.add("noShow");
-//     document.getElementById("gameInfo").classList.remove("fadeInElm");
-// }
-
-
-// if (getStorageItem("raceInfo") != "" && getStorageItem("raceInfo") != null && bothPlayersEnabled && getStorageItem("scoreDisplay") === "yes") {
-// 	document.getElementById("raceInfo").classList.remove("noShow");
-// 	document.getElementById("raceInfo").classList.add("fadeInElm");
-//     document.getElementById("raceInfo").innerHTML = getStorageItem("raceInfo");
-// }
-
-// function updateIconsVisibility(show) {
-//     const action = show ? "fadeInElm" : "fadeOutElm";
-//     document.getElementById("p1ExtIcon").classList.replace(show ? "fadeOutElm" : "fadeInElm", action);
-//     document.getElementById("p2ExtIcon").classList.replace(show ? "fadeOutElm" : "fadeInElm", action);
-// }
-
-// if (getStorageItem(("usePlayer1")) != "yes") {
-// 	document.getElementById("player1Name").classList.replace("fadeInElm", "fadeOutElm");
-// 	document.getElementById("player1Score").classList.replace("fadeInElm", "fadeOutElm");
-// 	document.getElementById("player2Score").classList.replace("fadeInElm", "fadeOutElm");
-// }
-// if (getStorageItem(("usePlayer2")) != "yes") {
-// 	document.getElementById("player2Name").classList.replace("fadeInElm", "fadeOutElm");
-// 	document.getElementById("player1Score").classList.replace("fadeInElm", "fadeOutElm");
-// 	document.getElementById("player2Score").classList.replace("fadeInElm", "fadeOutElm");
-// }
-
-// if (getStorageItem('p1colorSet') != "") {
-// 	document.getElementById("player1Name").style.background = "linear-gradient(to left, white, " + getStorageItem('p1colorSet');
-// }
-// if (getStorageItem('p2colorSet') != "") {
-// 	document.getElementById("player2Name").style.background = "linear-gradient(to right, white, " + getStorageItem('p2colorSet');
-// }
-
-
-// function setCustomLogo(logoId, useCustomLogoKey, usePlayerKey) {
-//     if (getStorageItem(logoId) !== null && getStorageItem(logoId) !== "") {
-//         document.getElementById(logoId).src = getStorageItem(logoId);
-//         if (getStorageItem(useCustomLogoKey) === "yes" && getStorageItem(usePlayerKey) === "yes") {
-//             document.getElementById(logoId).classList.replace("fadeOutElm", "fadeInElm");
-//         }
-//     } else {
-//         document.getElementById(logoId).src = "./common/images/placeholder.png";
-//     }
-// }
 
 // Call the initialization function on window load
-window.addEventListener("load", initializeBrowserSourceExtensionStatus);
+// window.addEventListener("load", initializeBrowserSourceExtensionStatus);
 
 
-// Add this function to initialize and update the player extension button styling
-function initializeBrowserSourceExtensionStatus() {
-    // Get the extension icon elements for player 1 and 2
-    let p1ExtIcon = document.getElementById("p1ExtIcon");
-    let p2ExtIcon = document.getElementById("p2ExtIcon");
+// // Add this function to initialize and update the player extension button styling
+// function initializeBrowserSourceExtensionStatus() {
+//     // Get the extension icon elements for player 1 and 2
+//     let p1ExtIcon = document.getElementById("hpBPI");
+//     let p2ExtIcon = document.getElementById("p2ExtIcon");
 
-    // Check localStorage for stored extension status values
-    // (Assuming you set "playerExtension1" and "playerExtension2" to "enabled" when active)
-    let extStatus1 = getStorageItem("p1Extension");
-    let extStatus2 = getStorageItem("p2Extension");
+//     // Check localStorage for stored extension status values
+//     // (Assuming you set "playerExtension1" and "playerExtension2" to "enabled" when active)
+//     let extStatus1 = getStorageItem("p1Extension");
+//     let extStatus2 = getStorageItem("p2Extension");
 
-    // Update styling for Player 1's extension element
-    if (p1ExtIcon) {
-        if (extStatus1 && extStatus1 === "enabled") {
-            // p1ExtIcon.textContent = "Reset";
-            p1ExtIcon.style.backgroundColor = "darkred";
-            p1ExtIcon.style.color = "white";
-        } else {
-            // p1ExtIcon.textContent = "Extend";
-            p1ExtIcon.style.backgroundColor = "";
-            p1ExtIcon.style.color = "";
-        }
-    }
+//     // Update styling for Player 1's extension element
+//     if (p1ExtIcon) {
+//         if (extStatus1 && extStatus1 === "enabled") {
+//             // p1ExtIcon.textContent = "Reset";
+//             p1ExtIcon.style.backgroundColor = "darkred";
+//             p1ExtIcon.style.color = "white";
+//         } else {
+//             // p1ExtIcon.textContent = "Extend";
+//             p1ExtIcon.style.backgroundColor = "";
+//             p1ExtIcon.style.color = "";
+//         }
+//     }
     
-    // Update styling for Player 2's extension element
-    if (p2ExtIcon) {
-        if (extStatus2 && extStatus2 === "enabled") {
-            // p2ExtIcon.textContent = "Reset";
-            p2ExtIcon.style.backgroundColor = "darkred";
-            p2ExtIcon.style.color = "white";
-        } else {
-            // p2ExtIcon.textContent = "Extend";
-            p2ExtIcon.style.backgroundColor = "";
-            p2ExtIcon.style.color = "";
-        }
-    }
-}
+//     // Update styling for Player 2's extension element
+//     if (p2ExtIcon) {
+//         if (extStatus2 && extStatus2 === "enabled") {
+//             // p2ExtIcon.textContent = "Reset";
+//             p2ExtIcon.style.backgroundColor = "darkred";
+//             p2ExtIcon.style.color = "white";
+//         } else {
+//             // p2ExtIcon.textContent = "Extend";
+//             p2ExtIcon.style.backgroundColor = "";
+//             p2ExtIcon.style.color = "";
+//         }
+//     }
+// }
