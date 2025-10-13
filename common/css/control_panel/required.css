@@ -16,6 +16,37 @@ input[id*="CB"] {
 	margin-left: 5px;
 }
 
+
+ /* Style the button that is used to open and close the collapsible content */
+.collapsible {
+	background-color: #eee;
+	color: #444;
+	cursor: pointer;
+	padding: 8px;
+	width: 100%;
+	border: none;
+	text-align: left;
+	outline: none;
+	font-size: 15px;
+	margin-bottom: 10px;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active,
+.collapsible:hover {
+	background-color: #ccc;
+}
+
+ /* Style the collapsible content. Note: hidden by default */
+.content {
+	padding: 0 18px;
+	display: none;
+	background: #414553;
+	overflow: hidden;
+	border: #000 solid 2px;
+}
+
+
 div {
 	color:white;
 	min-height: 24px;
@@ -139,13 +170,23 @@ input[type="number"]::-webkit-outer-spin-button {
 	border:2px solid black;
 }
 
-#sendDataBtn{
+#refreshBrowserBtn {
 	cursor: pointer;
 	width: 150px;
 	font-size: 10pt;
 	padding: 0px 0px 0px 0px;
 	background: red;
 	color: black;
+	border: 2px solid black;
+}
+
+#sendDataBtn{
+	cursor: pointer;
+	color: white;
+	width: 150px;
+	font-size: 10pt;
+	padding: 0px 0px 0px 0px;
+	background: green;
 	border:2px solid black;
 }
 

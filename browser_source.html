@@ -39,10 +39,13 @@ free to use and modify and use as long as this copyright statment remains intact
 	<div id="scoreBoardDiv" class="fadeInElm">
 		<!-- Main scoreboard container -->
 		<div id="scoreBoard">
-			
 			<!-- Player 1 section -->
 			<div class="player-container left">
-				<div class="ext-image-container">
+				<div id="hpExtContainer">
+					<div id="hpExtDiv" class="fadeOutElm">
+					</div>
+				</div>		
+				<div id="hpImageContainer">
 					<div id="hpImageDiv" class="fadeOutElm">
 						<img id="hpImage" src=""></img>
 					</div>
@@ -56,9 +59,12 @@ free to use and modify and use as long as this copyright statment remains intact
 				<div class="score-logo-container">
 					<div id="hpScore" class="fadeInElm">99</div>
 				</div>
-		  	</div>
-		  	<!-- Player 2 section -->
-		  	<div class="player-container right">
+			</div>
+			<div id="shotClockContainer" class="noShow">
+				<div id="shotClock" class="fadeInElm">45</div>
+			</div>
+			<!-- Player 2 section -->
+			<div class="player-container right">
 				<div class="score-logo-container">
 					<div id="apScore" class="fadeInElm">99</div>
 				</div>
@@ -68,12 +74,16 @@ free to use and modify and use as long as this copyright statment remains intact
 					</div>
 					<div id="apBPIcon" class="fadeOutElm"></div>
 				</div>
-				<div class="ext-image-container">
+				<div id="apImageContainer">
 					<div id="apImageDiv" class="fadeOutElm">
 						<img id="apImage" src="">
 					</div>
 				</div>
-		  	</div>
+				<div id="apExtContainer">
+					<div id="apExtDiv" class="fadeOutElm">
+					</div>
+				</div>		
+			</div>
 		</div>
 	</div>
 	<script src="./common/js/browser_source_post.js"></script>

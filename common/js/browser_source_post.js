@@ -63,12 +63,14 @@ const handlers = {
         document.getElementById("raceInfo").style.width = data.raceInfo.raceInfoWidthTxt;
         document.getElementById("raceInfo").style.fontSize = data.raceInfo.raceInfoFontTxt;
         if (data.raceInfo.raceInfoBGNoneCB === "true") { // no background
-            document.getElementById("raceInfo").style.backgroundColor = '';
+            document.getElementById("raceInfo").style.background = 'none';
             document.getElementById("raceInfo").style.border = 'none';
             document.getElementById("raceInfo").style.boxShadow = 'none';
             document.getElementById("raceInfo").style.textShadow = 'none';
         } else {
             document.getElementById("raceInfo").style.backgroundColor = data.raceInfo.raceInfoBGTxt;
+            document.getElementById("raceInfo").style.boxShadow = "0 8px 16px 0 rgba(0, 0, 0, 0.6)";
+            document.getElementById("raceInfo").style.border = "2px solid black";
         }
         document.getElementById("raceInfo").style.color = data.raceInfo.raceInfoFGTxt;
         document.getElementById("raceInfo").style.cssText = document.getElementById("raceInfo").style.cssText + " " + data.raceInfo.raceInfoCSSTxt;
@@ -86,13 +88,15 @@ const handlers = {
         document.getElementById("gameInfo").style.height = data.gameInfo.gameInfoHeightTxt;
         document.getElementById("gameInfo").style.width = data.gameInfo.gameInfoWidthTxt;        
         document.getElementById("gameInfo").style.fontSize = data.gameInfo.gameInfoFontTxt;
-        if (data.gameInfo.gameInfoLeftTxt === "true") { // no background
-            document.getElementById("gameInfo").style.backgroundColor = '';
+        if (data.gameInfo.gameInfoBGNoneCB === "true") { // no background
+            document.getElementById("gameInfo").style.background = 'none';
             document.getElementById("gameInfo").style.border = 'none';
             document.getElementById("gameInfo").style.boxShadow = 'none';
             document.getElementById("gameInfo").style.textShadow = 'none';
         } else {
             document.getElementById("gameInfo").style.backgroundColor = data.gameInfo.gameInfoBGTxt;
+            document.getElementById("gameInfo").style.boxShadow = "0 8px 16px 0 rgba(0, 0, 0, 0.6)";
+            document.getElementById("gameInfo").style.border = "2px solid black";
         }
         document.getElementById("gameInfo").style.color = data.gameInfo.gameInfoFGTxt;
         document.getElementById("gameInfo").style.cssText = document.getElementById("gameInfo").style.cssText + " " + data.gameInfo.gameInfoCSSTxt;
@@ -110,13 +114,15 @@ const handlers = {
         document.getElementById("drawRound").style.height = data.drawRound.drawRoundHeightTxt;
         document.getElementById("drawRound").style.width = data.drawRound.drawRoundWidthTxt;        
         document.getElementById("drawRound").style.fontSize = data.drawRound.drawRoundFontTxt;
-        if (data.drawRound.drawRoundLeftTxt === "true") { // no background
-            document.getElementById("drawRound").style.backgroundColor = '';
+        if (data.drawRound.drawRoundBGNoneCB === "true") { // no background
+            document.getElementById("drawRound").style.background = 'none';
             document.getElementById("drawRound").style.border = 'none';
             document.getElementById("drawRound").style.boxShadow = 'none';
             document.getElementById("drawRound").style.textShadow = 'none';
         } else {
             document.getElementById("drawRound").style.backgroundColor = data.drawRound.drawRoundBGTxt;
+            document.getElementById("drawRound").style.boxShadow = "0 8px 16px 0 rgba(0, 0, 0, 0.6)";
+            document.getElementById("drawRound").style.border = "2px solid black";
         }
         document.getElementById("drawRound").style.color = data.drawRound.drawRoundFGTxt;
         document.getElementById("drawRound").style.cssText = document.getElementById("drawRound").style.cssText + " " + data.drawRound.drawRoundCSSTxt;
@@ -134,14 +140,16 @@ const handlers = {
         document.getElementById("ticker").style.height = data.ticker.tickerHeightTxt;
         document.getElementById("ticker").style.width = data.ticker.tickerWidthTxt;
         document.getElementById("ticker").style.fontSize = data.ticker.tickerFontTxt;
-        if (data.ticker.tickerLeftTxt === "true") { // no background
-            document.getElementById("ticker").style.backgroundColor = '';
+        if (data.ticker.tickerBGNoneCB === "true") { // no background
+            document.getElementById("ticker").style.background = 'none';
             document.getElementById("ticker").style.border = 'none';
             document.getElementById("ticker").style.boxShadow = 'none';
             document.getElementById("ticker").style.textShadow = 'none';
 
         } else {
             document.getElementById("ticker").style.backgroundColor = data.ticker.tickerBGTxt;
+            document.getElementById("ticker").style.boxShadow = "0 8px 16px 0 rgba(0, 0, 0, 0.6)";
+            document.getElementById("ticker").style.border = "2px solid black";
         }
         document.getElementById("ticker").style.color = data.ticker.tickerFGTxt;
         document.getElementById("ticker").style.cssText = document.getElementById("ticker").style.cssText + " " + data.ticker.tickerCSSTxt;
@@ -396,9 +404,18 @@ const handlers = {
 
     reload(data) {
         window.location.reload();
-    }
+    },
 
-};
+    shotClock(data) {
+        console.log("Shot Clock data: " + data.shotClock);
+        if (data.useShotClock) { //enabled
+            document.getElementById("shotClockContainer").classList.remove("noShow");
+            document.getElementById("shotClock").innerHTML = data.shotClock;
+        } else {
+            document.getElementById("shotClockContainer").classList.add("noShow");
+        }
+    }
+}
 
 // Main event handler
 bc.onmessage = (event) => {
