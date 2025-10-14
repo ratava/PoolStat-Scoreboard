@@ -1,4 +1,3 @@
-	
 body{
 	font-family: Arial, Helvetica, sans-serif;
 	background: #2b2e38;
@@ -16,7 +15,10 @@ input[id*="CB"] {
 	margin-left: 5px;
 }
 
-
+text{
+	margin-right:5px;
+	
+}
  /* Style the button that is used to open and close the collapsible content */
 .collapsible {
 	background-color: #eee;
@@ -41,11 +43,9 @@ input[id*="CB"] {
 .content {
 	padding: 0 18px;
 	display: none;
-	background: #414553;
+	background: #2b2e38;
 	overflow: hidden;
-	border: #000 solid 2px;
 }
-
 
 div {
 	color:white;
@@ -285,6 +285,7 @@ input {
 	clear: both;
 	width: 650px;
 	height:fit-content;
+	background: #2b2e38;
 }
 
 .column-center {
@@ -294,6 +295,7 @@ input {
 	clear: both;
 	width: 650px;
 	height:fit-content;
+	background: #2b2e38;
 }
 
 .column-right {
@@ -304,6 +306,7 @@ input {
 	clear: both;
 	width: 650px;
 	height:fit-content;
+	background: #2b2e38;
 }
 
 .column-center-close {
@@ -313,6 +316,7 @@ input {
 	clear: both;
 	width: 650px;
 	height:fit-content;
+	background: #2b2e38;
 }
 
 .header {
@@ -333,22 +337,6 @@ input {
 	font-weight: bold;
 	font-size: 16px;
 	font-variant: small-caps;
-}
-
-#ballTracker {
-	display: flex;
-	justify-content:center;
-	padding: 10px 0 10px 0;
-	clear: both;
-	width: 650px;
-}
-
-#ballSet {
-	display: flex;
-	justify-content:center;
-	padding: 10px 0 10px 0;
-	clear: both;
-	width: 650px;
 }
 
 /* Basic placeholder styling */
@@ -403,23 +391,6 @@ input {
     background-color: white;
     transition: .4s;
     border-radius: 50%;
-}
-
-.player1, .player2 {
-    position: absolute;
-    color: white;
-    font-size: 12px;
-    z-index: 1;
-    top: 72%;
-    transform: translateY(-50%);
-}
-
-.player1 {
-    left: 8px;
-}
-
-.player2 {
-    left: 30px;
 }
 
 input:checked + .slider_round {
@@ -525,7 +496,7 @@ input:checked + .slider_round:before {
 }
 
 .info-box {
-  	font-size: 10pt;
+	font-size: 10pt;
 	visibility: hidden; /* Hides the info box by default */
 	opacity: 0; /* Optional: for a fade-in effect */
 	width: 450px; /* Adjust as needed */
