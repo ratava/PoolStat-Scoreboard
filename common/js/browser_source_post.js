@@ -22,6 +22,7 @@ const bcr = new BroadcastChannel(`recv_${INSTANCE_ID}`); // browser_source -> co
 const bc = new BroadcastChannel(`main_${INSTANCE_ID}`);
 var playerNumber;
 const tickerMessageArray = [];
+var tickerAutoHide = "";
 
 // Set default values immediately
 function initializeDefaults() {
@@ -49,6 +50,29 @@ initializeDefaults();
 
 // First, separate handlers into distinct functions
 const handlers = {
+    bannerBox(data) {
+        console.log("Box Banner data: " + data.bannerBox);
+        if (data.bannerBox.bannerBoxEnabledCB === "true") { //enabled
+            document.getElementById("bannerBox").classList.remove("noShow");
+        } else {
+            document.getElementById("bannerBox").classList.add("noShow");
+        }
+        document.getElementById("bannerBox").style.left = data.bannerBox.bannerBoxLeftTxt;
+        document.getElementById("bannerBox").style.top = data.bannerBox.bannerBoxTopTxt;
+        document.getElementById("bannerBox").style.height = data.bannerBox.bannerBoxHeightTxt;
+        document.getElementById("bannerBox").style.width = data.bannerBox.bannerBoxWidthTxt;
+        if (data.bannerBox.bannerBoxBGNoneCB === "true") { // no background
+            document.getElementById("bannerBox").style.background = 'none';
+            document.getElementById("bannerBox").style.border = 'none';
+            document.getElementById("bannerBox").style.boxShadow = 'none';
+            document.getElementById("bannerBox").style.textShadow = 'none';
+        } else {
+            document.getElementById("bannerBox").style.backgroundColor = data.bannerBox.bannerBoxBGTxt;
+            document.getElementById("bannerBox").style.boxShadow = "0 8px 16px 0 rgba(0, 0, 0, 0.6)";
+            document.getElementById("bannerBox").style.border = "2px solid black";
+        }
+        document.getElementById("bannerBox").style.cssText = document.getElementById("bannerBox").style.cssText + " " + data.bannerBox.bannerBoxCSSTxt;
+    },
 
     raceInfo(data) {
         console.log("Race Info data: " + data.raceInfo);
@@ -86,7 +110,7 @@ const handlers = {
         document.getElementById("gameInfo").style.left = data.gameInfo.gameInfoLeftTxt;
         document.getElementById("gameInfo").style.top = data.gameInfo.gameInfoTopTxt;
         document.getElementById("gameInfo").style.height = data.gameInfo.gameInfoHeightTxt;
-        document.getElementById("gameInfo").style.width = data.gameInfo.gameInfoWidthTxt;        
+        document.getElementById("gameInfo").style.width = data.gameInfo.gameInfoWidthTxt;
         document.getElementById("gameInfo").style.fontSize = data.gameInfo.gameInfoFontTxt;
         if (data.gameInfo.gameInfoBGNoneCB === "true") { // no background
             document.getElementById("gameInfo").style.background = 'none';
@@ -112,7 +136,7 @@ const handlers = {
         document.getElementById("drawRound").style.left = data.drawRound.drawRoundLeftTxt;
         document.getElementById("drawRound").style.top = data.drawRound.drawRoundTopTxt;
         document.getElementById("drawRound").style.height = data.drawRound.drawRoundHeightTxt;
-        document.getElementById("drawRound").style.width = data.drawRound.drawRoundWidthTxt;        
+        document.getElementById("drawRound").style.width = data.drawRound.drawRoundWidthTxt;
         document.getElementById("drawRound").style.fontSize = data.drawRound.drawRoundFontTxt;
         if (data.drawRound.drawRoundBGNoneCB === "true") { // no background
             document.getElementById("drawRound").style.background = 'none';
@@ -135,10 +159,16 @@ const handlers = {
         } else {
             document.getElementById("ticker").classList.add("noShow");
         }
+        if (data.ticker.tickerAutoHideCB === "false") { //don't auto hide
+            tickerAutoHide = "false";
+        } else {
+            document.getElementById("ticker").classList.add("noShow");
+            tickerAutoHide = "true";
+        }
         document.getElementById("ticker").style.left = data.ticker.tickerLeftTxt;
         document.getElementById("ticker").style.top = data.ticker.tickerTopTxt;
         document.getElementById("ticker").style.height = data.ticker.tickerHeightTxt;
-        document.getElementById("ticker").style.width = data.ticker.tickerWidthTxt;
+        document.getElementById("ticker").style.minWidth = data.ticker.tickerWidthTxt;
         document.getElementById("ticker").style.fontSize = data.ticker.tickerFontTxt;
         if (data.ticker.tickerBGNoneCB === "true") { // no background
             document.getElementById("ticker").style.background = 'none';
@@ -160,7 +190,7 @@ const handlers = {
         document.getElementById("hpName").style.left = data.hpName.hpNameLeftTxt;
         document.getElementById("hpName").style.top = data.hpName.hpNameTopTxt;
         document.getElementById("hpName").style.height = data.hpName.hpNameHeightTxt;
-        document.getElementById("hpName").style.width = data.hpName.hpNameWidthTxt;        
+        document.getElementById("hpName").style.width = data.hpName.hpNameWidthTxt;
         document.getElementById("hpName").style.fontSize = data.hpName.hpNameFontTxt;
         if (data.hpName.hpNameBGNoneCB === "true") { // no background
             document.getElementById("hpName").style.backgroundColor = '';
@@ -221,7 +251,7 @@ const handlers = {
         document.getElementById("hpScore").style.color = data.hpScore.hpScoreFGTxt;
         document.getElementById("hpScore").style.cssText = document.getElementById("hpScore").style.cssText + " " + data.hpScore.hpScoreCSSTxt;
     },
-    
+
     apScore(data) {
         console.log("AP Score data: " + data.apScore);
         document.getElementById("apScore").style.right = data.apScore.apScoreLeftTxt;
@@ -233,7 +263,7 @@ const handlers = {
             document.getElementById("apScore").style.backgroundColor = '';
             document.getElementById("apScore").style.border = 'none';
             document.getElementById("apScore").style.boxShadow = 'none';
-            document.getElementById("apScore").style.textShadow = 'none';            
+            document.getElementById("apScore").style.textShadow = 'none';
         } else {
             document.getElementById("apScore").style.backgroundColor = data.apScore.apScoreBGTxt;
         }
@@ -249,10 +279,10 @@ const handlers = {
         document.getElementById("hpImage").style.width = data.hpImage.hpImageWidthTxt;
         document.getElementById("hpImage").style.cssText = document.getElementById("hpImage").style.cssText + " " + data.hpImage.hpImageCSSTxt;
         var domRoot = document.querySelector(':root');
-        var width=parseInt(data.hpImage.hpImageWidthTxt) * 2
+        var width = parseInt(data.hpImage.hpImageWidthTxt) * 2;
         domRoot.style.setProperty('--hp-Image-width', '-' + width.toString() + 'px');
     },
-    
+
     apImage(data) {
         console.log("HP Image data: " + data.apImage);
         document.getElementById("apImage").style.right = data.apImage.apImageLeftTxt;
@@ -261,7 +291,7 @@ const handlers = {
         document.getElementById("apImage").style.width = data.apImage.apImageWidthTxt;
         document.getElementById("apImage").style.cssText = document.getElementById("apImage").style.cssText + " " + data.apImage.apImageCSSTxt;
         var domRoot = document.querySelector(':root');
-        var width=parseInt(data.apImage.apImageWidthTxt) * 2
+        var width = parseInt(data.apImage.apImageWidthTxt) * 2;
         domRoot.style.setProperty('--ap-Image-width', width.toString() + 'px');
     },
 
@@ -276,7 +306,7 @@ const handlers = {
             document.getElementById("hpBPIcon").style.backgroundColor = '';
             document.getElementById("hpBPIcon").style.border = 'none';
             document.getElementById("hpBPIcon").style.boxShadow = 'none';
-            document.getElementById("hpBPIcon").style.textShadow = 'none';            
+            document.getElementById("hpBPIcon").style.textShadow = 'none';
         } else {
             document.getElementById("hpBPIcon").style.backgroundColor = data.hpBPIcon.bpBGTxt;
         }
@@ -285,7 +315,7 @@ const handlers = {
     apBPIcon(data) {
         console.log("AP BP Icon data: " + data.apBPIcon);
         document.getElementById("apBPIcon").style.right = data.apBPIcon.bpLeftTxt;
-        document.getElementById("apBPIcon").style.top = data.apBPIcon.bpTopTxt;        
+        document.getElementById("apBPIcon").style.top = data.apBPIcon.bpTopTxt;
         document.getElementById("apBPIcon").style.height = data.apBPIcon.bpHeightTxt;
         document.getElementById("apBPIcon").style.width = data.apBPIcon.bpWidthTxt;
         document.getElementById("apBPIcon").style.cssText = document.getElementById("apBPIcon").style.cssText + " " + data.apBPIcon.bpCSSTxt;
@@ -293,18 +323,131 @@ const handlers = {
             document.getElementById("apBPIcon").style.backgroundColor = '';
             document.getElementById("apBPIcon").style.border = 'none';
             document.getElementById("apBPIcon").style.boxShadow = 'none';
-            document.getElementById("apBPIcon").style.textShadow = 'none';            
+            document.getElementById("apBPIcon").style.textShadow = 'none';
         } else {
             document.getElementById("apBPIcon").style.backgroundColor = data.apBPIcon.bpBGTxt;
         }
     },
 
+    shotClockContainer(data) {
+        console.log("Shot Clock data: " + data.shotClockContainer);
+        if (data.shotClockContainer.shotClockEnabledCB === "true") { //enabled
+            document.getElementById("shotClockContainer").classList.remove("noShow");
+        } else {
+            document.getElementById("shotClockContainer").classList.add("noShow");
+        }
+        var logoHeight = parseInt(data.shotClockContainer.shotClockHeightTxt) * 0.6;
+        document.getElementById("shotClockContainer").style.left = data.shotClockContainer.shotClockLeftTxt;
+        document.getElementById("cueToolsLogo").style.left = data.shotClockContainer.shotClockLeftTxt;
+        document.getElementById("shotClockContainer").style.top = data.shotClockContainer.shotClockTopTxt;
+        document.getElementById("cueToolsLogo").style.top = (parseInt(data.shotClockContainer.shotClockTopTxt) - (logoHeight)).toString() + "px";
+        document.getElementById("shotClockContainer").style.height = data.shotClockContainer.shotClockHeightTxt;
+        document.getElementById("cueToolsLogo").style.height = logoHeight.toString() + "px";
+        document.getElementById("shotClockContainer").style.width = data.shotClockContainer.shotClockWidthTxt;
+        document.getElementById("cueToolsLogo").style.width = data.shotClockContainer.shotClockWidthTxt;
+        document.getElementById("shotClockContainer").style.fontSize = data.shotClockContainer.shotClockFontTxt;
+        if (data.shotClockContainer.shotClockBGNoneCB === "true") { // no background
+            document.getElementById("shotClockContainer").style.backgroundColor = '';
+            document.getElementById("shotClockContainer").style.backgroundImage = '';
+            document.getElementById("shotClockContainer").style.border = 'none';
+            document.getElementById("shotClockContainer").style.boxShadow = 'none';
+            document.getElementById("shotClockContainer").style.textShadow = 'none';
+        } else {
+            document.getElementById("shotClockContainer").style.backgroundColor = data.shotClockContainer.shotClockBGTxt;
+        }
+        document.getElementById("shotClockContainer").style.color = data.shotClockContainer.shotClockNormalTxt;
+        document.getElementById("shotClockContainer").style.cssText = document.getElementById("shotClockContainer").style.cssText + " " + data.shotClockContainer.shotClockCSSTxt;
+    },
+
+    matchClockContainer(data) {
+        console.log("match Clock data: " + data.matchClockContainer);
+        if (data.matchClockContainer.matchClockEnabledCB === "true") { //enabled
+            document.getElementById("matchClockContainer").classList.remove("noShow");
+        } else {
+            document.getElementById("matchClockContainer").classList.add("noShow");
+        }
+        document.getElementById("matchClockContainer").style.left = data.matchClockContainer.matchClockLeftTxt;
+        document.getElementById("matchClockContainer").style.top = data.matchClockContainer.matchClockTopTxt;
+        document.getElementById("matchClockContainer").style.height = data.matchClockContainer.matchClockHeightTxt;
+        document.getElementById("matchClockContainer").style.width = data.matchClockContainer.matchClockWidthTxt;
+        document.getElementById("matchClockContainer").style.fontSize = data.matchClockContainer.matchClockFontTxt;
+        if (data.matchClockContainer.matchClockBGNoneCB === "true") { // no background
+            document.getElementById("matchClockContainer").style.backgroundColor = '';
+            document.getElementById("matchClockContainer").style.backgroundImage = '';
+            document.getElementById("matchClockContainer").style.border = 'none';
+            document.getElementById("matchClockContainer").style.boxShadow = 'none';
+            document.getElementById("matchClockContainer").style.textShadow = 'none';
+        } else {
+            document.getElementById("matchClockContainer").style.backgroundColor = data.matchClockContainer.matchClockBGTxt;
+        }
+        document.getElementById("matchClockContainer").style.color = data.matchClockContainer.matchClockNormalTxt;
+        document.getElementById("matchClockContainer").style.cssText = document.getElementById("matchClockContainer").style.cssText + " " + data.matchClockContainer.matchClockCSSTxt;
+    },
+
+    hpExtContainer(data) {
+        console.log("HP Ext data: " + data.hpExtContainer);
+        if (data.hpExtContainer.hpExtEnabledCB === "true") { //enabled
+            document.getElementById("hpExtContainer").classList.remove("noShow");
+            document.getElementById("hpExtDiv").classList.remove("fadeOutElm");
+            document.getElementById("hpExtDiv").classList.add("fadeInElm");
+        } else {
+            document.getElementById("hpExtContainer").classList.add("noShow");
+            document.getElementById("hpExtDiv").classList.remove("fadeInElm");
+            document.getElementById("hpExtDiv").classList.add("fadeInElm");
+        }
+        document.getElementById("hpExtContainer").style.left = data.hpExtContainer.hpExtLeftTxt;
+        document.getElementById("hpExtContainer").style.top = data.hpExtContainer.hpExtTopTxt;
+        document.getElementById("hpExtContainer").style.height = data.hpExtContainer.hpExtHeightTxt;
+        document.getElementById("hpExtContainer").style.width = data.hpExtContainer.hpExtWidthTxt;
+        document.getElementById("hpExtContainer").style.fontSize = data.hpExtContainer.hpExtFontTxt;
+        if (data.hpExtContainer.hpExtBGNoneCB === "true") { // no background
+            document.getElementById("hpExtContainer").style.backgroundColor = '';
+            document.getElementById("hpExtContainer").style.backgroundImage = '';
+            document.getElementById("hpExtContainer").style.border = 'none';
+            document.getElementById("hpExtContainer").style.boxShadow = 'none';
+            document.getElementById("hpExtContainer").style.textShadow = 'none';
+        } else {
+            document.getElementById("hpExtContainer").style.backgroundColor = data.hpExtContainer.hpExtBGTxt;
+        }
+        document.getElementById("hpExtContainer").style.color = data.hpExtContainer.hpExtFGTxt;
+        document.getElementById("hpExtContainer").style.cssText = document.getElementById("hpExtContainer").style.cssText + " " + data.hpExtContainer.hpExtCSSTxt;
+    },
+
+    apExtContainer(data) {
+        console.log("ap Ext data: " + data.apExtContainer);
+        if (data.apExtContainer.apExtEnabledCB === "true") { //enabled
+            document.getElementById("apExtContainer").classList.remove("noShow");
+            document.getElementById("apExtDiv").classList.remove("fadeOutElm");
+            document.getElementById("apExtDiv").classList.add("fadeInElm");
+        } else {
+            document.getElementById("apExtContainer").classList.add("noShow");
+            document.getElementById("apExtDiv").classList.remove("fadeInElm");
+            document.getElementById("apExtDiv").classList.add("fadeInElm");
+        }
+        document.getElementById("apExtContainer").style.right = data.apExtContainer.apExtLeftTxt;
+        document.getElementById("apExtContainer").style.top = data.apExtContainer.apExtTopTxt;
+        document.getElementById("apExtContainer").style.height = data.apExtContainer.apExtHeightTxt;
+        document.getElementById("apExtContainer").style.width = data.apExtContainer.apExtWidthTxt;
+        document.getElementById("apExtContainer").style.fontSize = data.apExtContainer.apExtFontTxt;
+        if (data.apExtContainer.apExtBGNoneCB === "true") { // no background
+            document.getElementById("apExtContainer").style.backgroundColor = '';
+            document.getElementById("apExtContainer").style.backgroundImage = '';
+            document.getElementById("apExtContainer").style.border = 'none';
+            document.getElementById("apExtContainer").style.boxShadow = 'none';
+            document.getElementById("apExtContainer").style.textShadow = 'none';
+        } else {
+            document.getElementById("apExtContainer").style.backgroundColor = data.apExtContainer.apExtBGTxt;
+        }
+        document.getElementById("apExtContainer").style.color = data.apExtContainer.apExtFGTxt;
+        document.getElementById("apExtContainer").style.cssText = document.getElementById("apExtContainer").style.cssText + " " + data.apExtContainer.apExtCSSTxt;
+    },
+
     score(data) {
         console.log(`Player: ${data.player}, Score: ${data.score}`);
-        if (data.player == 1) {data.player = "hpScore";}
-        if (data.player == 2) {data.player = "apScore";}
+        if (data.player == 1) { data.player = "hpScore"; }
+        if (data.player == 2) { data.player = "apScore"; }
         const scoreElement = document.getElementById(data.player);
-            scoreElement.innerHTML = data.score;
+        scoreElement.innerHTML = data.score;
     },
 
     race(data) {
@@ -316,7 +459,7 @@ const handlers = {
             document.getElementById("raceInfo").innerHTML = data.race;
         } else {
             document.getElementById("raceInfo").classList.add("noShow");
-            document.getElementById("raceInfo").classList.remove("fadeInElm");        
+            document.getElementById("raceInfo").classList.remove("fadeInElm");
         }
     },
 
@@ -328,7 +471,7 @@ const handlers = {
             document.getElementById("gameInfo").innerHTML = data.game;
         } else {
             document.getElementById("gameInfo").classList.add("noShow");
-            document.getElementById("gameInfo").classList.remove("fadeInElm");        
+            document.getElementById("gameInfo").classList.remove("fadeInElm");
         }
     },
 
@@ -340,15 +483,15 @@ const handlers = {
             document.getElementById("drawRound").innerHTML = data.draw;
         } else {
             document.getElementById("drawRound").classList.add("noShow");
-            document.getElementById("drawRound").classList.remove("fadeInElm");        
+            document.getElementById("drawRound").classList.remove("fadeInElm");
         }
     },
 
     name(data) {
         console.log("Player/Team: " + data.player + " named " + data.name);
-        if (data.player == 1) {data.player = "hpName";}
-        if (data.player == 2) {data.player = "apName";}
-        if (data.name === null || data.name === undefined) {console.log('foobar'); data.name = " "};
+        if (data.player == 1) { data.player = "hpName"; }
+        if (data.player == 2) { data.player = "apName"; }
+        if (data.name === null || data.name === undefined) { console.log('foobar'); data.name = " "; };
         document.getElementById(data.player).innerHTML = data.name;
     },
 
@@ -379,10 +522,10 @@ const handlers = {
             document.getElementById("apImageDiv").classList.add("fadeInElm");
             document.getElementById("apImage").src = data.awayPlayerLogo;
             document.getElementById("apName").style.transform = 'translateX(var(--ap-Image-width))';
-            document.getElementById("apBPIcon").style.transform = 'translateX(var(--ap-Image-width))';            
+            document.getElementById("apBPIcon").style.transform = 'translateX(var(--ap-Image-width))';
         } else {
             document.getElementById("apName").style.transform = '';
-            document.getElementById("apBPIcon").style.transform = '';            
+            document.getElementById("apBPIcon").style.transform = '';
             document.getElementById("apImageDiv").classList.remove("fadeInElm");
             document.getElementById("apImageDiv").classList.add("fadeOutElm");
         }
@@ -391,14 +534,14 @@ const handlers = {
     breakingPlayer(data) {
         if (data.breakingPlayer == "hp") {
             document.getElementById("apBPIcon").classList.remove("fadeInElm");
-            document.getElementById("apBPIcon").classList.add("fadeOutElm");            
+            document.getElementById("apBPIcon").classList.add("fadeOutElm");
             document.getElementById("hpBPIcon").classList.remove("fadeOutElm");
-            document.getElementById("hpBPIcon").classList.add("fadeInElm");            
+            document.getElementById("hpBPIcon").classList.add("fadeInElm");
         } else if (data.breakingPlayer == "ap") {
             document.getElementById("hpBPIcon").classList.remove("fadeInElm");
-            document.getElementById("hpBPIcon").classList.add("fadeOutElm");            
+            document.getElementById("hpBPIcon").classList.add("fadeOutElm");
             document.getElementById("apBPIcon").classList.remove("fadeOutElm");
-            document.getElementById("apBPIcon").classList.add("fadeInElm");            
+            document.getElementById("apBPIcon").classList.add("fadeInElm");
         }
     },
 
@@ -407,16 +550,33 @@ const handlers = {
     },
 
     shotClock(data) {
-        console.log("Shot Clock data: " + data.shotClock);
         if (data.useShotClock) { //enabled
             document.getElementById("shotClockContainer").classList.remove("noShow");
             document.getElementById("shotClock").innerHTML = data.shotClock;
         } else {
             document.getElementById("shotClockContainer").classList.add("noShow");
         }
-    }
-}
+    },
 
+    shotClockColour(data) {
+        document.getElementById("shotClockContainer").style.color = data.shotClockColour;
+    },
+
+    shotClockExtension(data) {
+        if (data.shotClockExtension === "one") { //home Player
+            document.getElementById("hpExtDiv").classList.add("fadeOutElm");
+        } else {
+            document.getElementById("apExtDiv").classList.add("fadeOutElm");
+        }
+    },
+
+    shotClockExtensionReset(data) {
+        document.getElementById("hpExtDiv").classList.remove("fadeOutElm");
+        document.getElementById("apExtDiv").classList.remove("fadeOutElm");
+        document.getElementById("hpExtDiv").classList.add("fadeInElm");
+        document.getElementById("apExtDiv").classList.add("fadeInElm");
+    }
+};
 // Main event handler
 bc.onmessage = (event) => {
     console.log('Received event data:', event.data);
@@ -433,102 +593,61 @@ bc.onmessage = (event) => {
 //							autostart stuff
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-$(document).ready(function() {
-    
-    bcr.postMessage({"refresh":"now"});
+$(document).ready(function () {
+
+    bcr.postMessage({ "refresh": "now" });
 
 });
 
 function clearTicker() {
-    document.getElementById("ticker").classList.remove("fadeInElm");
-    document.getElementById("ticker").classList.add("fadeOutElm");
-    document.getElementById("tickerContent").innerHTML = "";    
+    if (tickerAutoHide === "true") {
+        document.getElementById("ticker").classList.add("noShow");
+    }
+    document.getElementById("tickerContent").innerHTML = "";
 }
 
 function displayTickerMessage() {
     while (tickerMessageArray.length > 0) {
         var message = tickerMessageArray.shift();
-        document.getElementById("ticker").classList.remove("fadeOutElm");
-        document.getElementById("ticker").classList.add("fadeInElm");
-        document.getElementById("tickerContent").insertAdjacentHTML('beforeend',message);
-        setTimeout(clearTicker, 7000)
+        if (tickerAutoHide === "true") {
+            document.getElementById("ticker").classList.remove("noShow");
+        }
+        document.getElementById("tickerContent").insertAdjacentHTML('beforeend', message);
+        setTimeout(clearTicker, 7000);
 
     }
 }
 setInterval(displayTickerMessage, 7500);
-    
+
 
 if (getStorageItem("p1NameCtrlPanel") != "" || getStorageItem("p1NameCtrlPanel") != null) {
-	document.getElementById("hpName").innerHTML = getStorageItem("p1NameCtrlPanel");
+    document.getElementById("hpName").innerHTML = getStorageItem("p1NameCtrlPanel");
 }
 if (getStorageItem("p1NameCtrlPanel") == "" || getStorageItem("p1NameCtrlPanel") == null) {
-	document.getElementById("hpName").innerHTML = " ";
+    document.getElementById("hpName").innerHTML = " ";
 }
 
 if (getStorageItem("p2NameCtrlPanel") != "" || getStorageItem("p2NameCtrlPanel") != null) {
-	document.getElementById("apName").innerHTML = getStorageItem("p2NameCtrlPanel");
+    document.getElementById("apName").innerHTML = getStorageItem("p2NameCtrlPanel");
 }
 if (getStorageItem("p2NameCtrlPanel") == "" || getStorageItem("p2NameCtrlPanel") == null) {
-	document.getElementById("apName").innerHTML = " ";
+    document.getElementById("apName").innerHTML = " ";
 }
 
 
 if (getStorageItem("p1ScoreCtrlPanel") != null && getStorageItem("usePoolStat") != "yes") {
-	document.getElementById("hpScore").innerHTML = getStorageItem("p1ScoreCtrlPanel");
+    document.getElementById("hpScore").innerHTML = getStorageItem("p1ScoreCtrlPanel");
 } else {
     if (getStorageItem("usePoolStat") != "yes") {
-	    document.getElementById("hpScore").innerHTML = 0;
+        document.getElementById("hpScore").innerHTML = 0;
     }
 }
 
 
 if (getStorageItem("p2ScoreCtrlPanel") != null && getStorageItem("usePoolStat") != "yes") {
-	document.getElementById("apScore").innerHTML = getStorageItem("p2ScoreCtrlPanel");
+    document.getElementById("apScore").innerHTML = getStorageItem("p2ScoreCtrlPanel");
 } else {
     if (getStorageItem("usePoolStat") != "yes") {
-    	document.getElementById("apScore").innerHTML = 0;
+        document.getElementById("apScore").innerHTML = 0;
     }
 }
-
-
-// Call the initialization function on window load
-// window.addEventListener("load", initializeBrowserSourceExtensionStatus);
-
-
-// // Add this function to initialize and update the player extension button styling
-// function initializeBrowserSourceExtensionStatus() {
-//     // Get the extension icon elements for player 1 and 2
-//     let p1ExtIcon = document.getElementById("hpBPI");
-//     let p2ExtIcon = document.getElementById("p2ExtIcon");
-
-//     // Check localStorage for stored extension status values
-//     // (Assuming you set "playerExtension1" and "playerExtension2" to "enabled" when active)
-//     let extStatus1 = getStorageItem("p1Extension");
-//     let extStatus2 = getStorageItem("p2Extension");
-
-//     // Update styling for Player 1's extension element
-//     if (p1ExtIcon) {
-//         if (extStatus1 && extStatus1 === "enabled") {
-//             // p1ExtIcon.textContent = "Reset";
-//             p1ExtIcon.style.backgroundColor = "darkred";
-//             p1ExtIcon.style.color = "white";
-//         } else {
-//             // p1ExtIcon.textContent = "Extend";
-//             p1ExtIcon.style.backgroundColor = "";
-//             p1ExtIcon.style.color = "";
-//         }
-//     }
-    
-//     // Update styling for Player 2's extension element
-//     if (p2ExtIcon) {
-//         if (extStatus2 && extStatus2 === "enabled") {
-//             // p2ExtIcon.textContent = "Reset";
-//             p2ExtIcon.style.backgroundColor = "darkred";
-//             p2ExtIcon.style.color = "white";
-//         } else {
-//             // p2ExtIcon.textContent = "Extend";
-//             p2ExtIcon.style.backgroundColor = "";
-//             p2ExtIcon.style.color = "";
-//         }
-//     }
-// }

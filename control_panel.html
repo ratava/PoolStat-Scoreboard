@@ -226,6 +226,21 @@ free to use and modify and use as long as this copyright statment remains intact
                     <li>Auto Name move will automatically move the name field if a player image is specified by PoolStat.</li>
                 </p>
                 <h4>Click on a section to expend/collapse</h4>
+                <button type="button" class="collapsible">Top Banner Box</button>             
+                <div class="content">                
+                    <div class="column">
+                        <div><text id="bannerBoxLeft">Right</text><input type="text" id="bannerBoxLeftTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
+                        <div><text id="bannerBoxTop">Top</text><input type="text" id="bannerBoxTopTxt"style="width:50px;" onchange="positionConfigChange(this)"></div>
+                        <div><text id="bannerBoxHeight">Height</text><input type="text" id="bannerBoxHeightTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
+                        <div><text id="bannerBoxWidth">Width</text><input type="text" id="bannerBoxWidthTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
+                    </div>
+                    <div class="column">
+                        <div><text id="bannerBoxEnabled">Enable Banner</text><input type="checkbox" id="bannerBoxEnabledCB" onchange="positionConfigChange(this)"></div>
+                        <div><text id="bannerBoxCSS">Additional CSS</text><input type="text" id="bannerBoxCSSTxt" style="width: 100px;" onchange="positionConfigChange(this)"></div>
+                        <div><text id="bannerBoxBG">Background Colour</text><input type="color" id="bannerBoxBGTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"></div>
+                        <div><text id="bannerBoxBGNone">No BG</text><input type="checkbox" id="bannerBoxBGNoneCB" onchange="positionConfigChange(this)"></div>
+                    </div>
+                </div>        
                 <button type="button" class="collapsible">Race Info</button>             
                 <div class="content">
                     <div class="column">
@@ -287,6 +302,7 @@ free to use and modify and use as long as this copyright statment remains intact
                         <div><text id="tickerCSS">Additional CSS</text><input type="text" id="tickerCSSTxt" style="width: 100px;" onchange="positionConfigChange(this)"></div>
                         <div><text id="tickerFG">Foreground Colour</text><input type="color" id="tickerFGTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"></div>
                         <div><text id="tickerBG">Background Colour</text><input type="color" id="tickerBGTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"></div>
+                        <div><text id="tickerBGNone">Auto Hide</text><input type="checkbox" id="tickerAutoHideCB" onchange="positionConfigChange(this)"></div>
                         <div><text id="tickerBGNone">No BG</text><input type="checkbox" id="tickerBGNoneCB" onchange="positionConfigChange(this)"></div>
                     </div>
                 </div>
@@ -370,6 +386,7 @@ free to use and modify and use as long as this copyright statment remains intact
                     </div>
                     <div class="column">
                         <div><text id="hpImageCSS">Additional CSS</text><input type="text" id="hpImageCSSTxt" style="width: 100px;" onchange="positionConfigChange(this)"></div>
+                        <div><text id="hpImageAutoMove">Enable Image</text><input type="checkbox" id="hpImageEnableCB" onchange="positionConfigChange(this)"></div>
                         <div><text id="hpImageAutoMove">Auto Name Move</text><input type="checkbox" id="hpImageAutoMoveCB" onchange="positionConfigChange(this)"></div>
                     </div> 
                 </div>
@@ -383,6 +400,7 @@ free to use and modify and use as long as this copyright statment remains intact
                     </div>
                     <div class="column">
                         <div><text id="apImageCSS">Additional CSS</text><input type="text" id="apImageCSSTxt" style="width: 100px;" onchange="positionConfigChange(this)"></div>
+                        <div><text id="apImageAutoMove">Enable Image</text><input type="checkbox" id="apImageEnableCB" onchange="positionConfigChange(this)"></div>
                         <div><text id="apImageAutoMove">Auto Name Move</text><input type="checkbox" id="apImageAutoMoveCB" onchange="positionConfigChange(this)"></div>
                     </div> 
                 </div>
@@ -398,21 +416,6 @@ free to use and modify and use as long as this copyright statment remains intact
                         <div><text id="bpBGNone">No BG</text><input type="checkbox" id="bpBGNoneCB" onchange="positionConfigChange(this)" onchange="positionConfigChange(this)"></div>
                     </div> 
                 </div>
-                <button type="button" class="collapsible">Top Banner Box</button>             
-                <div class="content">                
-                    <div class="column">
-                        <div><text id="bannerBoxLeft">Right</text><input type="text" id="bannerBoxLeftTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
-                        <div><text id="bannerBoxTop">Top</text><input type="text" id="bannerBoxTopTxt"style="width:50px;" onchange="positionConfigChange(this)"></div>
-                        <div><text id="bannerBoxHeight">Height</text><input type="text" id="bannerBoxHeightTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
-                        <div><text id="bannerBoxWidth">Width</text><input type="text" id="bannerBoxWidthTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
-                    </div>
-                    <div class="column">
-                        <div><text id="bannerBoxEnabled">No BG</text><input type="checkbox" id="bannerBoxEnabledCB" onchange="positionConfigChange(this)"></div>
-                        <div><text id="bannerBoxCSS">Additional CSS</text><input type="text" id="bannerBoxCSSTxt" style="width: 100px;" onchange="positionConfigChange(this)"></div>
-                        <div><text id="bannerBoxBG">Background Colour</text><input type="color" id="bannerBoxBGTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"></div>
-                        <div><text id="bannerBoxBGNone">No BG</text><input type="checkbox" id="bannerBoxBGNoneCB" onchange="positionConfigChange(this)"></div>
-                    </div>
-                </div>        
                 <a href="https://cuetools.app/"><img src="./common/images/cuetools_logo_streaming.png" alt="CueTools Logo" title="CueTools Logo" width="100px" height="50px"></a>                                
                 <button type="button" class="collapsible">Match Clock</button>             
                 <div class="content">                
@@ -437,7 +440,7 @@ free to use and modify and use as long as this copyright statment remains intact
                 <button type="button" class="collapsible">Shot Clock</button>             
                 <div class="content">                
                     <div class="column">
-                        <div><text id="shotClockLeft">Right</text><input type="text" id="shotClockLeftTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
+                        <div><text id="shotClockLeft">Left</text><input type="text" id="shotClockLeftTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
                         <div><text id="shotClockTop">Top</text><input type="text" id="shotClockTopTxt"style="width:50px;" onchange="positionConfigChange(this)"></div>
                         <div><text id="shotClockHeight">Height</text><input type="text" id="shotClockHeightTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
                         <div><text id="shotClockWidth">Width</text><input type="text" id="shotClockWidthTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
@@ -450,6 +453,7 @@ free to use and modify and use as long as this copyright statment remains intact
                     </div>
                     <div class="column">
                         <div><text id="shotClockNormal">Normal Colour</text><input type="color" id="shotClockNormalTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"></div>
+                        <div><text id="shotClockWarning">Warning Colour</text><input type="color" id="shotClockWarningTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"></div>
                         <div><text id="shotClock5Second">5 Second Colour</text><input type="color" id="shotClock5SecondTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"></div>
                         <div><text id="shotClockCompleted">Completed Colour</text><input type="color" id="shotClockCompletedTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"></div>
                     </div>
@@ -457,7 +461,7 @@ free to use and modify and use as long as this copyright statment remains intact
                 <button type="button" class="collapsible">Home Player - Extension</button>             
                 <div class="content">                
                     <div class="column">
-                        <div><text id="hpExtLeft">Right</text><input type="text" id="hpExtLeftTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
+                        <div><text id="hpExtLeft">Left</text><input type="text" id="hpExtLeftTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
                         <div><text id="hpExtTop">Top</text><input type="text" id="hpExtTopTxt"style="width:50px;" onchange="positionConfigChange(this)"></div>
                         <div><text id="hpExtHeight">Height</text><input type="text" id="hpExtHeightTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>
                         <div><text id="hpExtWidth">Width</text><input type="text" id="hpExtWidthTxt" style="width:50px;" onchange="positionConfigChange(this)"></div>

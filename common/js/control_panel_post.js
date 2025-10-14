@@ -35,6 +35,16 @@ var c2value;
 var pColormsg;
 const positionConfigArray = [];
 const defaultValues = {
+	// Top Banner Box
+	bannerBoxLeftTxt: "1px",
+	bannerBoxTopTxt: "1px",
+	bannerBoxHeightTxt: "100px",
+	bannerBoxWidthTxt: "1920px",
+	bannerBoxEnabledCB: "true",
+	bannerBoxCSSTxt: "",
+	bannerBoxBGTxt: "#800000",
+	bannerBoxBGNoneCB: "false",
+
 	// Race Info
 	raceInfoLeftTxt: "340px",
 	raceInfoTopTxt: "20px",
@@ -78,6 +88,7 @@ const defaultValues = {
 	tickerFGTxt: "#ffffff",
 	tickerBGTxt: "#3679dd",
 	tickerBGNoneCB: "false",
+	tickerAutoHideCB: "true",
 
 	// Home Player Name
 	hpNameLeftTxt: "340px",
@@ -131,6 +142,7 @@ const defaultValues = {
 	hpImageHeightTxt: "60px",
 	hpImageWidthTxt: "60px",
 	hpImageCSSTxt: "",
+	hpImageEnableCB: "false",
 	hpImageAutoMoveCB: "false",
 
 	// Away Player Image
@@ -139,6 +151,7 @@ const defaultValues = {
 	apImageHeightTxt: "60px",
 	apImageWidthTxt: "60px",
 	apImageCSSTxt: "",
+	apImageEnableCB: "false",
 	apImageAutoMoveCB: "false",
 
 	// Breaking Player Indicator
@@ -147,16 +160,6 @@ const defaultValues = {
 	bpCSSTxt: "",
 	bpBGTxt: "#808080",
 	bpBGNoneCB: "false",
-
-	// Top Banner Box
-	bannerBoxLeftTxt: "1px",
-	bannerBoxTopTxt: "1px",
-	bannerBoxHeightTxt: "100px",
-	bannerBoxWidthTxt: "1920px",
-	bannerBoxEnabledCB: "true",
-	bannerBoxCSSTxt: "",
-	bannerBoxBGTxt: "#800000",
-	bannerBoxBGNoneCB: "false",
 
 	// Match Clock
 	matchClockLeftTxt: "50%",
@@ -181,6 +184,7 @@ const defaultValues = {
 	shotClockBGTxt: "#800000",
 	shotClockBGNoneCB: "false",
 	shotClockNormalTxt: "#ffffff",
+	shotClockWarningTxt: "#FFFF00",
 	shotClock5SecondTxt: "#FFFF00",
 	shotClockCompletedTxt: "#FF0000",
 
@@ -290,6 +294,14 @@ window.onload = function () {
 		document.getElementById("psRigIdTxt").textContent = getStorageItem("PoolStatRigId");
 	}
 
+	if (getStorageItem("poolStatConfigCueTools") === "true" || getStorageItem("poolStatConfigCueTools") === null) {
+		document.getElementById("cueToolsEnableCB").checked = true;
+		setStorageItem("cueToolsEnableCB", "true");
+	} else {
+		document.getElementById("cueToolsEnableCB").checked = false;
+		setStorageItem("cueToolsEnableCB", "false");
+	}
+
 	intiializePositionConfig();
 	// Initialize the logo and extension status for each logo (players + slideshow logos) and player
 	console.log(`Instance: ${INSTANCE_ID}`);
@@ -317,6 +329,18 @@ function intiializePositionConfig() {
 			}
 		}
 	});
+
+	const bannerBoxObject = {
+		"bannerBoxEnabledCB": getStorageItem("bannerBoxEnabledCB"),
+		"bannerBoxLeftTxt": getStorageItem("bannerBoxLeftTxt"),
+		"bannerBoxTopTxt": getStorageItem("bannerBoxTopTxt"),
+		"bannerBoxHeightTxt": getStorageItem("bannerBoxHeightTxt"),
+		"bannerBoxWidthTxt": getStorageItem("bannerBoxWidthTxt"),
+		"bannerBoxCSSTxt": getStorageItem("bannerBoxCSSTxt"),
+		"bannerBoxBGTxt": getStorageItem("bannerBoxBGTxt"),
+		"bannerBoxBGNoneCB": getStorageItem("bannerBoxBGNoneCB")
+	};
+	bc.postMessage({ "bannerBox": bannerBoxObject });
 
 	const raceInfoObject = {
 		"useRaceInfo": getStorageItem("useRaceInfo"),
@@ -370,7 +394,8 @@ function intiializePositionConfig() {
 		"tickerCSSTxt": getStorageItem("tickerCSSTxt"),
 		"tickerFGTxt": getStorageItem("tickerFGTxt"),
 		"tickerBGTxt": getStorageItem("tickerBGTxt"),
-		"tickerBGNoneCB": getStorageItem("tickerBGNoneCB")
+		"tickerBGNoneCB": getStorageItem("tickerBGNoneCB"),
+		"tickerAutoHideCB": getStorageItem("tickerAutoHideCB")
 	};
 	bc.postMessage({ "ticker": tickerObject });
 
@@ -450,11 +475,11 @@ function intiializePositionConfig() {
 	};
 	bc.postMessage({ "apImage": apImageObject });
 
-	var hpBPLeft = parseInt(getStorageItem("hpNameLeftTxt")) - parseInt(getStorageItem("bpWidthTxt"));
-	var hpBPTop = getStorageItem("hpNameTopTxt");
+	var hpBPLeft = parseInt(getStorageItem("hpNameLeftTxt")) + (parseInt(getStorageItem("hpNameWidthTxt")) / 2);
+	var hpBPTop = parseInt(getStorageItem("hpNameTopTxt")) - parseInt(getStorageItem("bpHeightTxt")) - 5;
 	const hpBPIconObject = {
 		"bpLeftTxt": hpBPLeft.toString() + 'px',
-		"bpTopTxt": hpBPTop,
+		"bpTopTxt": hpBPTop.toString() + 'px',
 		"bpHeightTxt": getStorageItem("bpHeightTxt"),
 		"bpWidthTxt": getStorageItem("bpWidthTxt"),
 		"bpCSSTxt": getStorageItem("bpCSSTxt"),
@@ -462,17 +487,77 @@ function intiializePositionConfig() {
 	};
 	bc.postMessage({ "hpBPIcon": hpBPIconObject });
 
-	var apBPLeft = parseInt(getStorageItem("apNameLeftTxt")) - parseInt(getStorageItem("bpWidthTxt"));
-	var apBPTop = getStorageItem("apNameTopTxt");
+	var apBPLeft = parseInt(getStorageItem("apNameLeftTxt")) + (parseInt(getStorageItem("apNameWidthTxt")) / 2);
+	var apBPTop = parseInt(getStorageItem("apNameTopTxt")) - parseInt(getStorageItem("bpHeightTxt")) - 5;
 	const apBPIconObject = {
 		"bpLeftTxt": apBPLeft.toString() + 'px',
-		"bpTopTxt": apBPTop,
+		"bpTopTxt": apBPTop.toString() + 'px',
 		"bpHeightTxt": getStorageItem("bpHeightTxt"),
 		"bpWidthTxt": getStorageItem("bpWidthTxt"),
 		"bpCSSTxt": getStorageItem("bpCSSTxt"),
 		"bpBGNoneCB": getStorageItem("bpBGNoneCB")
 	};
 	bc.postMessage({ "apBPIcon": apBPIconObject });
+
+	const shotClockContainerObject = {
+		"shotClockEnabledCB": getStorageItem("poolStatConfigCueTools"),
+		"shotClockLeftTxt": getStorageItem("shotClockLeftTxt"),
+		"shotClockTopTxt": getStorageItem("shotClockTopTxt"),
+		"shotClockHeightTxt": getStorageItem("shotClockHeightTxt"),
+		"shotClockWidthTxt": getStorageItem("shotClockWidthTxt"),
+		"shotClockFontTxt": getStorageItem("shotClockFontTxt"),
+		"shotClockCSSTxt": getStorageItem("shotClockCSSTxt"),
+		"shotClockBGTxt": getStorageItem("shotClockBGTxt"),
+		"shotClockBGNoneCB": getStorageItem("shotClockBGNoneCB"),
+		"shotClockNormalTxt": getStorageItem("shotClockNormalTxt"),
+		"shotClock5SecondTxt": getStorageItem("shotClock5SecondTxt"),
+		"shotClockCompletedTxt": getStorageItem("shotClockCompletedTxt")
+	};
+	bc.postMessage({ "shotClockContainer": shotClockContainerObject });
+
+	const hpExtObject = {
+		"hpExtEnabledCB": getStorageItem("poolStatConfigCueTools"),
+		"hpExtLeftTxt": getStorageItem("hpExtLeftTxt"),
+		"hpExtTopTxt": getStorageItem("hpExtTopTxt"),
+		"hpExtHeightTxt": getStorageItem("hpExtHeightTxt"),
+		"hpExtWidthTxt": getStorageItem("hpExtWidthTxt"),
+		"hpExtFontTxt": getStorageItem("hpExtFontTxt"),
+		"hpExtCSSTxt": getStorageItem("hpExtCSSTxt"),
+		"hpExtFGTxt": getStorageItem("hpExtFGTxt"),
+		"hpExtBGTxt": getStorageItem("hpExtBGTxt"),
+		"hpExtBGNoneCB": getStorageItem("hpExtBGNoneCB"),
+	};
+	bc.postMessage({ "hpExtContainer": hpExtObject });
+
+	const apExtObject = {
+		"apExtEnabledCB": getStorageItem("poolStatConfigCueTools"),
+		"apExtLeftTxt": getStorageItem("apExtLeftTxt"),
+		"apExtTopTxt": getStorageItem("apExtTopTxt"),
+		"apExtHeightTxt": getStorageItem("apExtHeightTxt"),
+		"apExtWidthTxt": getStorageItem("apExtWidthTxt"),
+		"apExtFontTxt": getStorageItem("apExtFontTxt"),
+		"apExtCSSTxt": getStorageItem("apExtCSSTxt"),
+		"apExtFGTxt": getStorageItem("apExtFGTxt"),
+		"apExtBGTxt": getStorageItem("apExtBGTxt"),
+		"apExtBGNoneCB": getStorageItem("apExtBGNoneCB"),
+	};
+	bc.postMessage({ "apExtContainer": apExtObject });
+
+	const matchClockContainerObject = {
+		"matchClockEnabledCB": getStorageItem("poolStatConfigCueTools"),
+		"matchClockLeftTxt": getStorageItem("matchClockLeftTxt"),
+		"matchClockTopTxt": getStorageItem("matchClockTopTxt"),
+		"matchClockHeightTxt": getStorageItem("matchClockHeightTxt"),
+		"matchClockWidthTxt": getStorageItem("matchClockWidthTxt"),
+		"matchClockFontTxt": getStorageItem("matchClockFontTxt"),
+		"matchClockCSSTxt": getStorageItem("matchClockCSSTxt"),
+		"matchClockBGTxt": getStorageItem("matchClockBGTxt"),
+		"matchClockBGNoneCB": getStorageItem("matchClockBGNoneCB"),
+		"matchClockNormalTxt": getStorageItem("matchClockNormalTxt"),
+		"matchClock5SecondTxt": getStorageItem("matchClock5SecondTxt"),
+		"matchClockCompletedTxt": getStorageItem("matchClockCompletedTxt")
+	};
+	bc.postMessage({ "matchClockContainer": matchClockContainerObject });
 
 	postNames("", "");
 	postInfo("", "");
@@ -483,11 +568,12 @@ function downloadData(type) {
 	const positionData = {};
 
 	// Iterate through each ID in the array
-	for (const id of positionConfigArray) {
+	Object.entries(defaultValues).forEach(([key]) => {
 		// Get the value using the provided function
-		const value = getStorageItem(id); // returns a string
-		positionData[id] = value;
-	}
+		const value = getStorageItem(key); // returns a string
+		positionData[key] = value;
+	});
+
 	var content;
 	// Convert the object to a JSON string
 	if (type == "pos") {

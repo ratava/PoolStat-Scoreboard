@@ -494,6 +494,7 @@ function positionConfigChange(inputElement) {
     } else {
         setStorageItem(inputElement.id, inputElement.value);
     }
+    intiializePositionConfig();
 }
 
 function saveTimerID(inputElement) {
@@ -535,6 +536,15 @@ function poolStatConfigBreakingPlayer() {
 
     console.log(`Use PoolStat Breaking Player ${isChecked}`);
     setStorageItem("usePoolStatBreakingPlayer", storageValue);
+}
+
+function poolStatConfigCueTools() {
+    var poolStatConfigCueTools = document.getElementById("cueToolsEnableCB");
+    var isChecked = poolStatConfigCueTools.checked;
+    var storageValue = isChecked ? "true" : "false";
+
+    console.log(`Use CueTools ${isChecked}`);
+    setStorageItem("poolStatConfigCueTools", storageValue);
 }
 
 function scoreDisplaySetting() {
@@ -783,6 +793,9 @@ function saveCueToolsSettings(getArgsPayload) {
                 case 'timeMatchAdjust':
                     handleMatchClockAdjust('minutes', value);
                     break;
+                case 'timeClock':
+                    handleShotClockState(value);
+                    break;
             }
         }
     });
@@ -866,6 +879,17 @@ function handleMatchClockState(state) {
     }
 }
 
+function handleShotClockState(state) {
+    if (extraDebug) { console.log('Shot Clock State Change: '); }
+    if (state) {
+        var shotClockTime = parseInt(getStorageItem('cueTools_timeClock'));
+        if (extraDebug) { console.log('Shot Clock Time: ' + shotClockTime); }
+        shotClock.set(shotClockTime);
+    } else {
+        shotClock.pause();
+    }
+}
+
 function handleMatchClockTime(type, value) {
     if (extraDebug) { console.log(`Match Clock Time Change: ${type} to ${value}`); }
 
@@ -879,6 +903,7 @@ function handleMatchClockAdjust(type, value) {
 function handleShotClockResume() {
     if (extraDebug) { console.log('Resuming timer...'); }
     var remaining = shotClock.getTime();
+    checkShotClockColour(remaining);
     bc.postMessage({ shotClock: remaining, useShotClock: true });
     shotClock.resume();
 }
@@ -893,16 +918,19 @@ function handleShotClockRestart() {
     if (extraDebug) { console.log('Restarting timer...'); }
     shotClock.reset(parseInt(getStorageItem('cueTools_timeClock')));
     var remaining = shotClock.getTime();
+    checkShotClockColour(remaining);
     bc.postMessage({ shotClock: remaining, useShotClock: true });
+    bc.postMessage({ shotClockExtensionReset: true });
 }
 
 function handleShotClockState(state) {
     if (extraDebug) { console.log('Shot Clock State Change: '); }
     if (state) {
         var shotClockTime = parseInt(getStorageItem('cueTools_timeClock'));
-        if (extraDebug) { console.log('Match Clock Time: ' + shotClockTime); }
+        if (extraDebug) { console.log('Shot Clock Time: ' + shotClockTime); }
         shotClock.set(shotClockTime);
         var remaining = shotClock.getTime();
+        checkShotClockColour(remaining);
         bc.postMessage({ shotClock: remaining, useShotClock: true });
     } else {
         matchClock.pause();
@@ -920,17 +948,42 @@ function handleShotClockExtension(player) {
     shotClock.adjust(timeAdjust);
     var remaining = shotClock.getTime();
     bc.postMessage({ shotClock: remaining, useShotClock: true });
+    bc.postMessage({ shotClockExtension: player });
 }
 
 shotClock.onTick((time) => {
-    // const display = document.getElementById('shotClockDisplay');
-    // if (display) {
-    //     display.textContent = time;
-    // }
-    console.log('Shot Clock Time:', time);
+    if (extraDebug) { console.log('Shot Clock Time:', time); }
     bc.postMessage({ shotClock: time, useShotClock: true });
+    checkShotClockColour(time);
 });
 
+function checkShotClockColour(time) {
+    var scWarningTime = parseInt(getStorageItem('cueTools_timeWarning'));
+    var normal = getStorageItem('shotClockNormalTxt');
+    var warning = getStorageItem('shotClockWarningTxt');
+    var fiveSecond = getStorageItem('shotClock5SecondTxt');
+    var completed = getStorageItem('shotClockCompletedTxt');
+
+    if (time > scWarningTime) {
+        bc.postMessage({ shotClockColour: normal });
+    }
+
+    if (time == scWarningTime) {
+        bc.postMessage({ shotClockColour: warning });
+    }
+
+    if (time < scWarningTime && time > 5) {
+        bc.postMessage({ shotClockColour: normal });
+    }
+
+    if (time <= 5 && time > 0) {
+        bc.postMessage({ shotClockColour: fiveSecond });
+    }
+
+    if (time == 0) {
+        bc.postMessage({ shotClockColour: completed });
+    }
+}
 
 function createTimer(name, initialSeconds = 45) {
     let remaining = initialSeconds;
@@ -1182,7 +1235,7 @@ function checkForUpdate() {
             const latestVersion = data.tag_name.replace(/^v/, '');
             if (compareVersions(latestVersion, versionNum) > 0) {
                 updateStatus.innerHTML = `Update available! Latest version: ${latestVersion}<br>
-                    <a href="${data.html_url}" target="_blank" rel="noopener noreferrer style="color: red;">Download Update</a>`;
+            <a href="${data.html_url}" target="_blank" rel="noopener noreferrer style="color: red;">Download Update</a>`;
             } else {
                 updateStatus.textContent = "You have the latest version.";
             }

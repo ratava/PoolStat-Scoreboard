@@ -28,10 +28,11 @@ free to use and modify and use as long as this copyright statment remains intact
 <body>
 	<!-- Race to & Game Info in center -->
 	<div id="gameInfoWrapper">
+		<div id="bannerBox" class="noShow fadeInElm"></div>
 		<div id="raceInfo" class="noShow fadeInElm"></div>
 		<div class="noShow fadeInElm" id="gameInfo"></div>
 		<div class="noShow fadeInElm" id="drawRound"></div>
-		<div class="ticker-container fadeOutElm" id="ticker">
+		<div class="ticker-container" id="ticker">
 			<div class="ticker-content" id="tickerContent"></div>
 		</div>
 	</div>
@@ -41,8 +42,9 @@ free to use and modify and use as long as this copyright statment remains intact
 		<div id="scoreBoard">
 			<!-- Player 1 section -->
 			<div class="player-container left">
-				<div id="hpExtContainer">
+				<div id="hpExtContainer" class="noShow">
 					<div id="hpExtDiv" class="fadeOutElm">
+						⏳
 					</div>
 				</div>		
 				<div id="hpImageContainer">
@@ -51,7 +53,7 @@ free to use and modify and use as long as this copyright statment remains intact
 					</div>
 				</div>		
 				<div id="hpPlayerBPName">
-					<div id="hpBPIcon" class="fadeOutElm"></div>
+					<div id="hpBPIcon" class="fadeOutElm">Break</div>
 					<div id="hpName" class="fadeInElm">
 						<span>Home Player</span>
 					</div>
@@ -60,9 +62,15 @@ free to use and modify and use as long as this copyright statment remains intact
 					<div id="hpScore" class="fadeInElm">99</div>
 				</div>
 			</div>
-			<div id="shotClockContainer" class="noShow">
-				<div id="shotClock" class="fadeInElm">45</div>
+			<div id="cueTools">
+				<img id="cueToolsLogo" src="./common/images/cuetools_logo_streaming.png"></img>
+				<div id="shotClockContainer" class="noShow">
+					<div id="shotClock" class="fadeInElm">45</div>
+				</div>
 			</div>
+				<div id="matchClockContainer" class="noShow">
+					<div id="matchClock" class="fadeInElm">45min</div>
+				</div>			
 			<!-- Player 2 section -->
 			<div class="player-container right">
 				<div class="score-logo-container">
@@ -72,15 +80,16 @@ free to use and modify and use as long as this copyright statment remains intact
 					<div id="apName" class="fadeInElm">
 						<span>Away Player</span>
 					</div>
-					<div id="apBPIcon" class="fadeOutElm"></div>
+					<div id="apBPIcon" class="fadeOutElm">Break</div>
 				</div>
 				<div id="apImageContainer">
 					<div id="apImageDiv" class="fadeOutElm">
 						<img id="apImage" src="">
 					</div>
 				</div>
-				<div id="apExtContainer">
+				<div id="apExtContainer" class="noShow">
 					<div id="apExtDiv" class="fadeOutElm">
+						⏳
 					</div>
 				</div>		
 			</div>
