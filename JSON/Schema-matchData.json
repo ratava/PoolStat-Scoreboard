@@ -55,6 +55,9 @@
     },
     "breakingPlayer": {
       "type": "string"
+    },
+    "timerId": {
+      "type": "string"
     }
   },
   "required": [
@@ -74,6 +77,7 @@
     "awayPlayerLogo",
     "homePlayerScore",
     "awayPlayerScore",
-    "breakingPlayer"
+    "breakingPlayer",
+    "timerId"
   ]
 }

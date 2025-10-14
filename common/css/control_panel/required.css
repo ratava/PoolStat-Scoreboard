@@ -70,6 +70,7 @@ div {
 	justify-content: center;
 	font-size: 10pt;
 	padding: 2px;
+	background-color: #1a1c23; /* Darker background color */
 }
 
 #p1Score, #p2Score {
@@ -327,16 +328,40 @@ input {
 	width: 650px;
 }
 
+.header span {
+    font-family: 'Roboto', sans-serif; /* Modern font */
+    font-size: 12pt;
+    color: #ff4757; /* Slightly brighter red for better contrast */
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Centered the Ko-fi 2D barcode and support message */
+.header a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 0 auto;
+}
+
 .section-header {
 	display: flex;
 	justify-content:space-between;
 	padding: 15px 0 0 0;
 	clear: both;
 	text-decoration: underline;
-	/* text-transform:capitalize; */
 	font-weight: bold;
-	font-size: 16px;
+	font-size: 16pt; /* Slightly smaller font size */
 	font-variant: small-caps;
+    font-family: 'Roboto', sans-serif; /* Modern font */
+    font-size: 18pt;
+    font-weight: bold;
+    color: #4caf50; /* Modern green color */
+    text-transform: uppercase;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 /* Basic placeholder styling */
@@ -410,110 +435,105 @@ input:checked + .slider_round:before {
 	border-radius: 50%;
 }
 
-/* Add styles for tabs */
+/* Modernized tab design */
 .tab {
-	/* overflow: hidden; */
-	color: white;
-	display: flex;
-	justify-content:stretch;
-	width: 674px;
+    display: flex;
+    flex-direction: row; /* Set tabs to align horizontally */
+    justify-content: space-around;
+    background-color: #2b2e38;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .tab button {
-	background-color: inherit;
-	float: left;
-	border-bottom-width: 0px;
-	outline: none;
-	cursor: pointer;
-	padding: 14px;
-	transition: 0.3s;
-	font-size: 17px;
-	color: white;
-	border-radius: 10px 10px 0 0;
-	box-sizing: border-box;
+    flex: 1;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: #4c4c4c;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    height: 50px; /* Set a consistent height for all tabs */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Add spacing between the icon and the text */
 }
 
 .tab button:hover {
-	border-radius: 10px 10px 0 0;
-	border: 2px solid transparent; /* prevent bounce effect from apparent defout border on tab */
-	border-bottom-width: 0px;
+    background-color: #6c757d;
+    color: #f8f9fa;
 }
 
 .tab button.active {
-	border-radius: 10px 10px 0px 0px;
-	border: 2px solid transparent; /* prevent bounce effect from apparent defout border on tab */
-	border-bottom-width: 0px;
+    background-color: #007bff;
+    color: white;
+    border-bottom: 3px solid #0056b3;
 }
 
 .tabcontent {
-	display: flex;
-    flex-direction: column;
-	padding: 0 12px 6px 12px;
-	color: white; /* Match the font color */
-	border-radius: 0 10px 10px 10px;
+    display: none;
+    padding: 20px;
+    background-color: #1a1c23; /* Darker background color */
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
 }
 
-.tablinks {
-	text-transform: uppercase;
-	font-weight: bold;
-	font-size: 16px;
-}
-
-.zoom-controls {
+/* Modernized the layout of column-type divs in the PoolStat tab using flexbox */
+#PoolStat .column {
     display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 10px 0;
+    flex-wrap: wrap; /* Allow items to wrap to the next line if needed */
+    gap: 15px; /* Add spacing between items */
+    justify-content: space-between; /* Distribute items evenly */
+    align-items: center; /* Align items vertically */
+    padding: 10px; /* Add padding for better spacing */
 }
 
-.zoom-controls .hover {
-    padding: 5px 10px;
-    cursor: pointer;
-    border-radius: 4px;
-    background-color: var(--button-background);
-    color: var(--button-text);
-    transition: background-color 0.2s;
-}
-
-.zoom-controls .hover:hover {
-    background-color: var(--button-hover);
-}
-
-.zoom-controls label {
-    margin-right: 10px;
-}
-
-.zoom-controls span {
-    min-width: 60px;
-    text-align: center;
-}
-
+/* Fixed the info-box class to only show on hover */
 .hover-container {
-	position: relative; /* Needed for positioning the info-box */
-	display: inline-block; /* Or block, depending on desired layout */
-	cursor: pointer; /* Optional: indicates interactivity */
-	font-size: 14pt;
+    position: relative; /* Needed for positioning the info-box */
+    display: inline-block; /* Ensure the icon and info-box are inline */
+    cursor: pointer; /* Indicate interactivity */
 }
 
 .info-box {
-	font-size: 10pt;
-	visibility: hidden; /* Hides the info box by default */
-	opacity: 0; /* Optional: for a fade-in effect */
-	width: 450px; /* Adjust as needed */
-	background-color: #555;
-	color: #fff;
-	text-align: center;
-	border-radius: 6px;
-	padding: 5px 0;
-	position: absolute;
-	z-index: 1; /* Ensures it appears above other content */
-	bottom: 125%; /* Positions above the hover-container */
-	left: 50%;
-	margin-left: -100px; /* Centers the info box */
-	transition: opacity 0.3s; /* Optional: for a smooth fade-in */
+    visibility: hidden; /* Hide the info-box by default */
+    opacity: 0; /* Ensure it is not visible */
+    transition: opacity 0.3s ease; /* Smooth transition for visibility */
+    position: absolute;
+    bottom: 100%; /* Position above the icon */
+    left: 50%;
+    transform: translateX(-50%); /* Center the info-box */
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    z-index: 1;
 }
 
 .hover-container:hover .info-box {
-	visibility: visible;
-	opacity: 1; /* Reveals the info box on hover */
+    visibility: visible; /* Show the info-box on hover */
+    opacity: 1; /* Make it fully visible */
+}
+
+/* Increased the size of the info-box icon */
+.hover-container .icon {
+    font-size: 24px; /* Larger font size for better visibility */
+    color: #007bff; /* Optional: Add a modern blue color */
+}
+
+/* Updated the background color of collapsible divs in the layout tab */
+#PositionConfig .collapsible {
+    background-color: #d0ebff; /* Light blue background color */
+}
+
+@media (max-width: 768px) {
+    .tab {
+        flex-direction: row; /* Keep horizontal layout even on smaller screens */
+    }
 }

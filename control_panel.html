@@ -52,10 +52,18 @@ free to use and modify and use as long as this copyright statment remains intact
             </div> <!-- Header-->
             <!-- Tab navigation inside the main division -->
             <div class="tab">
-                <button id="poolStatTab" class="tablinks" onclick="openTab(event, 'PoolStat')">PoolStat</button>
-                <button id="generalSettingsTab" class="tablinks" onclick="openTab(event, 'GeneralSettings')">Settings</button>
-                <button id="positionConfigTab" class="tablinks" onclick="openTab(event, 'PositionConfig')">Layout</button>
-                <button id="testDataTab" class="tablinks" onclick="openTab(event, 'testData')">Simulate</button>
+                <button id="poolStatTab" class="tablinks" onclick="openTab(event, 'PoolStat')">
+                    <i class="icon">🎱</i> PoolStat
+                </button>
+                <button id="generalSettingsTab" class="tablinks" onclick="openTab(event, 'GeneralSettings')">
+                    <i class="icon">⚙️</i> Settings
+                </button>
+                <button id="positionConfigTab" class="tablinks" onclick="openTab(event, 'PositionConfig')">
+                    <i class="icon">📐</i> Layout
+                </button>
+                <button id="testDataTab" class="tablinks" onclick="openTab(event, 'testData')">
+                    <i class="icon">🧪</i> Simulate
+                </button>
             </div>
             <!-- PoolStat Tab -->
             <div id="PoolStat" class="tabcontent">
@@ -64,13 +72,14 @@ free to use and modify and use as long as this copyright statment remains intact
                 </div>
                 <div class="column-center-close">
                     PoolStat Unique Rig ID: &nbsp;
+                    <!-- Updated the info-box icon to a better design -->
                     <div class="hover-container">
-                        ⓘ
+                        <i class="icon">ℹ️</i> <!-- Updated icon to a more modern and recognizable info symbol -->
                         <span class="info-box">
                             <p>
-                                This ID will need to be Applied to your table configuration in
+                                This ID will need to be applied to your table configuration in
                                 Poolstat live. Not having a matching ID will stop live updates
-                                wortking on this Rig.
+                                working on this Rig.
                             </p>
                         </span>
                     </div>
@@ -94,10 +103,11 @@ free to use and modify and use as long as this copyright statment remains intact
                     <text id="raceInfoTxt"></text>
                     <text>Game/Other Info:</text>
                     <text id="gameInfoTxt"></text>
-                    <text>Draw - Round:</text>
-                    <text id="drawRoundTxt"></text>
+
                 </div>
                 <div class="column">
+                    <text>Draw - Round:</text>
+                    <text id="drawRoundTxt"></text>                    
                     <text id="raceInfo">Competition ID:</text>
                     <text id="compIdTxt"></text>
                     <text>Match ID:</text>
@@ -125,8 +135,12 @@ free to use and modify and use as long as this copyright statment remains intact
                     <div>
                         <text>Timer ID</text><input type="text" id="timerID" style="width:150px;" onchange="saveTimerID(this)">
                     </div>
+                    <div>
+                        <text id="cueToolsStatusTxt">Cuetools Connection Status: </text>&nbsp;
+                        <text id="cueToolsStatus"></text>
+                    </div>        
                 </div>
-                <div class="column-center">
+                <div class="column">
                     <div class="hover obs28" id="cuetoolsConnectBtn" onclick="cueToolsConnectBtn()">
                         Connect
                     </div>   
