@@ -299,7 +299,13 @@ window.onload = function () {
 		setStorageItem("cueToolsEnableCB", "true");
 	} else {
 		document.getElementById("cueToolsEnableCB").checked = false;
-		setStorageItem("cueToolsEnableCB", "false");
+	}
+
+	if (getStorageItem("cueToolsSoundEffects") === "true" || getStorageItem("cueToolsSoundEffects") === null) {
+		document.getElementById("cueToolsSoundEffectsCB").checked = true;
+		setStorageItem("cueToolsSoundEffects", "true");
+	} else {
+		document.getElementById("cueToolsSoundEffectsCB").checked = false;
 	}
 
 	intiializePositionConfig();

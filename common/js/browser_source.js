@@ -74,10 +74,10 @@ function customShow() {
 
 function customHide() {
 	document.getElementById("customLogo1").classList.replace("fadeInElm", "fadeOutElm");
-	setTimeout(function () { 
-		document.getElementById("customLogo1").style.display = "none"; 
+	setTimeout(function () {
+		document.getElementById("customLogo1").style.display = "none";
 	}, 1000);
-}		
+}
 
 function custom2Show() {
 	document.getElementById("customLogo2").style.removeProperty('display');
@@ -94,32 +94,34 @@ function custom2Show() {
 
 function custom2Hide() {
 	document.getElementById("customLogo2").classList.replace("fadeInElm", "fadeOutElm");
-	setTimeout(function () { 
-		document.getElementById("customLogo2").style.display = "none"; 
+	setTimeout(function () {
+		document.getElementById("customLogo2").style.display = "none";
 	}, 1000);
 }
 
+
+
 function changeActivePlayer(activePlayer) {
-    if (activePlayer === true || activePlayer === null) {
+	if (activePlayer === true || activePlayer === null) {
 		console.log(`Show player 1`);
-        document.getElementById("player1Image").classList.replace("fadeOutElm", "fadeInElm");
-        document.getElementById("player2Image").classList.replace("fadeInElm", "fadeOutElm");
-    } else if (activePlayer === false) {
+		document.getElementById("player1Image").classList.replace("fadeOutElm", "fadeInElm");
+		document.getElementById("player2Image").classList.replace("fadeInElm", "fadeOutElm");
+	} else if (activePlayer === false) {
 		console.log(`Show player 2`);
-        document.getElementById("player1Image").classList.replace("fadeInElm", "fadeOutElm");
-        document.getElementById("player2Image").classList.replace("fadeOutElm", "fadeInElm");
-    }else {
-        console.log(`No valid player selected`); // Log if no valid player
-    }
+		document.getElementById("player1Image").classList.replace("fadeInElm", "fadeOutElm");
+		document.getElementById("player2Image").classList.replace("fadeOutElm", "fadeInElm");
+	} else {
+		console.log(`No valid player selected`); // Log if no valid player
+	}
 }
 
 function setStorageItem(key, value) {
-    const prefix = INSTANCE_ID ? `${INSTANCE_ID}_` : '';
-    localStorage.setItem(`${prefix}${key}`, value);
+	const prefix = INSTANCE_ID ? `${INSTANCE_ID}_` : '';
+	localStorage.setItem(`${prefix}${key}`, value);
 }
 
 function getStorageItem(key, defaultValue = null) {
-    const prefix = INSTANCE_ID ? `${INSTANCE_ID}_` : '';
-    const value = localStorage.getItem(`${prefix}${key}`);
-    return value !== null ? value : defaultValue;
+	const prefix = INSTANCE_ID ? `${INSTANCE_ID}_` : '';
+	const value = localStorage.getItem(`${prefix}${key}`);
+	return value !== null ? value : defaultValue;
 }

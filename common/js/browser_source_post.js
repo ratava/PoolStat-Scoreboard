@@ -575,8 +575,31 @@ const handlers = {
         document.getElementById("apExtDiv").classList.remove("fadeOutElm");
         document.getElementById("hpExtDiv").classList.add("fadeInElm");
         document.getElementById("apExtDiv").classList.add("fadeInElm");
-    }
+    },
+
+    matchClock(data) {
+        if (data.useMatchClock) { //enabled
+            document.getElementById("matchClockContainer").classList.remove("noShow");
+            document.getElementById("matchClock").innerHTML = data.matchClock;
+        } else {
+            document.getElementById("matchClockContainer").classList.add("noShow");
+        }
+    },
+
+    matchClockColour(data) {
+        document.getElementById("matchClockContainer").style.color = data.matchClockColour;
+    },
+
+
+    playSound(data) {
+        const sound = new Howl({
+            src: [data.playSound],
+            html5: true // use HTML5 Audio for remote files
+        });
+        sound.play();
+    },
 };
+
 // Main event handler
 bc.onmessage = (event) => {
     console.log('Received event data:', event.data);
@@ -651,3 +674,5 @@ if (getStorageItem("p2ScoreCtrlPanel") != null && getStorageItem("usePoolStat") 
         document.getElementById("apScore").innerHTML = 0;
     }
 }
+
+

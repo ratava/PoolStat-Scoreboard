@@ -20,6 +20,9 @@ let client = null;
 const extraDebug = true;
 const matchClock = createTimer('matchClock', 45 * 60);
 const shotClock = createTimer('shotClock', 45);
+const warningSound = "https://timer.cuetools.app/warningDing.mp3";
+const fiveSecondSound = "https://timer.cuetools.app/tickSound.mp3";
+const completedSound = "https://timer.cuetools.app/outOfTime.mp3";
 
 //main function to update scoreboard from PoolStat Live Stream
 function poolstatUpdate(updateJSON) {
@@ -460,6 +463,7 @@ function openTab(evt, tabName) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+    //buildSections();
     // Try to get the last selected tab from localStorage
     const lastSelectedTab = getStorageItem("lastSelectedTab");
 
@@ -481,18 +485,442 @@ document.addEventListener("DOMContentLoaded", function () {
     if (getStorageItem("PoolStatRigId") != null) {
         connectPSLiveStream();
     }
+
+    if (getStorageItem("poolStatConfigCueTools") === "true" && getStorageItem('timerID') != null) {
+        const socket = cueToolsConnect((data) => {
+        });
+    }
 });
+
+function buildSections() {
+    const sections = [
+        {
+            id: 'bannerBox',
+            title: 'Top Banner Box',
+            type: 'table',
+            fields: [
+                { type: 'text', label: 'Right', idSuffix: 'LeftTxt', width: 50 },
+                { type: 'text', label: 'Top', idSuffix: 'TopTxt', width: 50 },
+                { type: 'text', label: 'Height', idSuffix: 'HeightTxt', width: 50 },
+                { type: 'text', label: 'Width', idSuffix: 'WidthTxt', width: 50 },
+                { type: 'checkbox', label: 'Enable Banner', idSuffix: 'EnabledCB' },
+                { type: 'text', label: 'Additional CSS', idSuffix: 'CSSTxt', width: 100 },
+                { type: 'color', label: 'Background Colour', idSuffix: 'BGTxt', colorspace: 'limited-srgb' },
+                { type: 'checkbox', label: 'No BG', idSuffix: 'BGNoneCB' },
+            ]
+        },
+        {
+            id: 'raceInfo',
+            title: 'Race Info',
+            type: 'table',
+            fields: [
+                { type: 'text', label: 'Centre', idSuffix: 'LeftTxt', width: 50 },
+                { type: 'text', label: 'Top', idSuffix: 'TopTxt', width: 50 },
+                { type: 'text', label: 'Height', idSuffix: 'HeightTxt', width: 50 },
+                { type: 'text', label: 'Width', idSuffix: 'WidthTxt', width: 50 },
+                { type: 'text', label: 'Font Size', idSuffix: 'FontTxt', width: 50 },
+                { type: 'text', label: 'Additional CSS', idSuffix: 'CSSTxt', width: 100 },
+                { type: 'color', label: 'Foreground Colour', idSuffix: 'FGTxt', colorspace: 'limited-srgb' },
+                { type: 'color', label: 'Background Colour', idSuffix: 'BGTxt', colorspace: 'limited-srgb' },
+                { type: 'checkbox', label: 'No BG', idSuffix: 'BGNoneCB' },
+            ]
+        },
+        {
+            id: 'gameInfo',
+            title: 'Game Info',
+            type: 'table',
+            fields: [
+                { type: 'text', label: 'Centre', idSuffix: 'LeftTxt', width: 50 },
+                { type: 'text', label: 'Top', idSuffix: 'TopTxt', width: 50 },
+                { type: 'text', label: 'Height', idSuffix: 'HeightTxt', width: 50 },
+                { type: 'text', label: 'Width', idSuffix: 'WidthTxt', width: 50 },
+                { type: 'text', label: 'Font Size', idSuffix: 'FontTxt', width: 50 },
+                { type: 'text', label: 'Additional CSS', idSuffix: 'CSSTxt', width: 100 },
+                { type: 'color', label: 'Foreground Colour', idSuffix: 'FGTxt', colorspace: 'limited-srgb' },
+                { type: 'color', label: 'Background Colour', idSuffix: 'BGTxt', colorspace: 'limited-srgb' },
+                { type: 'checkbox', label: 'No BG', idSuffix: 'BGNoneCB' },
+            ]
+        },
+        {
+            id: 'drawRound',
+            title: 'Draw - Round',
+            type: 'table',
+            fields: [
+                { type: 'text', label: 'Centre', idSuffix: 'LeftTxt', width: 50 },
+                { type: 'text', label: 'Top', idSuffix: 'TopTxt', width: 50 },
+                { type: 'text', label: 'Height', idSuffix: 'HeightTxt', width: 50 },
+                { type: 'text', label: 'Width', idSuffix: 'WidthTxt', width: 50 },
+                { type: 'text', label: 'Font Size', idSuffix: 'FontTxt', width: 50 },
+                { type: 'text', label: 'Additional CSS', idSuffix: 'CSSTxt', width: 100 },
+                { type: 'color', label: 'Foreground Colour', idSuffix: 'FGTxt', colorspace: 'limited-srgb' },
+                { type: 'color', label: 'Background Colour', idSuffix: 'BGTxt', colorspace: 'limited-srgb' },
+                { type: 'checkbox', label: 'No BG', idSuffix: 'BGNoneCB' },
+            ]
+        },
+        {
+            id: 'ticker',
+            title: 'Ticker',
+            columns: [
+                [
+                    { type: 'text', label: 'Centre', idSuffix: 'LeftTxt', width: 50 },
+                    { type: 'text', label: 'Top', idSuffix: 'TopTxt', width: 50 },
+                    { type: 'text', label: 'Height', idSuffix: 'HeightTxt', width: 50 },
+                    { type: 'text', label: 'Width', idSuffix: 'WidthTxt', width: 50 },
+                    { type: 'text', label: 'Font Size', idSuffix: 'FontTxt', width: 50 },
+                ],
+                [
+                    { type: 'text', label: 'Additional CSS', idSuffix: 'CSSTxt', width: 100 },
+                    { type: 'color', label: 'Foreground Colour', idSuffix: 'FGTxt', colorspace: 'limited-srgb' },
+                    { type: 'color', label: 'Background Colour', idSuffix: 'BGTxt', colorspace: 'limited-srgb' },
+                    { type: 'checkbox', label: 'Auto Hide', idSuffix: 'AutoHideCB' },
+                    { type: 'checkbox', label: 'No BG', idSuffix: 'BGNoneCB' }
+                ]
+            ]
+        },
+        {
+            id: 'hpName',
+            title: 'Home Player Name',
+            columns: [
+                [
+                    { type: 'text', label: 'Left', idSuffix: 'LeftTxt', width: 50 },
+                    { type: 'text', label: 'Top', idSuffix: 'TopTxt', width: 50 },
+                    { type: 'text', label: 'Height', idSuffix: 'HeightTxt', width: 50 },
+                    { type: 'text', label: 'Width', idSuffix: 'WidthTxt', width: 50 },
+                    { type: 'text', label: 'Font Size', idSuffix: 'FontTxt', width: 50 },
+                ],
+                [
+                    { type: 'text', label: 'Additional CSS', idSuffix: 'CSSTxt', width: 100 },
+                    { type: 'color', label: 'Foreground Colour', idSuffix: 'FGTxt', colorspace: 'limited-srgb' },
+                    { type: 'color', label: 'Background Colour', idSuffix: 'BGTxt', colorspace: 'limited-srgb' },
+                ],
+                [
+                    { type: 'checkbox', label: 'No BG', idSuffix: 'BGNoneCB' },
+                    { type: 'checkbox', label: 'Gradient', idSuffix: 'BGGradientCB' }
+                ]
+            ]
+        },	
+        {
+            id: 'apName',
+            title: 'Away Player Name',
+            fields: [
+                { type: 'text', label: 'Left', idSuffix: 'LeftTxt', width: 50 },
+                { type: 'text', label: 'Top', idSuffix: 'TopTxt', width: 50 },
+                { type: 'text', label: 'Height', idSuffix: 'HeightTxt', width: 50 },
+                { type: 'text', label: 'Width', idSuffix: 'WidthTxt', width: 50 },
+                { type: 'text', label: 'Font Size', idSuffix: 'FontTxt', width: 50 },
+                { type: 'text', label: 'Additional CSS', idSuffix: 'CSSTxt', width: 100 },
+                { type: 'color', label: 'Foreground Colour', idSuffix: 'FGTxt', colorspace: 'limited-srgb' },
+                { type: 'color', label: 'Background Colour', idSuffix: 'BGTxt', colorspace: 'limited-srgb' },
+                { type: 'checkbox', label: 'No BG', idSuffix: 'BGNoneCB' },
+                { type: 'checkbox', label: 'Gradient', idSuffix: 'BGGradientCB' }
+            ]
+        },							
+        {
+            id: 'homePlayerScore',
+            title: 'Home Player Score',
+            columns: [
+                [
+                    { label: 'Left', type: 'text', id: 'hpScoreLeftTxt', style: 'width:50px' },
+                    { label: 'Top', type: 'text', id: 'hpScoreTopTxt', style: 'width:50px' },
+                    { label: 'Height', type: 'text', id: 'hpScoreHeightTxt', style: 'width:50px' },
+                    { label: 'Width', type: 'text', id: 'hpScoreWidthTxt', style: 'width:50px' },
+                    { label: 'Font Size', type: 'text', id: 'hpScoreFontTxt', style: 'width:50px' }
+                ],
+                [
+                    { label: 'Additional CSS', type: 'text', id: 'hpScoreCSSTxt', style: 'width:100px' },
+                    { label: 'Foreground Colour', type: 'color', id: 'hpScoreFGTxt' },
+                    { label: 'Background Colour', type: 'color', id: 'hpScoreBGTxt' },
+                    { label: 'No BG', type: 'checkbox', id: 'hpScoreBGNoneCB' }
+                ]
+            ]
+        },
+        {
+            id: 'awayPlayerScore',
+            title: 'Away Player Score',
+            columns: [
+                [
+                    { label: 'Right', type: 'text', id: 'apScoreLeftTxt', style: 'width:50px' },
+                    { label: 'Top', type: 'text', id: 'apScoreTopTxt', style: 'width:50px' },
+                    { label: 'Height', type: 'text', id: 'apScoreHeightTxt', style: 'width:50px' },
+                    { label: 'Width', type: 'text', id: 'apScoreWidthTxt', style: 'width:50px' },
+                    { label: 'Font Size', type: 'text', id: 'apScoreFontTxt', style: 'width:50px' }
+                ],
+                [
+                    { label: 'Additional CSS', type: 'text', id: 'apScoreCSSTxt', style: 'width:100px' },
+                    { label: 'Foreground Colour', type: 'color', id: 'apScoreFGTxt' },
+                    { label: 'Background Colour', type: 'color', id: 'apScoreBGTxt' },
+                    { label: 'No BG', type: 'checkbox', id: 'apScoreBGNoneCB' }
+                ]
+            ]
+        },
+        {
+            id: 'homePlayerImage',
+            title: 'Home Player Image',
+            columns: [
+                [
+                    { label: 'Left', type: 'text', id: 'hpImageLeftTxt', style: 'width:50px' },
+                    { label: 'Top', type: 'text', id: 'hpImageTopTxt', style: 'width:50px' },
+                    { label: 'Height', type: 'text', id: 'hpImageHeightTxt', style: 'width:50px' },
+                    { label: 'Width', type: 'text', id: 'hpImageWidthTxt', style: 'width:50px' }
+                ],
+                [
+                    { label: 'Additional CSS', type: 'text', id: 'hpImageCSSTxt', style: 'width:100px' },
+                    { label: 'Enable Image', type: 'checkbox', id: 'hpImageEnableCB' },
+                    { label: 'Auto Name Move', type: 'checkbox', id: 'hpImageAutoMoveCB' }
+                ]
+            ]
+        },
+        {
+            id: 'awayPlayerImage',
+            title: 'Away Player Image',
+            columns: [
+                [
+                    { label: 'Right', type: 'text', id: 'apImageLeftTxt', style: 'width:50px' },
+                    { label: 'Top', type: 'text', id: 'apImageTopTxt', style: 'width:50px' },
+                    { label: 'Height', type: 'text', id: 'apImageHeightTxt', style: 'width:50px' },
+                    { label: 'Width', type: 'text', id: 'apImageWidthTxt', style: 'width:50px' }
+                ],
+                [
+                    { label: 'Additional CSS', type: 'text', id: 'apImageCSSTxt', style: 'width:100px' },
+                    { label: 'Enable Image', type: 'checkbox', id: 'apImageEnableCB' },
+                    { label: 'Auto Name Move', type: 'checkbox', id: 'apImageAutoMoveCB' }
+                ]
+            ]
+        },
+        {
+            id: 'breakingPlayerIndicator',
+            title: 'Breaking Player Indicator',
+            columns: [
+                [
+                    { label: 'Height', type: 'text', id: 'bpHeightTxt', style: 'width:50px' },
+                    { label: 'Width', type: 'text', id: 'bpWidthTxt', style: 'width:50px' },
+                    { label: 'Additional CSS', type: 'text', id: 'bpCSSTxt', style: 'width:100px' }
+                ],
+                [
+                    { label: 'Background Colour', type: 'color', id: 'bpBGTxt' },
+                    { label: 'No BG', type: 'checkbox', id: 'bpBGNoneCB' }
+                ]
+            ]
+        },
+
+        // CueTools logo section
+        {
+            id: 'cueToolsLogo',
+            type: 'html',
+            html: `
+                <a href="https://cuetools.app/">
+                    <img src="./common/images/cuetools-logo.png"
+                        alt="CueTools Logo"
+                        title="CueTools Logo"
+                        width="100px"
+                        height="50px"/>
+                </a>
+            `
+        },
+
+        // Match Clock
+        {
+            id: 'matchClock',
+            title: 'Match Clock',
+            columns: [
+                [
+                    { label: 'Right', type: 'text', id: 'matchClockLeftTxt', style: 'width:50px' },
+                    { label: 'Top', type: 'text', id: 'matchClockTopTxt', style: 'width:50px' },
+                    { label: 'Height', type: 'text', id: 'matchClockHeightTxt', style: 'width:50px' },
+                    { label: 'Width', type: 'text', id: 'matchClockWidthTxt', style: 'width:50px' },
+                    { label: 'Font Size', type: 'text', id: 'matchClockFontTxt', style: 'width:50px' }
+                ],
+                [
+                    { label: 'Additional CSS', type: 'text', id: 'matchClockCSSTxt', style: 'width:100px' },
+                    { label: 'Background Colour', type: 'color', id: 'matchClockBGTxt' },
+                    { label: 'No BG', type: 'checkbox', id: 'matchClockBGNoneCB' }
+                ],
+                [
+                    { label: 'Normal Colour', type: 'color', id: 'matchClockNormalTxt' },
+                    { label: '5 Second Colour', type: 'color', id: 'matchClock5SecondTxt' },
+                    { label: 'Completed Colour', type: 'color', id: 'matchClockCompletedTxt' }
+                ]
+            ]
+        },
+
+        // Shot Clock
+        {
+            id: 'shotClock',
+            title: 'Shot Clock',
+            columns: [
+                [
+                    { label: 'Left', type: 'text', id: 'shotClockLeftTxt', style: 'width:50px' },
+                    { label: 'Top', type: 'text', id: 'shotClockTopTxt', style: 'width:50px' },
+                    { label: 'Height', type: 'text', id: 'shotClockHeightTxt', style: 'width:50px' },
+                    { label: 'Width', type: 'text', id: 'shotClockWidthTxt', style: 'width:50px' },
+                    { label: 'Font Size', type: 'text', id: 'shotClockFontTxt', style: 'width:50px' }
+                ],
+                [
+                    { label: 'Additional CSS', type: 'text', id: 'shotClockCSSTxt', style: 'width:100px' },
+                    { label: 'Background Colour', type: 'color', id: 'shotClockBGTxt' },
+                    { label: 'No BG', type: 'checkbox', id: 'shotClockBGNoneCB' }
+                ],
+                [
+                    { label: 'Normal Colour', type: 'color', id: 'shotClockNormalTxt' },
+                    { label: 'Warning Colour', type: 'color', id: 'shotClockWarningTxt' },
+                    { label: '5 Second Colour', type: 'color', id: 'shotClock5SecondTxt' },
+                    { label: 'Completed Colour', type: 'color', id: 'shotClockCompletedTxt' }
+                ]
+            ]
+        },
+
+        // Home Player Extension
+        {
+            id: 'homePlayerExt',
+            title: 'Home Player - Extension',
+            columns: [
+                [
+                    { label: 'Left', type: 'text', id: 'hpExtLeftTxt', style: 'width:50px' },
+                    { label: 'Top', type: 'text', id: 'hpExtTopTxt', style: 'width:50px' },
+                    { label: 'Height', type: 'text', id: 'hpExtHeightTxt', style: 'width:50px' },
+                    { label: 'Width', type: 'text', id: 'hpExtWidthTxt', style: 'width:50px' },
+                    { label: 'Font Size', type: 'text', id: 'hpExtFontTxt', style: 'width:50px' }
+                ],
+                [
+                    { label: 'Additional CSS', type: 'text', id: 'hpExtCSSTxt', style: 'width:100px' },
+                    { label: 'Foreground Colour', type: 'color', id: 'hpExtFGTxt' },
+                    { label: 'Background Colour', type: 'color', id: 'hpExtBGTxt' },
+                    { label: 'No BG', type: 'checkbox', id: 'hpExtBGNoneCB' }
+                ]
+            ]
+        },
+
+        // Away Player Extension
+        {
+            id: 'awayPlayerExt',
+            title: 'Away Player - Extension',
+            columns: [
+                [
+                    { label: 'Right', type: 'text', id: 'apExtLeftTxt', style: 'width:50px' },
+                    { label: 'Top', type: 'text', id: 'apExtTopTxt', style: 'width:50px' },
+                    { label: 'Height', type: 'text', id: 'apExtHeightTxt', style: 'width:50px' },
+                    { label: 'Width', type: 'text', id: 'apExtWidthTxt', style: 'width:50px' },
+                    { label: 'Font Size', type: 'text', id: 'apExtFontTxt', style: 'width:50px' }
+                ],
+                [
+                    { label: 'Additional CSS', type: 'text', id: 'apExtCSSTxt', style: 'width:100px' },
+                    { label: 'Foreground Colour', type: 'color', id: 'apExtFGTxt' },
+                    { label: 'Background Colour', type: 'color', id: 'apExtBGTxt' },
+                    { label: 'No BG', type: 'checkbox', id: 'apExtBGNoneCB' }
+                ]
+            ]
+        }
+    ];
+
+    const container = document.getElementById('configContainer'); // container div in your HTML
+
+    container.innerHTML = ''; // clear existing content
+
+
+    console.log('Building Sections');
+    console.log(Array.isArray(sections)); // should print true
+    console.log(sections);
+
+
+    sections.forEach(section => {
+        // Create collapsible button
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'collapsible';
+        button.textContent = section.title;
+        container.appendChild(button);
+
+        // Create content div
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'content';
+
+        // Use table if section.table === true, else columns
+        if (section.table) {
+            const table = document.createElement('table');
+            table.className = 'table-container';
+
+            section.fields.forEach(field => {
+                const row = document.createElement('tr');
+
+                const tdLabel = document.createElement('td');
+                const label = document.createElement('label');
+                label.htmlFor = section.id + field.idSuffix;
+                label.textContent = field.label;
+                tdLabel.appendChild(label);
+
+                const tdInput = document.createElement('td');
+                const input = document.createElement('input');
+                input.type = field.type || 'text';
+                input.id = section.id + field.idSuffix;
+                if (field.width) input.style.width = field.width + 'px';
+                if (field.colorspace) input.setAttribute('colorspace', field.colorspace);
+                if (field.checked) input.checked = true;
+                input.onchange = () => positionConfigChange(input);
+                tdInput.appendChild(input);
+
+                row.appendChild(tdLabel);
+                row.appendChild(tdInput);
+                table.appendChild(row);
+            });
+
+            contentDiv.appendChild(table);
+
+        } 
+        if (Array.isArray(section.columns)) {
+            section.columns.forEach(colFields => {
+                const colDiv = document.createElement('div');
+                colDiv.className = 'column';
+
+                if (Array.isArray(colFields)) {
+                    colFields.forEach(field => {
+                        const div = document.createElement('div');
+
+                        const label = document.createElement('label');
+                        label.htmlFor = section.id + field.idSuffix;
+                        label.textContent = field.label;
+                        div.appendChild(label);
+
+                        const input = document.createElement('input');
+                        input.type = field.type || 'text';
+                        input.id = section.id + field.idSuffix;
+                        if (field.width) input.style.width = field.width + 'px';
+                        if (field.colorspace) input.setAttribute('colorspace', field.colorspace);
+                        if (field.checked) input.checked = true;
+                        input.onchange = () => positionConfigChange(input);
+                        div.appendChild(input);
+
+                        colDiv.appendChild(div);
+                    });
+                }
+
+                contentDiv.appendChild(colDiv);
+            });
+        }
+
+        container.appendChild(contentDiv);
+    });
+
+    // Optional: reattach collapsible functionality if needed
+    // const collapsibles = container.querySelectorAll('.collapsible');
+    // collapsibles.forEach(btn => {
+    //     btn.onclick = function () {
+    //         this.classList.toggle('active');
+    //         const content = this.nextElementSibling;
+    //         content.style.display = content.style.display === 'block' ? 'none' : 'block';
+    //     };
+    // });
+}	
 
 function positionConfigChange(inputElement) {
     console.log(inputElement.value + " " + inputElement.id);
     if (inputElement.id.includes('CB')) {
         if (inputElement.checked) {
-            setStorageItem(inputElement.id, "true");
+            setStorageItem(inputElement.id, "true", true);
         } else {
-            setStorageItem(inputElement.id, "false");
+            setStorageItem(inputElement.id, "false", true);
         }
     } else {
-        setStorageItem(inputElement.id, inputElement.value);
+        setStorageItem(inputElement.id, inputElement.value, true);
     }
     intiializePositionConfig();
 }
@@ -538,13 +966,20 @@ function poolStatConfigBreakingPlayer() {
     setStorageItem("usePoolStatBreakingPlayer", storageValue);
 }
 
-function poolStatConfigCueTools() {
-    var poolStatConfigCueTools = document.getElementById("cueToolsEnableCB");
-    var isChecked = poolStatConfigCueTools.checked;
-    var storageValue = isChecked ? "true" : "false";
-
-    console.log(`Use CueTools ${isChecked}`);
-    setStorageItem("poolStatConfigCueTools", storageValue);
+function poolStatConfigCueTools(option) {
+    if (option === 'timer') {
+        var poolStatConfigCueTools = document.getElementById("cueToolsEnableCB");
+        var isChecked = poolStatConfigCueTools.checked;
+        var storageValue = isChecked ? "true" : "false";
+        if (extraDebug) { console.log(`Use CueTools Timeer ${isChecked}`); }
+        setStorageItem("poolStatConfigCueTools", storageValue);
+    } else if (option === 'sound') {
+        var cueToolsSoundEffectsCB = document.getElementById("cueToolsSoundEffectsCB");
+        var isChecked = cueToolsSoundEffectsCB.checked;
+        var storageValue = isChecked ? "true" : "false";
+        if (extraDebug) { console.log(`Use CueTools Sound Effect ${isChecked}`); }
+        setStorageItem("cueToolsSoundEffects", storageValue);
+    }
 }
 
 function scoreDisplaySetting() {
@@ -560,24 +995,6 @@ function scoreDisplaySetting() {
     if (getStorageItem("usePoolStat") === "yes") {
         bc.postMessage({ scoreDisplay: poolStatCheckbox.checked ? "yes" : "no" });
     }
-}
-
-function clearGame() {
-    console.log('Clearing Match Data');
-    document.getElementById("raceInfoTxt").textContent = "";
-    document.getElementById("gameInfoTxt").textContent = "";
-    document.getElementById("compIdTxt").textContent = "";
-    document.getElementById("matchIdTxt").textContent = "";
-    document.getElementById("p1NameTxt").textContent = "";
-    document.getElementById("p2NameTxt").textContent = "";
-    setStorageItem("p1NameCtrlPanel", "");
-    setStorageItem("p2NameCtrlPanel", "");
-    setStorageItem("raceInfo", "");
-    setStorageItem("gameInfo", "");
-    setStorageItem("compId", "");
-    setStorageItem("matchId", "");
-    postNames("", "");
-    postInfo("", "");
 }
 
 function postNames(p1namemsg, p2namemsg) {
@@ -662,11 +1079,11 @@ function postScore(opt1, player) {
     }
 }
 
+//Cuetools Timer Integration
 var socket = null;
 
 function cueToolsConnectBtn() {
     const socket = cueToolsConnect((data) => {
-
     });
 }
 
@@ -700,10 +1117,10 @@ function cueToolsConnect(onMessageCallback) {
     // Handle successful connection
     socket.on('connect', () => {
         if (extraDebug) { console.log('✅ Connected to CueTools server:', socket.id); }
+        cueToolsStatus.textContent = `Connected to CueTools Timer ID: ${getStorageItem('timerID')}`;
         setStorageItem('socketID', socket.id);
         // Example: Send a message to the server
         socket.emit('join', getStorageItem('timerID'));
-
 
         const timerID = getStorageItem('timerID');
         const socketID = socket.id;
@@ -744,6 +1161,18 @@ function cueToolsConnect(onMessageCallback) {
         console.error('Connection error:', error.message);
     });
 
+    socket.on("reconnect_attempt", () => {
+        if (extraDebug) { console.log("Attempting to reconnect to CueTools server..."); }
+        cueToolsStatus.textContent = 'Reconnecting to CueTools server...';
+    });
+
+    socket.on("reconnect", (attemptNumber) => {
+        if (extraDebug) { console.log(`Reconnected to CueTools server after ${attemptNumber} attempts.`); }
+        cueToolsStatus.textContent = `Reconnected to CueTools Timer ID: ${getStorageItem('timerID')}`;
+        // Re-emit join event after reconnection
+        socket.emit('join', getStorageItem('timerID'));
+    });
+
     return socket;
 }
 
@@ -766,20 +1195,21 @@ function saveCueToolsSettings(getArgsPayload) {
 
     const { socketAllowedSettings, ...settings } = getArgsPayload.options.detail;
     const uniqueKeys = [...new Set(socketAllowedSettings)];
-    uniqueKeys.forEach((key) => {
+    uniqueKeys.forEach((key) => {  //save everything to local storage first
         if (key in settings) {
             const value = settings[key];
             const storageKey = `cueTools_${key}`;
             setStorageItem(storageKey, value);
             if (extraDebug) { console.log(`✅ Stored ${storageKey}:`, value); }
+        }
+    });
 
-
+    uniqueKeys.forEach((key) => { //now handle specific settings that need action
+        if (key in settings) {
+            const value = settings[key];
             switch (key) {
                 case 'matchClock':
                     handleMatchClockState(value);
-                    break;
-                case 'timeMatchClockHours':
-                    handleMatchClockTime('hours', value);
                     break;
                 case 'timeMatchClockMinutes':
                     handleMatchClockTime('minutes', value);
@@ -850,138 +1280,6 @@ function handleRunFunctionMessage(messageObject) {
             break;
         default:
             console.warn(`Unknown function "${func}" received.`);
-    }
-}
-
-//match extension handler
-function handleMatchReset() {
-    if (extraDebug) { console.log('Resetting match...'); }
-}
-
-function handleMatchPause() {
-    if (extraDebug) { console.log('Pause match...'); }
-}
-
-function handleMatchStart() {
-    if (extraDebug) { console.log('Starting match...'); }
-}
-
-
-
-function handleMatchClockState(state) {
-    if (extraDebug) { console.log('Match Clock State Change: '); }
-    if (state) {
-        var matchClockTime = (parseInt(getStorageItem('cueTools_timeMatchClockMinutes')) * 60) + (parseInt(getStorageItem('cueTools_timeMatchClockhours')) * 3600);
-        if (extraDebug) { console.log('Match Clock Time: ' + matchClockTime); }
-        matchClock.set(matchClockTime);
-    } else {
-        matchClock.pause();
-    }
-}
-
-function handleShotClockState(state) {
-    if (extraDebug) { console.log('Shot Clock State Change: '); }
-    if (state) {
-        var shotClockTime = parseInt(getStorageItem('cueTools_timeClock'));
-        if (extraDebug) { console.log('Shot Clock Time: ' + shotClockTime); }
-        shotClock.set(shotClockTime);
-    } else {
-        shotClock.pause();
-    }
-}
-
-function handleMatchClockTime(type, value) {
-    if (extraDebug) { console.log(`Match Clock Time Change: ${type} to ${value}`); }
-
-
-}
-
-function handleMatchClockAdjust(type, value) {
-
-}
-
-function handleShotClockResume() {
-    if (extraDebug) { console.log('Resuming timer...'); }
-    var remaining = shotClock.getTime();
-    checkShotClockColour(remaining);
-    bc.postMessage({ shotClock: remaining, useShotClock: true });
-    shotClock.resume();
-}
-
-//shot clock extension handler
-function handleShotClockPause() {
-    if (extraDebug) { console.log('Pausing timer...'); }
-    shotClock.pause();
-}
-
-function handleShotClockRestart() {
-    if (extraDebug) { console.log('Restarting timer...'); }
-    shotClock.reset(parseInt(getStorageItem('cueTools_timeClock')));
-    var remaining = shotClock.getTime();
-    checkShotClockColour(remaining);
-    bc.postMessage({ shotClock: remaining, useShotClock: true });
-    bc.postMessage({ shotClockExtensionReset: true });
-}
-
-function handleShotClockState(state) {
-    if (extraDebug) { console.log('Shot Clock State Change: '); }
-    if (state) {
-        var shotClockTime = parseInt(getStorageItem('cueTools_timeClock'));
-        if (extraDebug) { console.log('Shot Clock Time: ' + shotClockTime); }
-        shotClock.set(shotClockTime);
-        var remaining = shotClock.getTime();
-        checkShotClockColour(remaining);
-        bc.postMessage({ shotClock: remaining, useShotClock: true });
-    } else {
-        matchClock.pause();
-    }
-}
-
-function handleShotClockExtension(player) {
-    if (!player) {
-        console.warn('No player specified for extension.');
-        return;
-    }
-
-    if (extraDebug) { console.log(`Extending time for player: ${player}`); }
-    var timeAdjust = parseInt(getStorageItem('cueTools_timeExtension'));
-    shotClock.adjust(timeAdjust);
-    var remaining = shotClock.getTime();
-    bc.postMessage({ shotClock: remaining, useShotClock: true });
-    bc.postMessage({ shotClockExtension: player });
-}
-
-shotClock.onTick((time) => {
-    if (extraDebug) { console.log('Shot Clock Time:', time); }
-    bc.postMessage({ shotClock: time, useShotClock: true });
-    checkShotClockColour(time);
-});
-
-function checkShotClockColour(time) {
-    var scWarningTime = parseInt(getStorageItem('cueTools_timeWarning'));
-    var normal = getStorageItem('shotClockNormalTxt');
-    var warning = getStorageItem('shotClockWarningTxt');
-    var fiveSecond = getStorageItem('shotClock5SecondTxt');
-    var completed = getStorageItem('shotClockCompletedTxt');
-
-    if (time > scWarningTime) {
-        bc.postMessage({ shotClockColour: normal });
-    }
-
-    if (time == scWarningTime) {
-        bc.postMessage({ shotClockColour: warning });
-    }
-
-    if (time < scWarningTime && time > 5) {
-        bc.postMessage({ shotClockColour: normal });
-    }
-
-    if (time <= 5 && time > 0) {
-        bc.postMessage({ shotClockColour: fiveSecond });
-    }
-
-    if (time == 0) {
-        bc.postMessage({ shotClockColour: completed });
     }
 }
 
@@ -1100,14 +1398,193 @@ function createTimer(name, initialSeconds = 45) {
     };
 }
 
-function cueToolsDisconnect(socket) {
-    if (socket && socket.connected) {
-        socket.disconnect();
-        console.log('Disconnected from CueTools server.');
+// Match Clock Functions
+
+function handleMatchClockState(state) {
+    if (extraDebug) { console.log('Match Clock State Change: ' + state); }
+    setStorageItem('cueTools_matchClock', state);
+}
+
+function handleMatchReset() {
+    if (extraDebug) { console.log('Resetting match...'); }
+    console.log(getStorageItem('cueTools_timeMatchClockMinutes') + ' ' + getStorageItem('cueTools_timeMatchClockHours'));
+    var minutes = parseInt(getStorageItem('cueTools_timeMatchClockMinutes'));
+    var hours = parseInt(getStorageItem('cueTools_timeMatchClockHours'));
+    if (isNaN(minutes)) { minutes = 0; }
+    if (isNaN(hours)) { hours = 0; }
+    matchClock.reset((minutes * 60) + (hours * 3600));
+}
+
+function handleMatchPause() {
+    if (extraDebug) { console.log('Pause match...'); }
+    matchClock.pause();
+}
+
+function handleMatchStart() {
+    if (extraDebug) { console.log('Starting match...'); }
+    matchClock.start();
+}
+
+function handleMatchClockTime(type, value) {
+    if (extraDebug) { console.log(`Match Clock Time Change: ${type} to ${value}`); }
+    var hours = parseInt(getStorageItem('cueTools_timeMatchClockHours'));
+    var minutes = parseInt(getStorageItem('cueTools_timeMatchClockMinutes'));
+    if (isNaN(minutes)) { minutes = 0; }
+    if (isNaN(hours)) { hours = 0; }
+
+    var time = (hours * 3600) + (minutes * 60);
+    matchClock.reset(time);
+    var remaining = matchClock.getTime();
+    checkMatchClockTick(remaining);
+    var displayTime;
+    if (time > 60) {
+        displayTime = Math.round(remaining / 60).toString() + "min";
     } else {
-        console.warn('No active connection to disconnect.');
+        displayTime = time.toString() + "sec";
+    }
+    bc.postMessage({ matchClock: displayTime, useMatchClock: getStorageItem('cueTools_matchClock') === 'true' });
+}
+
+function handleMatchClockAdjust(type, value) {
+
+}
+
+function checkMatchClockTick(time) {
+    var mcWarningTime = 60;
+    var normal = getStorageItem('shotClockNormalTxt');
+    var warning = getStorageItem('shotClockWarningTxt');
+    var fiveSecond = getStorageItem('shotClock5SecondTxt');
+    var completed = getStorageItem('shotClockCompletedTxt');
+
+    if (time > mcWarningTime) {
+        bc.postMessage({ matchClockColour: normal });
+    }
+
+    if (time == mcWarningTime) {
+        bc.postMessage({ matchClockColour: warning });
+        bc.postMessage({ playSound: warningSound });
+    }
+
+    if (time < mcWarningTime && time > 20) {
+        bc.postMessage({ matchClockColour: normal });
+    }
+
+    if (time <= 20 && time > 0) {
+        bc.postMessage({ matchClockColour: fiveSecond });
+        bc.postMessage({ playSound: fiveSecondSound });
+    }
+
+    if (time == 0) {
+        bc.postMessage({ matchClockColour: completed });
+        bc.postMessage({ playSound: completedSound });
     }
 }
+
+matchClock.onTick((time) => {
+    if (extraDebug) { console.log('Match Clock Time:', time); }
+    var displayTime;
+    if (time > 60) {
+        displayTime = Math.round(remaining / 60).toString() + "min";
+    } else {
+        displayTime = time.toString() + "sec";
+    }
+    if (displayTime === '0sec') { displayTime = 'End'; }
+    if (extraDebug) { console.log('Display Time:', displayTime); }
+    bc.postMessage({ matchClock: displayTime, useMatchClock: getStorageItem('cueTools_matchClock') === 'true' });
+    checkMatchClockTick(time);
+});
+
+// Shot Clock Functions
+function handleShotClockResume() {
+    if (extraDebug) { console.log('Resuming timer...'); }
+    var remaining = shotClock.getTime();
+    checkShotClockColour(remaining);
+    bc.postMessage({ shotClock: remaining, useShotClock: true });
+    shotClock.resume();
+}
+
+//shot clock extension handler
+function handleShotClockPause() {
+    if (extraDebug) { console.log('Pausing timer...'); }
+    shotClock.pause();
+}
+
+function handleShotClockRestart() {
+    if (extraDebug) { console.log('Restarting timer...'); }
+    shotClock.reset(parseInt(getStorageItem('cueTools_timeClock')));
+    var remaining = shotClock.getTime();
+    checkShotClockColour(remaining);
+    bc.postMessage({ shotClock: remaining, useShotClock: true });
+    bc.postMessage({ shotClockExtensionReset: true });
+}
+
+function handleShotClockState(state) {
+    if (extraDebug) { console.log('Shot Clock State Change: '); }
+    if (state) {
+        var shotClockTime = parseInt(getStorageItem('cueTools_timeClock'));
+        if (extraDebug) { console.log('Shot Clock Time: ' + shotClockTime); }
+        shotClock.set(shotClockTime);
+        var remaining = shotClock.getTime();
+        checkShotClockColour(remaining);
+        bc.postMessage({ shotClock: remaining, useShotClock: true });
+    } else {
+        matchClock.pause();
+    }
+}
+
+function handleShotClockExtension(player) {
+    if (!player) {
+        console.warn('No player specified for extension.');
+        return;
+    }
+
+    if (extraDebug) { console.log(`Extending time for player: ${player}`); }
+    var timeAdjust = parseInt(getStorageItem('cueTools_timeExtension'));
+    shotClock.adjust(timeAdjust);
+    var remaining = shotClock.getTime();
+    bc.postMessage({ shotClock: remaining, useShotClock: true });
+    bc.postMessage({ shotClockExtension: player });
+}
+
+function checkShotClockColour(time) {
+    var scWarningTime = parseInt(getStorageItem('cueTools_timeWarning'));
+    var normal = getStorageItem('shotClockNormalTxt');
+    var warning = getStorageItem('shotClockWarningTxt');
+    var fiveSecond = getStorageItem('shotClock5SecondTxt');
+    var completed = getStorageItem('shotClockCompletedTxt');
+
+    if (time > scWarningTime) {
+        bc.postMessage({ shotClockColour: normal });
+    }
+
+    if (time == scWarningTime) {
+        bc.postMessage({ shotClockColour: warning });
+        bc.postMessage({ playSound: warningSound });
+    }
+
+    if (time < scWarningTime && time > 5) {
+        bc.postMessage({ shotClockColour: normal });
+    }
+
+    if (time <= 5 && time > 0) {
+        bc.postMessage({ shotClockColour: fiveSecond });
+        bc.postMessage({ playSound: fiveSecondSound });
+    }
+
+    if (time == 0) {
+        bc.postMessage({ shotClockColour: completed });
+        bc.postMessage({ playSound: completedSound });
+    }
+}
+
+
+shotClock.onTick((time) => {
+    if (extraDebug) { console.log('Shot Clock Time:', time); }
+    bc.postMessage({ shotClock: time, useShotClock: true });
+    checkShotClockColour(time);
+});
+
+
 
 
 function startThemeCheck() {
@@ -1158,9 +1635,17 @@ function resetScores() {
 }
 
 
-function setStorageItem(key, value) {
+function setStorageItem(key, value, saveIcon = false) {
+    if (saveIcon) {
+        document.getElementById("saveIcon").classList.remove("fadeOutElm");
+        document.getElementById("saveIcon").classList.add("fadeInElm");
+    }
     const prefix = INSTANCE_ID ? `${INSTANCE_ID}_` : '';
     localStorage.setItem(`${prefix}${key}`, value);
+    // if (saveIcon) {
+    //     document.getElementById("saveIcon").classList.add("fadeOutElm");
+    //     document.getElementById("saveIcon").classList.remove("fadeInElm");
+    // }
 }
 
 function getStorageItem(key, defaultValue = null) {
