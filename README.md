@@ -57,6 +57,7 @@ This scene can be configured to cycle through sponsor logos, images, or even vid
 - PoolStat.net.au by Brella Tech. Thank you John for trusting me to deliver this project ![PoolStat](https://info.poolstat.net.au)
 - CueTools. Thank you Shayne ![CueTools](https://cuetools.app)
 - Jay Whindross from Beyond the Cue Ball. Thank you for your input.![Beyond the Cue Ball](https://www.facebook.com/profile.php?id=61581674846444)
-  
-<p style="text-align:center;">This paragraph is centered.</p>
+<div align="center">
+  PoolStat Scoreboard Copyright Brent Wesley 2025
+</div>
   
