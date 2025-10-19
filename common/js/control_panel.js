@@ -31,12 +31,13 @@ function poolstatUpdate(updateJSON) {
         if (updateJSON["compId"] > 1) { setStorageItem("compId", updateJSON["compId"]); }
         if (updateJSON["matchId"] > 1) { setStorageItem("matchId", updateJSON["matchId"]); }
         if (updateJSON["obsProfileName"].length > 1) { setStorageItem("obsProfileName", updateJSON["obsProfileName"]); }
-
+        if (updateJSON["obsSceneName"].length > 1) { setStorageItem("obsSceneName", updateJSON["obsSceneName"]); }
 
         if (updateJSON["streamKey"].length > 1) { setStorageItem("streamKey", updateJSON["streamKey"]); }
         if (updateJSON["streamStatus"] === true) {
             setStorageItem("streamStatus", updateJSON["streamStatus"]);
             changeOBSProfile(updateJSON["obsProfileName"]);
+            changeOBSScene(updateJSON["obsSceneName"]);
             updateStreamStatus();
         } else {
             setStorageItem("streamStatus", updateJSON["streamStatus"]);
@@ -289,6 +290,39 @@ function changeOBSProfile(newProfile) {
     return obsWS;
 }
 
+function changeOBSScene(newScene) {
+    const obsWS = new OBSWebSocket();
+
+    obsWS.connect()
+        .then(() => {
+            if (extraDebug) { console.log('Connected to OBS WebSocket Scene'); }
+            return obsWS.call('GetCurrentProgramScene');
+        })
+        .then(data => {
+            console.log('Current Scene:', data.currentSceneName);
+            if (data.currentSceneName !== newScene) {
+                return obsWS.call('SetCurrentProgramScene', { sceneName: newScene });
+            } else {
+                if (extraDebug) { console.log('Scene is already set to the desired scene.'); }
+                return Promise.resolve(); // Resolve to continue the chain
+            }
+        })
+        .then(() => {
+            console.log('Profile changed (if applicable).');
+            obsWS.disconnect();
+        })
+        .catch(err => {
+            console.error('Error:', err);
+        });
+
+    obsWS.on('ConnectionClosed', () => {
+        console.log('Disconnected from OBS WebSocket');
+    });
+    obsWS.on('error', err => {
+        console.error('OBS WebSocket error:', err);
+    });
+    return obsWS;
+}
 // start OBS stream
 function startOBSStream() {
     const obsWS = new OBSWebSocket();
@@ -598,7 +632,7 @@ function buildSections() {
                     { type: 'checkbox', label: 'Gradient', idSuffix: 'BGGradientCB' }
                 ]
             ]
-        },	
+        },
         {
             id: 'apName',
             title: 'Away Player Name',
@@ -614,7 +648,7 @@ function buildSections() {
                 { type: 'checkbox', label: 'No BG', idSuffix: 'BGNoneCB' },
                 { type: 'checkbox', label: 'Gradient', idSuffix: 'BGGradientCB' }
             ]
-        },							
+        },
         {
             id: 'homePlayerScore',
             title: 'Home Player Score',
@@ -865,7 +899,7 @@ function buildSections() {
 
             contentDiv.appendChild(table);
 
-        } 
+        }
         if (Array.isArray(section.columns)) {
             section.columns.forEach(colFields => {
                 const colDiv = document.createElement('div');
@@ -909,7 +943,7 @@ function buildSections() {
     //         content.style.display = content.style.display === 'block' ? 'none' : 'block';
     //     };
     // });
-}	
+}
 
 function positionConfigChange(inputElement) {
     console.log(inputElement.value + " " + inputElement.id);
@@ -964,6 +998,30 @@ function poolStatConfigBreakingPlayer() {
 
     console.log(`Use PoolStat Breaking Player ${isChecked}`);
     setStorageItem("usePoolStatBreakingPlayer", storageValue);
+}
+
+function poolStatConfigBannerBox() {
+    var usePoolStatConfigBannerBox = document.getElementById("bannerBoxEnableCB");
+    var isChecked = usePoolStatConfigBannerBox.checked;
+    var storageValue = isChecked ? "true" : "false";
+    console.log(`Use PoolStat Banner Box ${isChecked}`);
+    setStorageItem("usePoolStatBannerBox", storageValue);
+}
+
+function poolStatConfigCustomImage(image) {
+    if (image === '1') {
+        var usePoolStatConfigImage = document.getElementById("customImage1EnableCB");
+        var isChecked = usePoolStatConfigImage.checked;
+        var storageValue = isChecked ? "true" : "false";
+        console.log(`Use PoolStat Custom Image 1 ${isChecked}`);
+        setStorageItem("usePoolStatCustomImage1", storageValue);
+    } else if (image === '2') {
+        var usePoolStatConfigImage = document.getElementById("customImage2EnableCB");
+        var isChecked = usePoolStatConfigImage.checked;
+        var storageValue = isChecked ? "true" : "false";
+        console.log(`Use PoolStat Custom Image 2 ${isChecked}`);
+        setStorageItem("usePoolStatCustomImage2", storageValue);
+    }
 }
 
 function poolStatConfigCueTools(option) {

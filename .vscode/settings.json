@@ -32,5 +32,9 @@
 	// Debugger for Firefox Settings
 	"firefox.keepProfileChanges": false,
 	"firefox.port": 6000,
-	"firefox.reloadOnChange": true
+		"firefox.reloadOnChange": true,
+		"html.format.wrapAttributes": "auto",
+		"html.format.wrapLineLength": 0,
+		"prettier.printWidth": 300,
+		"prettier.proseWrap": "never"
 }

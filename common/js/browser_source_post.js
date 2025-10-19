@@ -74,6 +74,57 @@ const handlers = {
         document.getElementById("bannerBox").style.cssText = document.getElementById("bannerBox").style.cssText + " " + data.bannerBox.bannerBoxCSSTxt;
     },
 
+
+    customImage1(data) {
+        console.log("Custom Image 1 data: " + data.customImage1);
+        if (data.customImage1.customImage1EnabledCB === "true") { //enabled
+            document.getElementById("customImage1").classList.remove("noShow");
+        } else {
+            document.getElementById("customImage1").classList.add("noShow");
+        }
+        document.getElementById("customImage1").style.left = data.customImage1.customImage1LeftTxt;
+        document.getElementById("customImage1").style.top = data.customImage1.customImage1TopTxt;
+        document.getElementById("customImage1").style.height = data.customImage1.customImage1HeightTxt;
+        document.getElementById("customImage1").style.width = data.customImage1.customImage1WidthTxt;
+        if (data.customImage1.customImage1BGNoneCB === "true") { // no background
+            document.getElementById("customImage1").style.background = 'none';
+            document.getElementById("customImage1").style.border = 'none';
+            document.getElementById("customImage1").style.boxShadow = 'none';
+            document.getElementById("customImage1").style.textShadow = 'none';
+        } else {
+            document.getElementById("customImage1").style.backgroundColor = data.customImage1.customImage1BGTxt;
+            document.getElementById("customImage1").style.boxShadow = "0 8px 16px 0 rgba(0, 0, 0, 0.6)";
+            document.getElementById("customImage1").style.border = "2px solid black";
+        }
+        document.getElementById("customImage1Img").src = "data:image/png;base64, " + data.customImage1.customImage1ImgSrc;
+        document.getElementById("customImage1").style.cssText = document.getElementById("customImage1").style.cssText + " " + data.customImage1.customImage1CSSTxt;
+    },
+
+    customImage2(data) {
+        console.log("Custom Image 2 data: " + data.customImage2);
+        if (data.customImage2.customImage2EnabledCB === "true") { //enabled
+            document.getElementById("customImage2").classList.remove("noShow");
+        } else {
+            document.getElementById("customImage2").classList.add("noShow");
+        }
+        document.getElementById("customImage2").style.right = data.customImage2.customImage2LeftTxt;
+        document.getElementById("customImage2").style.top = data.customImage2.customImage2TopTxt;
+        document.getElementById("customImage2").style.height = data.customImage2.customImage2HeightTxt;
+        document.getElementById("customImage2").style.width = data.customImage2.customImage2WidthTxt;
+        if (data.customImage2.customImage2BGNoneCB === "true") { // no background
+            document.getElementById("customImage2").style.background = 'none';
+            document.getElementById("customImage2").style.border = 'none';
+            document.getElementById("customImage2").style.boxShadow = 'none';
+            document.getElementById("customImage2").style.textShadow = 'none';
+        } else {
+            document.getElementById("customImage2").style.backgroundColor = data.customImage2.customImage2BGTxt;
+            document.getElementById("customImage2").style.boxShadow = "0 8px 26px 0 rgba(0, 0, 0, 0.6)";
+            document.getElementById("customImage2").style.border = "2px solid black";
+        }
+        document.getElementById("customImage2Img").src = "data:image/png;base64, " + data.customImage2.customImage2ImgSrc;
+        document.getElementById("customImage2").style.cssText = document.getElementById("customImage2").style.cssText + " " + data.customImage2.customImage2CSSTxt;
+    },
+
     raceInfo(data) {
         console.log("Race Info data: " + data.raceInfo);
         if (data.raceInfo.useRaceInfo === "true") { //enabled

@@ -25,6 +25,18 @@ html, body {
     max-width: max-width;
 }
 
+#customImage1, #customImage2 {
+    position: fixed;
+    text-align: center;
+    padding: 0px 0px;
+    margin: 0 0px 0 0px;
+    z-index: 10;
+}
+
+#customImage1 img, #customImage2 img {
+    max-width: 100%;
+    max-height: 100%;
+}
 #hpExtContainer, #apExtContainer {
     position: fixed;
     text-align: center;

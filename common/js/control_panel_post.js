@@ -40,10 +40,27 @@ const defaultValues = {
 	bannerBoxTopTxt: "1px",
 	bannerBoxHeightTxt: "100px",
 	bannerBoxWidthTxt: "1920px",
-	bannerBoxEnabledCB: "true",
 	bannerBoxCSSTxt: "",
 	bannerBoxBGTxt: "#800000",
 	bannerBoxBGNoneCB: "false",
+
+	// Custom Image 1
+	customImage1LeftTxt: "1px",
+	customImage1TopTxt: "1px",
+	customImage1HeightTxt: "100px",
+	customImage1WidthTxt: "1920px",
+	customImage1CSSTxt: "",
+	customImage1BGTxt: "#800000",
+	customImage1BGNoneCB: "false",
+
+	// Custom Image 2
+	customImage2LeftTxt: "1px",
+	customImage2TopTxt: "1px",
+	customImage2HeightTxt: "100px",
+	customImage2WidthTxt: "1920px",
+	customImage2CSSTxt: "",
+	customImage2BGTxt: "#800000",
+	customImage2BGNoneCB: "false",
 
 	// Race Info
 	raceInfoLeftTxt: "340px",
@@ -272,6 +289,30 @@ window.onload = function () {
 		setStorageItem("usePoolStatBreakingPlayer", "false");
 	}
 
+	if (getStorageItem("usePoolStatBannerBox") === "true" || getStorageItem("usePoolStatBannerBox") === null) {
+		document.getElementById("bannerBoxEnableCB").checked = true;
+		setStorageItem("usePoolStatBannerBox", "true");
+	} else {
+		document.getElementById("bannerBoxEnableCB").checked = false;
+		setStorageItem("usePoolStatBannerBox", "false");
+	}
+
+	if (getStorageItem("usePoolStatCustomImage1") === "true" || getStorageItem("usePoolStatCustomImage1") === null) {
+		document.getElementById("customImage1EnableCB").checked = true;
+		setStorageItem("usePoolStatCustomImage1", "true");
+	} else {
+		document.getElementById("customImage1EnableCB").checked = false;
+		setStorageItem("usePoolStatCustomImage1", "false");
+	}
+
+	if (getStorageItem("usePoolStatCustomImage2") === "true" || getStorageItem("usePoolStatCustomImage2") === null) {
+		document.getElementById("customImage2EnableCB").checked = true;
+		setStorageItem("usePoolStatCustomImage2", "true");
+	} else {
+		document.getElementById("customImage2EnableCB").checked = false;
+		setStorageItem("usePoolStatCustomImage2", "false");
+	}
+
 	if (getStorageItem("p1Score") === null) {
 		setStorageItem("p1Score", "0");
 	}
@@ -337,7 +378,7 @@ function intiializePositionConfig() {
 	});
 
 	const bannerBoxObject = {
-		"bannerBoxEnabledCB": getStorageItem("bannerBoxEnabledCB"),
+		"bannerBoxEnabledCB": getStorageItem("usePoolStatBannerBox"),
 		"bannerBoxLeftTxt": getStorageItem("bannerBoxLeftTxt"),
 		"bannerBoxTopTxt": getStorageItem("bannerBoxTopTxt"),
 		"bannerBoxHeightTxt": getStorageItem("bannerBoxHeightTxt"),
@@ -347,6 +388,32 @@ function intiializePositionConfig() {
 		"bannerBoxBGNoneCB": getStorageItem("bannerBoxBGNoneCB")
 	};
 	bc.postMessage({ "bannerBox": bannerBoxObject });
+
+	const customImage1Object = {
+		"customImage1EnabledCB": getStorageItem("usePoolStatCustomImage1"),
+		"customImage1ImgSrc": getStorageItem("customImage1"),
+		"customImage1LeftTxt": getStorageItem("customImage1LeftTxt"),
+		"customImage1TopTxt": getStorageItem("customImage1TopTxt"),
+		"customImage1HeightTxt": getStorageItem("customImage1HeightTxt"),
+		"customImage1WidthTxt": getStorageItem("customImage1WidthTxt"),
+		"customImage1CSSTxt": getStorageItem("customImage1CSSTxt"),
+		"customImage1BGTxt": getStorageItem("customImage1BGTxt"),
+		"customImage1BGNoneCB": getStorageItem("customImage1BGNoneCB")
+	};
+	bc.postMessage({ "customImage1": customImage1Object });
+
+	const customImage2Object = {
+		"customImage2EnabledCB": getStorageItem("usePoolStatCustomImage2"),
+		"customImage2ImgSrc": getStorageItem("customImage2"),
+		"customImage2LeftTxt": getStorageItem("customImage2LeftTxt"),
+		"customImage2TopTxt": getStorageItem("customImage2TopTxt"),
+		"customImage2HeightTxt": getStorageItem("customImage2HeightTxt"),
+		"customImage2WidthTxt": getStorageItem("customImage2WidthTxt"),
+		"customImage2CSSTxt": getStorageItem("customImage2CSSTxt"),
+		"customImage2BGTxt": getStorageItem("customImage2BGTxt"),
+		"customImage2BGNoneCB": getStorageItem("customImage2BGNoneCB")
+	};
+	bc.postMessage({ "customImage2": customImage2Object });
 
 	const raceInfoObject = {
 		"useRaceInfo": getStorageItem("useRaceInfo"),
@@ -683,6 +750,54 @@ function uploadConfig() {
 		};
 
 		reader.readAsText(file);
+	};
+
+	input.click();
+}
+
+function uploadImage1() {
+	const input = document.createElement('input');
+	input.type = 'file';
+	input.accept = 'image/*';
+
+	input.onchange = () => {
+		const file = input.files[0];
+		if (!file) return;
+
+		const reader = new FileReader();
+		reader.onload = () => {
+			const base64String = reader.result.split(',')[1]; // Remove data URL prefix
+			setStorageItem('customImage1', base64String);
+		};
+		reader.onerror = () => {
+			console.error('Error reading file:', reader.error);
+		};
+
+		reader.readAsDataURL(file);
+	};
+
+	input.click();
+}
+
+function uploadImage2() {
+	const input = document.createElement('input');
+	input.type = 'file';
+	input.accept = 'image/*';
+
+	input.onchange = () => {
+		const file = input.files[0];
+		if (!file) return;
+
+		const reader = new FileReader();
+		reader.onload = () => {
+			const base64String = reader.result.split(',')[1]; // Remove data URL prefix
+			setStorageItem('customImage2', base64String);
+		};
+		reader.onerror = () => {
+			console.error('Error reading file:', reader.error);
+		};
+
+		reader.readAsDataURL(file);
 	};
 
 	input.click();

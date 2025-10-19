@@ -1,4 +1,4 @@
-body{
+collapsiblebody{
 	font-family: Arial, Helvetica, sans-serif;
 	background: #2b2e38;
 	margin-left:auto;
@@ -21,16 +21,21 @@ text{
 }
  /* Style the button that is used to open and close the collapsible content */
 .collapsible {
-	background-color: #eee;
-	color: #444;
+	border-bottom: #4caf50 1px solid;
+	border-top: none;
+	border-left: none;
+	border-right: none;
+	border-radius: 10px;
+	background-color: #2b2e38;
+	color: green;
 	cursor: pointer;
 	padding: 8px;
 	width: 100%;
-	border: none;
 	text-align: left;
 	outline: none;
 	font-size: 15px;
 	margin-bottom: 10px;
+	border-style: unset;
 }
 
 /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
@@ -45,6 +50,7 @@ text{
 	display: none;
 	background: #2b2e38;
 	overflow: hidden;
+	margin-bottom: 10px;
 }
 
 div {
@@ -101,7 +107,7 @@ input[type="number"]::-webkit-outer-spin-button {
 	font-variation-settings:
 	'FILL' 0,
 	'wght' 400,
-	'GRAD' 0,
+	'GRAD' 0,sec
 	'opsz' 40
 }
 
@@ -413,11 +419,6 @@ input {
     visibility: hidden;
     opacity: 0;
     transition: visibility 0s 1s, opacity 1s linear;
-}
-
-/* Updated the background color of collapsible divs in the layout tab */
-#PositionConfig .collapsible {
-    background-color: #d0ebff; /* Light blue background color */
 }
 
 @media (max-width: 768px) {

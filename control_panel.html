@@ -43,7 +43,11 @@ free to use and modify and use as long as this copyright statment remains intact
 					target="_blank"
 					rel="noopener noreferrer"
 				>
-                    <img src="./common/images/pss-logo gold.png" width="200px" alt="PoolStat Scoreboard">
+					<img
+						src="./common/images/pss-logo gold.png"
+						width="200px"
+						alt="PoolStat Scoreboard"
+					/>
 					<span style="font-size: 10pt; color: red; top: 4px"
 						>v
 						<span id="verNum"
@@ -76,7 +80,12 @@ free to use and modify and use as long as this copyright statment remains intact
 						<br />Support Brent Wesley</span
 					>
 				</a>
-				<link class="fadeInElm" id="saveIcon" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=save_clock" />
+				<link
+					class="fadeInElm"
+					id="saveIcon"
+					rel="stylesheet"
+					href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=save_clock"
+				/>
 			</div>
 			<!-- Header-->
 			<!-- Tab navigation inside the main division -->
@@ -115,77 +124,80 @@ free to use and modify and use as long as this copyright statment remains intact
 				<div class="section-header" id="poolStatLabel">
 					PoolStat Match Details
 				</div>
-                <table class="table-container">
+				<table class="table-container">
 					<tr>
-                        <td>
-                        PoolStat Unique Rig ID: &nbsp;
-                        <!-- Updated the info-box icon to a better design -->
-                        <div class="hover-container">
-                            <i class="icon">ℹ️</i>
-                            <!-- Updated icon to a more modern and recognizable info symbol -->
-                            <span class="info-box">
-                                <p>
-                                    This ID will need to be applied to your table configuration in
-                                    Poolstat live. Not having a matching ID will stop live updates
-                                    working on this Rig.
-                                </p>
-                            </span>
-                        </div></td>
-                        <td><text id="psRigIdTxt"></text></td>
-                    </tr>
-                    <tr>
-                        <td><text id="psLiveStatusTxt">Connection Status: </text></td>
-                        <td><text id="psLiveStatus"></text></td>
-                    </tr>
-                    <tr>
-                        <td><text id="streamStatusTxt">Stream Status: </text></td>
-                        <td><text id="streamStatus"></text></td>
-                    </tr>
+						<td>
+							PoolStat Unique Rig ID: &nbsp;
+							<!-- Updated the info-box icon to a better design -->
+							<div class="hover-container">
+								<i class="icon">ℹ️</i>
+								<!-- Updated icon to a more modern and recognizable info symbol -->
+								<span class="info-box">
+									<p>
+										This ID will need to be applied to your table configuration
+										in Poolstat live. Not having a matching ID will stop live
+										updates working on this Rig.
+									</p>
+								</span>
+							</div>
+						</td>
+						<td><text id="psRigIdTxt"></text></td>
+					</tr>
+					<tr>
+						<td><text id="psLiveStatusTxt">Connection Status: </text></td>
+						<td><text id="psLiveStatus"></text></td>
+					</tr>
+					<tr>
+						<td><text id="streamStatusTxt">Stream Status: </text></td>
+						<td><text id="streamStatus"></text></td>
+					</tr>
 				</table>
 				<div class="section-header" id="gameDetailLabel">Game Details</div>
 				<table class="table-container"">
-					<tr>
-						<td><text id="raceInfo">Race Info:</text></td>
-						<td><text id="raceInfoTxt"></text></td>
-						<td><text>Game/Other Info:</text></td>
-						<td><text id="gameInfoTxt"></text></td>
-					</tr>
-					<tr>
-						<td><text>Draw - Round:</text></td>
-						<td><text id="drawRoundTxt"></text></td>
-						<td><text>Competition ID:</text></td>
-						<td><text id="compIdTxt"></text></td>
-						<td><text>Match ID:</text>
-						<text id="matchIdTxt"></text></td>
-					</tr>
-				</table>
+				<tr>
+					<td><text id="raceInfo">Race Info:</text></td>
+					<td><text id="raceInfoTxt"></text></td>
+					<td><text>Game/Other Info:</text></td>
+					<td><text id="gameInfoTxt"></text></td>
+				</tr>
+				<tr>
+					<td><text>Draw - Round:</text></td>
+					<td><text id="drawRoundTxt"></text></td>
+					<td><text>Competition ID:</text></td>
+					<td><text id="compIdTxt"></text></td>
+					<td><text>Match ID:</text> <text id="matchIdTxt"></text></td>
+				</tr>
+
 				<div class="section-header" id="playerDetailLabel">
 					Player/Team Details
 				</div>
-                <table class="table-container">
-                    <tr>
-					    <td>Home Player/Team Name:</td>
-					    <td><text id="p1NameTxt"></text></td>
-                    </tr>
-                    <tr>
-					    <td>Away Player/Team Name:</td>
-					    <td><text id="p2NameTxt"></text></td>
+				<table class="table-container">
+					<tr>
+						<td>Home Player/Team Name:</td>
+						<td><text id="p1NameTxt"></text></td>
 					</tr>
-                </table>
+					<tr>
+						<td>Away Player/Team Name:</td>
+						<td><text id="p2NameTxt"></text></td>
+					</tr>
+				</table>
 				<div class="section-header" id="poolStatLabel">CueTools Timer</div>
-                <table class="table-container">
-                    <tr>
-                        <td>Timer ID</td>
-                        <td>
-                            <input
-                                type="text"
-                                id="timerID"
-                                style="width: 150px"
-							onchange="saveTimerID(this)"
-						/></td>
-                    </tr>
-                    <tr>
-						<td><text id="cueToolsStatusTxt">Cuetools Connection Status: </text></td>
+				<table class="table-container">
+					<tr>
+						<td>Timer ID</td>
+						<td>
+							<input
+								type="text"
+								id="timerID"
+								style="width: 150px"
+								onchange="saveTimerID(this)"
+							/>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<text id="cueToolsStatusTxt">Cuetools Connection Status: </text>
+						</td>
 						<td><text id="cueToolsStatus"></text></td>
 					</tr>
 				</table>
@@ -206,7 +218,9 @@ free to use and modify and use as long as this copyright statment remains intact
 				<table class="table-container">
 					<tr>
 						<td>
-							<label for="raceInfoEnableCB" id="raceInfoEnable">Show Race Format</label>
+							<label for="raceInfoEnableCB" id="raceInfoEnable"
+								>Show Race Format</label
+							>
 						</td>
 						<td>
 							<input
@@ -217,7 +231,9 @@ free to use and modify and use as long as this copyright statment remains intact
 							/>
 						</td>
 						<td>
-							<label for="gameInfoEnableCB" id="gameInfoEnable">Show Game Info</label>
+							<label for="gameInfoEnableCB" id="gameInfoEnable"
+								>Show Game Info</label
+							>
 						</td>
 						<td>
 							<input
@@ -227,10 +243,12 @@ free to use and modify and use as long as this copyright statment remains intact
 								onchange="poolStatConfigGameInfo()"
 							/>
 						</td>
-					</tr>	
+					</tr>
 					<tr>
 						<td>
-							<label for="tickerEnableCB" id="tickerEnable">Marquee Ticker</label>
+							<label for="tickerEnableCB" id="tickerEnable"
+								>Marquee Ticker</label
+							>
 						</td>
 						<td>
 							<input
@@ -251,11 +269,13 @@ free to use and modify and use as long as this copyright statment remains intact
 								onchange="poolStatConfigBreakingPlayer()"
 							/>
 						</td>
-					</tr>	
+					</tr>
 					<tr>
 						<td>
-							<label for="bannerBoxEnableCB" id="bannerBoxEnable">Banner Box</label>
-						</td>						
+							<label for="bannerBoxEnableCB" id="bannerBoxEnable"
+								>Banner Box</label
+							>
+						</td>
 						<td>
 							<input
 								type="checkbox"
@@ -263,6 +283,56 @@ free to use and modify and use as long as this copyright statment remains intact
 								id="bannerBoxEnableCB"
 								onchange="poolStatConfigBannerBox()"
 							/>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="Enable Custom Image 1" id="customImage1Enable"
+								>Enable Custom Image 1</label
+							>
+						</td>
+						<td>
+							<input
+								type="checkbox"
+								class="smallSize"
+								id="customImage1EnableCB"
+								onchange="poolStatConfigCustomImage('1')"
+							/>
+						</td>
+						<td>
+							<div
+								class="hover obs28"
+								onclick="uploadImage1()"
+								id="uploadImage1Btn"
+								style="color: white"
+							>
+								Upload Custom Image 1
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="Enable Custom Image 2" id="customImage2Enable"
+								>Enable Custom Image 2</label
+							>
+						</td>
+						<td>
+							<input
+								type="checkbox"
+								class="smallSize"
+								id="customImage2EnableCB"
+								onchange="poolStatConfigCustomImage('2')"
+							/>
+						</td>
+						<td>
+							<div
+								class="hover obs28"
+								onclick="uploadImage2()"
+								id="uploadImage2Btn"
+								style="color: white"
+							>
+								Upload Custom Image 2
+							</div>
 						</td>
 					</tr>
 				</table>
@@ -313,7 +383,11 @@ free to use and modify and use as long as this copyright statment remains intact
 				<table class="table-container">
 					<tr>
 						<td>
-							<div class="hover obs28" id="updateCheck" onclick="checkForUpdate()">
+							<div
+								class="hover obs28"
+								id="updateCheck"
+								onclick="checkForUpdate()"
+							>
 								Check for Update
 							</div>
 						</td>
@@ -325,7 +399,7 @@ free to use and modify and use as long as this copyright statment remains intact
 				<div class="section-header" id="localDataSettingLabel">
 					Local Data Settings
 				</div>
-				
+
 				<table class="table-container table-centered">
 					<tr class="tr-centered">
 						<td class="td-centered">
@@ -334,7 +408,7 @@ free to use and modify and use as long as this copyright statment remains intact
 								onclick="downloadData('pos')"
 								id="downloadPositionDataBtn"
 								style="color: white"
-								>
+							>
 								Download Position Config
 							</div>
 						</td>
@@ -344,7 +418,7 @@ free to use and modify and use as long as this copyright statment remains intact
 								onclick="downloadData('all')"
 								id="downloadAllDataBtn"
 								style="color: white"
-								>
+							>
 								Download All Config
 							</div>
 						</td>
@@ -354,7 +428,7 @@ free to use and modify and use as long as this copyright statment remains intact
 								onclick="uploadConfig()"
 								id="uploadConfigBtn"
 								style="color: white"
-								>
+							>
 								Upload and apply
 							</div>
 						</td>
@@ -366,7 +440,7 @@ free to use and modify and use as long as this copyright statment remains intact
 								onclick="resetInstance()"
 								id="resetDataBtn"
 								style="color: white"
-								>
+							>
 								Clear Instance Data
 							</div>
 						</td>
@@ -376,7 +450,7 @@ free to use and modify and use as long as this copyright statment remains intact
 								onclick="refreshBrowsers()"
 								id="refreshBrowserBtn"
 								style="color: white"
-								>
+							>
 								Refresh Browsers
 							</div>
 						</td>
@@ -386,7 +460,7 @@ free to use and modify and use as long as this copyright statment remains intact
 								onclick="resetAll()"
 								id="resetDataBtn"
 								style="color: white"
-								>
+							>
 								Clear All Data
 							</div>
 						</td>
@@ -410,7 +484,7 @@ free to use and modify and use as long as this copyright statment remains intact
 				<div class="content">
 					<table class="table-container">
 						<tr>
-							<td><label for="bannerBoxLeftTxt">Right</label></td>
+							<td><label for="bannerBoxLeftTxt">Left</label></td>
 							<td>
 								<input
 									type="text"
@@ -454,22 +528,12 @@ free to use and modify and use as long as this copyright statment remains intact
 							</td>
 						</tr>
 						<tr>
-							<td><label for="bannerBoxEnabledCB">Enable Banner</label></td>
-							<td>
-								<input
-									type="checkbox"
-									id="bannerBoxEnabledCB"
-									onchange="positionConfigChange(this)"
-								/>
-							</td>
-						</tr>
-						<tr>
 							<td><label for="bannerBoxCSSTxt">Additional CSS</label></td>
 							<td>
 								<input
 									type="text"
 									id="bannerBoxCSSTxt"
-									style="width: 100px"
+									style="width: 200px"
 									onchange="positionConfigChange(this)"
 								/>
 							</td>
@@ -491,6 +555,170 @@ free to use and modify and use as long as this copyright statment remains intact
 								<input
 									type="checkbox"
 									id="bannerBoxBGNoneCB"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
+						</tr>
+					</table>
+				</div>
+
+				<button type="button" class="collapsible">Custom Image 1</button>
+				<div class="content">
+					<table class="table-container">
+						<tr>
+							<td><label for="customImage1LeftTxt">Left</label></td>
+							<td>
+								<input
+									type="text"
+									id="customImage1LeftTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
+						</tr>
+						<tr>
+							<td><label for="customImage1TopTxt">Top</label></td>
+							<td>
+								<input
+									type="text"
+									id="customImage1TopTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
+						</tr>
+						<tr>
+							<td><label for="customImage1HeightTxt">Height</label></td>
+							<td>
+								<input
+									type="text"
+									id="customImage1HeightTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
+						</tr>
+						<tr>
+							<td><label for="customImage1WidthTxt">Width</label></td>
+							<td>
+								<input
+									type="text"
+									id="customImage1WidthTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
+						</tr>
+						<tr>
+							<td><label for="customImage1CSSTxt">Additional CSS</label></td>
+							<td>
+								<input
+									type="text"
+									id="customImage1CSSTxt"
+									style="width: 200px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
+						</tr>
+						<tr>
+							<td><label for="customImage1BGTxt">Background Colour</label></td>
+							<td>
+								<input
+									type="color"
+									id="customImage1BGTxt"
+									colorspace="limited-srgb"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
+						</tr>
+						<tr>
+							<td><label for="customImage1BGNoneCB">No BG</label></td>
+							<td>
+								<input
+									type="checkbox"
+									id="customImage1BGNoneCB"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
+						</tr>
+					</table>
+				</div>
+
+				<button type="button" class="collapsible">Custom Image 2</button>
+				<div class="content">
+					<table class="table-container">
+						<tr>
+							<td><label for="customImage2LeftTxt">Right</label></td>
+							<td>
+								<input
+									type="text"
+									id="customImage2LeftTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
+						</tr>
+						<tr>
+							<td><label for="customImage2TopTxt">Top</label></td>
+							<td>
+								<input
+									type="text"
+									id="customImage2TopTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
+						</tr>
+						<tr>
+							<td><label for="customImage2HeightTxt">Height</label></td>
+							<td>
+								<input
+									type="text"
+									id="customImage2HeightTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
+						</tr>
+						<tr>
+							<td><label for="customImage2WidthTxt">Width</label></td>
+							<td>
+								<input
+									type="text"
+									id="customImage2WidthTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
+						</tr>
+						<tr>
+							<td><label for="customImage2CSSTxt">Additional CSS</label></td>
+							<td>
+								<input
+									type="text"
+									id="customImage2CSSTxt"
+									style="width: 200px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
+						</tr>
+						<tr>
+							<td><label for="customImage2BGTxt">Background Colour</label></td>
+							<td>
+								<input
+									type="color"
+									id="customImage2BGTxt"
+									colorspace="limited-srgb"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
+						</tr>
+						<tr>
+							<td><label for="customImage2BGNoneCB">No BG</label></td>
+							<td>
+								<input
+									type="checkbox"
+									id="customImage2BGNoneCB"
 									onchange="positionConfigChange(this)"
 								/>
 							</td>
@@ -562,7 +790,7 @@ free to use and modify and use as long as this copyright statment remains intact
 								<input
 									type="text"
 									id="raceInfoCSSTxt"
-									style="width: 100px"
+									style="width: 200px"
 									onchange="positionConfigChange(this)"
 								/>
 							</td>
@@ -666,7 +894,7 @@ free to use and modify and use as long as this copyright statment remains intact
 								<input
 									type="text"
 									id="gameInfoCSSTxt"
-									style="width: 100px"
+									style="width: 200px"
 									onchange="positionConfigChange(this)"
 								/>
 							</td>
@@ -769,7 +997,7 @@ free to use and modify and use as long as this copyright statment remains intact
 								<input
 									type="text"
 									id="drawRoundCSSTxt"
-									style="width: 100px"
+									style="width: 200px"
 									onchange="positionConfigChange(this)"
 								/>
 							</td>
@@ -872,7 +1100,7 @@ free to use and modify and use as long as this copyright statment remains intact
 								<input
 									type="text"
 									id="tickerCSSTxt"
-									style="width: 100px"
+									style="width: 200px"
 									onchange="positionConfigChange(this)"
 								/>
 							</td>
@@ -985,7 +1213,7 @@ free to use and modify and use as long as this copyright statment remains intact
 								<input
 									type="text"
 									id="hpNameCSSTxt"
-									style="width: 100px"
+									style="width: 200px"
 									onchange="positionConfigChange(this)"
 								/>
 							</td>
@@ -1099,7 +1327,7 @@ free to use and modify and use as long as this copyright statment remains intact
 								<input
 									type="text"
 									id="apNameCSSTxt"
-									style="width: 100px"
+									style="width: 200px"
 									onchange="positionConfigChange(this)"
 								/>
 							</td>
@@ -1153,39 +1381,101 @@ free to use and modify and use as long as this copyright statment remains intact
 					<table class="table-container">
 						<tr>
 							<td><label for="hpScoreLeftTxt">Left</label></td>
-							<td><input type="text" id="hpScoreLeftTxt" style="width: 50px" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="text"
+									id="hpScoreLeftTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="hpScoreTopTxt">Top</label></td>
-							<td><input type="text" id="hpScoreTopTxt" style="width: 50px" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="text"
+									id="hpScoreTopTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="hpScoreHeightTxt">Height</label></td>
-							<td><input type="text" id="hpScoreHeightTxt" style="width: 50px" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="text"
+									id="hpScoreHeightTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="hpScoreWidthTxt">Width</label></td>
-							<td><input type="text" id="hpScoreWidthTxt" style="width: 50px" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="text"
+									id="hpScoreWidthTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="hpScoreFontTxt">Font Size</label></td>
-							<td><input type="text" id="hpScoreFontTxt" style="width: 50px" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="text"
+									id="hpScoreFontTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="hpScoreCSSTxt">Additional CSS</label></td>
-							<td><input type="text" id="hpScoreCSSTxt" style="width: 100px" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="text"
+									id="hpScoreCSSTxt"
+									style="width: 200px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="hpScoreFGTxt">Foreground Colour</label></td>
-							<td><input type="color" id="hpScoreFGTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="color"
+									id="hpScoreFGTxt"
+									colorspace="limited-srgb"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="hpScoreBGTxt">Background Colour</label></td>
-							<td><input type="color" id="hpScoreBGTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="color"
+									id="hpScoreBGTxt"
+									colorspace="limited-srgb"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="hpScoreBGNoneCB">No BG</label></td>
-							<td><input type="checkbox" id="hpScoreBGNoneCB" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="checkbox"
+									id="hpScoreBGNoneCB"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 					</table>
 				</div>
@@ -1195,39 +1485,101 @@ free to use and modify and use as long as this copyright statment remains intact
 					<table class="table-container">
 						<tr>
 							<td><label for="apScoreLeftTxt">Right</label></td>
-							<td><input type="text" id="apScoreLeftTxt" style="width: 50px" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="text"
+									id="apScoreLeftTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="apScoreTopTxt">Top</label></td>
-							<td><input type="text" id="apScoreTopTxt" style="width: 50px" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="text"
+									id="apScoreTopTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="apScoreHeightTxt">Height</label></td>
-							<td><input type="text" id="apScoreHeightTxt" style="width: 50px" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="text"
+									id="apScoreHeightTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="apScoreWidthTxt">Width</label></td>
-							<td><input type="text" id="apScoreWidthTxt" style="width: 50px" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="text"
+									id="apScoreWidthTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="apScoreFontTxt">Font Size</label></td>
-							<td><input type="text" id="apScoreFontTxt" style="width: 50px" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="text"
+									id="apScoreFontTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="apScoreCSSTxt">Additional CSS</label></td>
-							<td><input type="text" id="apScoreCSSTxt" style="width: 100px" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="text"
+									id="apScoreCSSTxt"
+									style="width: 200px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="apScoreFGTxt">Foreground Colour</label></td>
-							<td><input type="color" id="apScoreFGTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="color"
+									id="apScoreFGTxt"
+									colorspace="limited-srgb"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="apScoreBGTxt">Background Colour</label></td>
-							<td><input type="color" id="apScoreBGTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="color"
+									id="apScoreBGTxt"
+									colorspace="limited-srgb"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="apScoreBGNoneCB">No BG</label></td>
-							<td><input type="checkbox" id="apScoreBGNoneCB" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="checkbox"
+									id="apScoreBGNoneCB"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 					</table>
 				</div>
@@ -1237,31 +1589,78 @@ free to use and modify and use as long as this copyright statment remains intact
 					<table class="table-container">
 						<tr>
 							<td><label for="hpImageLeftTxt">Left</label></td>
-							<td><input type="text" id="hpImageLeftTxt" style="width: 50px" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="text"
+									id="hpImageLeftTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="hpImageTopTxt">Top</label></td>
-							<td><input type="text" id="hpImageTopTxt" style="width: 50px" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="text"
+									id="hpImageTopTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="hpImageHeightTxt">Height</label></td>
-							<td><input type="text" id="hpImageHeightTxt" style="width: 50px" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="text"
+									id="hpImageHeightTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="hpImageWidthTxt">Width</label></td>
-							<td><input type="text" id="hpImageWidthTxt" style="width: 50px" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="text"
+									id="hpImageWidthTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="hpImageCSSTxt">Additional CSS</label></td>
-							<td><input type="text" id="hpImageCSSTxt" style="width: 100px" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="text"
+									id="hpImageCSSTxt"
+									style="width: 200px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="hpImageEnableCB">Enable Image</label></td>
-							<td><input type="checkbox" id="hpImageEnableCB" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="checkbox"
+									id="hpImageEnableCB"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="hpImageAutoMoveCB">Auto Name Move</label></td>
-							<td><input type="checkbox" id="hpImageAutoMoveCB" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="checkbox"
+									id="hpImageAutoMoveCB"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 					</table>
 				</div>
@@ -1271,57 +1670,140 @@ free to use and modify and use as long as this copyright statment remains intact
 					<table class="table-container">
 						<tr>
 							<td><label for="apImageLeftTxt">Right</label></td>
-							<td><input type="text" id="apImageLeftTxt" style="width: 50px" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="text"
+									id="apImageLeftTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="apImageTopTxt">Top</label></td>
-							<td><input type="text" id="apImageTopTxt" style="width: 50px" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="text"
+									id="apImageTopTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="apImageHeightTxt">Height</label></td>
-							<td><input type="text" id="apImageHeightTxt" style="width: 50px" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="text"
+									id="apImageHeightTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="apImageWidthTxt">Width</label></td>
-							<td><input type="text" id="apImageWidthTxt" style="width: 50px" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="text"
+									id="apImageWidthTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="apImageCSSTxt">Additional CSS</label></td>
-							<td><input type="text" id="apImageCSSTxt" style="width: 100px" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="text"
+									id="apImageCSSTxt"
+									style="width: 200px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="apImageEnableCB">Enable Image</label></td>
-							<td><input type="checkbox" id="apImageEnableCB" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="checkbox"
+									id="apImageEnableCB"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="apImageAutoMoveCB">Auto Name Move</label></td>
-							<td><input type="checkbox" id="apImageAutoMoveCB" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="checkbox"
+									id="apImageAutoMoveCB"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 					</table>
 				</div>
 
-				<button type="button" class="collapsible">Breaking Player Indicator</button>
+				<button type="button" class="collapsible">
+					Breaking Player Indicator
+				</button>
 				<div class="content">
 					<table class="table-container">
 						<tr>
 							<td><label for="bpHeightTxt">Height</label></td>
-							<td><input type="text" id="bpHeightTxt" style="width: 50px" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="text"
+									id="bpHeightTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="bpWidthTxt">Width</label></td>
-							<td><input type="text" id="bpWidthTxt" style="width: 50px" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="text"
+									id="bpWidthTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="bpCSSTxt">Additional CSS</label></td>
-							<td><input type="text" id="bpCSSTxt" style="width: 100px" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="text"
+									id="bpCSSTxt"
+									style="width: 200px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="bpBGTxt">Background Colour</label></td>
-							<td><input type="color" id="bpBGTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="color"
+									id="bpBGTxt"
+									colorspace="limited-srgb"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="bpBGNoneCB">No BG</label></td>
-							<td><input type="checkbox" id="bpBGNoneCB" onchange="positionConfigChange(this)" /></td>
+							<td>
+								<input
+									type="checkbox"
+									id="bpBGNoneCB"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 					</table>
 				</div>
@@ -1338,47 +1820,125 @@ free to use and modify and use as long as this copyright statment remains intact
 					<table class="table-container">
 						<tr>
 							<td><label for="matchClockLeftTxt">Right</label></td>
-							<td><input type="text" id="matchClockLeftTxt" style="width: 50px" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="text"
+									id="matchClockLeftTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="matchClockTopTxt">Top</label></td>
-							<td><input type="text" id="matchClockTopTxt" style="width: 50px" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="text"
+									id="matchClockTopTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="matchClockHeightTxt">Height</label></td>
-							<td><input type="text" id="matchClockHeightTxt" style="width: 50px" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="text"
+									id="matchClockHeightTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="matchClockWidthTxt">Width</label></td>
-							<td><input type="text" id="matchClockWidthTxt" style="width: 50px" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="text"
+									id="matchClockWidthTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="matchClockFontTxt">Font Size</label></td>
-							<td><input type="text" id="matchClockFontTxt" style="width: 50px" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="text"
+									id="matchClockFontTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="matchClockCSSTxt">Additional CSS</label></td>
-							<td><input type="text" id="matchClockCSSTxt" style="width: 100px" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="text"
+									id="matchClockCSSTxt"
+									style="width: 200px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="matchClockBGTxt">Background Colour</label></td>
-							<td><input type="color" id="matchClockBGTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="color"
+									id="matchClockBGTxt"
+									colorspace="limited-srgb"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="matchClockBGNoneCB">No BG</label></td>
-							<td><input type="checkbox" id="matchClockBGNoneCB" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="checkbox"
+									id="matchClockBGNoneCB"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="matchClockNormalTxt">Normal Colour</label></td>
-							<td><input type="color" id="matchClockNormalTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="color"
+									id="matchClockNormalTxt"
+									colorspace="limited-srgb"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="matchClock5SecondTxt">5 Second Colour</label></td>
-							<td><input type="color" id="matchClock5SecondTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="color"
+									id="matchClock5SecondTxt"
+									colorspace="limited-srgb"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
-							<td><label for="matchClockCompletedTxt">Completed Colour</label></td>
-							<td><input type="color" id="matchClockCompletedTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<label for="matchClockCompletedTxt">Completed Colour</label>
+							</td>
+							<td>
+								<input
+									type="color"
+									id="matchClockCompletedTxt"
+									colorspace="limited-srgb"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 					</table>
 				</div>
@@ -1388,135 +1948,348 @@ free to use and modify and use as long as this copyright statment remains intact
 					<table class="table-container">
 						<tr>
 							<td><label for="shotClockLeftTxt">Left</label></td>
-							<td><input type="text" id="shotClockLeftTxt" style="width: 50px" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="text"
+									id="shotClockLeftTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="shotClockTopTxt">Top</label></td>
-							<td><input type="text" id="shotClockTopTxt" style="width: 50px" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="text"
+									id="shotClockTopTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="shotClockHeightTxt">Height</label></td>
-							<td><input type="text" id="shotClockHeightTxt" style="width: 50px" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="text"
+									id="shotClockHeightTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="shotClockWidthTxt">Width</label></td>
-							<td><input type="text" id="shotClockWidthTxt" style="width: 50px" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="text"
+									id="shotClockWidthTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="shotClockFontTxt">Font Size</label></td>
-							<td><input type="text" id="shotClockFontTxt" style="width: 50px" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="text"
+									id="shotClockFontTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="shotClockCSSTxt">Additional CSS</label></td>
-							<td><input type="text" id="shotClockCSSTxt" style="width: 100px" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="text"
+									id="shotClockCSSTxt"
+									style="width: 200px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="shotClockBGTxt">Background Colour</label></td>
-							<td><input type="color" id="shotClockBGTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="color"
+									id="shotClockBGTxt"
+									colorspace="limited-srgb"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="shotClockBGNoneCB">No BG</label></td>
-							<td><input type="checkbox" id="shotClockBGNoneCB" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="checkbox"
+									id="shotClockBGNoneCB"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="shotClockNormalTxt">Normal Colour</label></td>
-							<td><input type="color" id="shotClockNormalTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="color"
+									id="shotClockNormalTxt"
+									colorspace="limited-srgb"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="shotClockWarningTxt">Warning Colour</label></td>
-							<td><input type="color" id="shotClockWarningTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="color"
+									id="shotClockWarningTxt"
+									colorspace="limited-srgb"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="shotClock5SecondTxt">5 Second Colour</label></td>
-							<td><input type="color" id="shotClock5SecondTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="color"
+									id="shotClock5SecondTxt"
+									colorspace="limited-srgb"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
-							<td><label for="shotClockCompletedTxt">Completed Colour</label></td>
-							<td><input type="color" id="shotClockCompletedTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<label for="shotClockCompletedTxt">Completed Colour</label>
+							</td>
+							<td>
+								<input
+									type="color"
+									id="shotClockCompletedTxt"
+									colorspace="limited-srgb"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 					</table>
 				</div>
 
-				<button type="button" class="collapsible">Home Player - Extension</button>
+				<button type="button" class="collapsible">
+					Home Player - Extension
+				</button>
 				<div class="content">
 					<table class="table-container">
 						<tr>
 							<td><label for="hpExtLeftTxt">Left</label></td>
-							<td><input type="text" id="hpExtLeftTxt" style="width: 50px" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="text"
+									id="hpExtLeftTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="hpExtTopTxt">Top</label></td>
-							<td><input type="text" id="hpExtTopTxt" style="width: 50px" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="text"
+									id="hpExtTopTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="hpExtHeightTxt">Height</label></td>
-							<td><input type="text" id="hpExtHeightTxt" style="width: 50px" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="text"
+									id="hpExtHeightTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="hpExtWidthTxt">Width</label></td>
-							<td><input type="text" id="hpExtWidthTxt" style="width: 50px" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="text"
+									id="hpExtWidthTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="hpExtFontTxt">Font Size</label></td>
-							<td><input type="text" id="hpExtFontTxt" style="width: 50px" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="text"
+									id="hpExtFontTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="hpExtCSSTxt">Additional CSS</label></td>
-							<td><input type="text" id="hpExtCSSTxt" style="width: 100px" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="text"
+									id="hpExtCSSTxt"
+									style="width: 200px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="hpExtFGTxt">Foreground Colour</label></td>
-							<td><input type="color" id="hpExtFGTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="color"
+									id="hpExtFGTxt"
+									colorspace="limited-srgb"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="hpExtBGTxt">Background Colour</label></td>
-							<td><input type="color" id="hpExtBGTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="color"
+									id="hpExtBGTxt"
+									colorspace="limited-srgb"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="hpExtBGNoneCB">No BG</label></td>
-							<td><input type="checkbox" id="hpExtBGNoneCB" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="checkbox"
+									id="hpExtBGNoneCB"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 					</table>
 				</div>
 
-				<button type="button" class="collapsible">Away Player - Extension</button>
+				<button type="button" class="collapsible">
+					Away Player - Extension
+				</button>
 				<div class="content">
 					<table class="table-container">
 						<tr>
 							<td><label for="apExtLeftTxt">Right</label></td>
-							<td><input type="text" id="apExtLeftTxt" style="width: 50px" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="text"
+									id="apExtLeftTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="apExtTopTxt">Top</label></td>
-							<td><input type="text" id="apExtTopTxt" style="width: 50px" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="text"
+									id="apExtTopTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="apExtHeightTxt">Height</label></td>
-							<td><input type="text" id="apExtHeightTxt" style="width: 50px" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="text"
+									id="apExtHeightTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="apExtWidthTxt">Width</label></td>
-							<td><input type="text" id="apExtWidthTxt" style="width: 50px" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="text"
+									id="apExtWidthTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="apExtFontTxt">Font Size</label></td>
-							<td><input type="text" id="apExtFontTxt" style="width: 50px" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="text"
+									id="apExtFontTxt"
+									style="width: 50px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="apExtCSSTxt">Additional CSS</label></td>
-							<td><input type="text" id="apExtCSSTxt" style="width: 100px" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="text"
+									id="apExtCSSTxt"
+									style="width: 200px"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="apExtFGTxt">Foreground Colour</label></td>
-							<td><input type="color" id="apExtFGTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="color"
+									id="apExtFGTxt"
+									colorspace="limited-srgb"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="apExtBGTxt">Background Colour</label></td>
-							<td><input type="color" id="apExtBGTxt" colorspace="limited-srgb" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="color"
+									id="apExtBGTxt"
+									colorspace="limited-srgb"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 						<tr>
 							<td><label for="apExtBGNoneCB">No BG</label></td>
-							<td><input type="checkbox" id="apExtBGNoneCB" onchange="positionConfigChange(this)"/></td>
+							<td>
+								<input
+									type="checkbox"
+									id="apExtBGNoneCB"
+									onchange="positionConfigChange(this)"
+								/>
+							</td>
 						</tr>
 					</table>
 				</div>
@@ -1549,11 +2322,11 @@ free to use and modify and use as long as this copyright statment remains intact
     "streamKey": "FB-10239015953915456-0-Ab223Izm2vZxMxFGAecrzRJh",
     "streamStatus": false,
     "matchStatus": "In Progress",
-    "eventName": "Battle of the Titans",
-    "matchFormat": "Race to 20",
+    "eventName": "Top 10 Shootout",
+    "matchFormat": "Race to 8",
     "drawRound": "05-10-2025 - Finals",
-    "homePlayer": "Brent Wesley",
-    "awayPlayer": "Greg Johncock",
+    "homePlayer": "Home Player",
+    "awayPlayer": "Away Player",
     "homePlayerLogo": "",
     "awayPlayerLogo": "",
     "homePlayerScore": 5,
