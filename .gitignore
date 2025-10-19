@@ -3,3 +3,4 @@ control_panel_dynamic.html
 .prettierrc
 .vscode/settings.json
 .vscode/
+.editorconfig

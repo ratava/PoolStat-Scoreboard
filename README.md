@@ -50,6 +50,10 @@ This scene can be configured to cycle through sponsor logos, images, or even vid
 - Provides sponsorship display opportunities  
 - Delivers a consistent, professional broadcast look
 
+## Installation, Configuration and Support
+
+A full guide on how to install, configure and troubleshoot can be found in the PoolStat Scoreboard Wiki located ![Here](https://github.com/ratava/PoolStat-Scoreboard/wiki)
+
 ## Acknowledgements
 
 - ![CueSport Scoreboard](https://github.com/iainsmacleod/CueSport-Scoreboard "CueSports Scoreboard")
@@ -57,6 +61,7 @@ This scene can be configured to cycle through sponsor logos, images, or even vid
 - PoolStat.net.au by Brella Tech. Thank you John for trusting me to deliver this project ![PoolStat](https://info.poolstat.net.au)
 - CueTools. Thank you Shayne ![CueTools](https://cuetools.app)
 - Jay Whindross from Beyond the Cue Ball. Thank you for your input.![Beyond the Cue Ball](https://www.facebook.com/profile.php?id=61581674846444)
+
 <div align="center">
   PoolStat Scoreboard Copyright Brent Wesley 2025
 </div>
