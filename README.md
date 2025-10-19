@@ -1,124 +1,60 @@
-<div align="center">
-    <table width="100%" border="0">
-        <tr>
-            <td>
-                <div align="center">
-                    <p style="color:yellow; font-weight:bolder"><b>PoolStat ScoreBoard</b>
-                </div>
-            </td>
-            <td>
-                <div align="center"><span style="font-size: 12px"><i>(Must be viewed @ 1920x1080)</i></span></div>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <div align="center"><br><b>Made for Australian users of PoolStat, based off of <a href="https://github.com/iainsmacleod/CueSport-Scoreboard)/">CueSport Scoreboard</a><br><span style="color: yellow"> and <a href="https://github.com/ngholson/g4ScoreBoard/">g4scoreboard</a><br><span style="color: yellow"> 
-				</div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                </div>
-            </td>
-            <td>
-                <div align="right"><br>View the full Wiki <a href="https://github.com/ratava/PoolStat-Scoreboard/wiki">Here</a>
-                    <br><a href="https://github.com/ratava/PoolStat-Scoreboard#installation" target="_blank">Plugin Installation Instructions</a><br>See <a href="https://github.com/iainsmacleod/CueSport-Scoreboard/releases" target="_blank">Releases Page</a> for most recent official release
-                </div>
-            </td>
-        </tr>
-    </table>
-</div>
-<br>
-<a href="https://www.buymeacoffee.com/brentwesley" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
-```
+# PoolStat Scoreboard for OBS
 
-PoolStat ScoreBoard is a modified version of CueSport Scoreboard which was orgianlly based of G4ScoreBoard. The purpose of this modification is to integrate Live scoring from PoolStat.net.au.
+PoolStat Scoreboard is a plugin for ![OBS Studio](https://obsproject.com/) that connects your ![PoolStat.net.au](https://poolstat.net.au) live scores directly to your OBS broadcast rig.  
+Through a dedicated Live Stream Portal, it links active PoolStat matches with your on-premise broadcast setup, effectively turning it into a remotely controlled production hub.
 
-PoolStat Scoreboatd addon for OBS Copyright 2025 Brent Wesley
-CueSport ScoreBoard addon for OBS Copyright 2025 Iain MacLeod
+The plugin overlays fully customizable graphics on your camera feed and streams the result straight to your preferred platform, including Facebook, YouTube, and Twitch.
 
-Modified version of G$Scoreboard:-
-G4ScoreBoard addon for OBS Copyright 2022-2023 Norman Gholson IV
-https://g4billiards.com http://www.g4creations.com
-```
--------------------------------------------------------------
+When a player updates a score in PoolStat, the change is sent to OBS almost instantly, ensuring your scoreboard is always up to date during the live stream.
 
-## Extract zip file to the folder of your choice.<br>
+---
 
-```
-Zip contents:
-{Cuesport-Scoreboard-main.zip}
-|
-|-[common]
-|   |-[js]
-|   |   |-jquery.js
-|   |   |-browser_source.js
-|   |   |-control_panel.js
-|   |   |-browser_source_post.js
-|   |   |-control_panel_post.js
-|   |
-|   |-[css]
-|   |	|-[control_panel]
-|   |	|   |-yami.css
-|   | 	|   |-acri.css
-|   |	|   |-dark.css
-|   |	|   |-grey.css
-|   |	|   |-rachni.css
-|   |	|   |-light.css
-|   |   |   |-required.css
-|   |	|
-|   |	|-[browser_source]
-|   |	    |-125.css
-|   |	    |-150.css
-|   |       |-200.css
-|   |
-|   |-[images]
-|   |   |-8ball_original.png
-|   |   |-8ball_small.png
-|   |   |-8_ball_game.png <-example of other custom logo use
-|   |   |-9_ball_game.png <-example of other custom logo use
-|   |   |-template.psd
-|	|	|-placeholder.png
-|   |
-|   |-[sound]
-|       |-beep2.mp3
-|       |-buzz.mp3
-|
-|-shot_clock_display.html   
-|-g4ScoreBoard_hotkeys.lua
-|-browser_source.html   
-|-control_panel.html
-|-hotkeys.js
-|-README.md
-|-LICENSE
- 
-```
---------------------------------------------------------------
+## Integrated Shot and Match Clock
 
-## Installation:
-```
-Extract the downloaded file to the directory of your choosing, 
-just make sure you know where to find it again. 
+PoolStat Scoreboard includes a fully integrated client for the CueTools shot and match clock.  
+Your timer can be displayed live in the stream, complete with time extension indicators, shot and match timing, and audible alerts.  
+It behaves like a proper broadcast graphic, not an afterthought.
 
-OBS V27.2 and higher Configuration (required):
-	
-1. click on the Docks Menu from the top menu bar.
-2. Select "Custom Browser Docks".
-3. type a name (Cuesport-Scoreboard) in the "Dock Name" box.
-4. input the full path file URI to "control_panel.html" in the URL box. 
-   (example: "file:///c:/users/yourname/desktop/PoolStat-Scoreboard/control_panel.html")
-5. Click "Close"
-6. Select the scene you want the scoreboard to display.
-7. Add a "Browser Source" -> "Create New" -> give it a name. click OK.
-8. Input the full path file URI to "browser_source.html" in the URL box.
-   (example: "file:///c:/users/yourname/desktop/PoolStat-Scoreboard/browser_source.html")
-9. Set Width to 1920 and Height to 1080. 
-10. click OK.
+---
 
-	
+## Match Information Supplied by PoolStat
 
----------------------------------------------------------------
+- Home and away player names  
+- Home and away player scores  
+- Race/match format  
+- Event name  
+- Draw or round name  
+- Home and away team or player logos  
+- Scrolling marquee ticker with updates from concurrent matches  
+- Breaking player indicator  
+- Shot clock with sound effects  
+- Shot clock time extension indicators for both sides  
+- Match clock
 
+---
 
+## Additional Customization
 
+You can display up to two custom images (such as club or sponsor logos) to add a professional touch and support sponsorship opportunities.
 
+During match intermissions, you can remotely switch to a dedicated intermission scene via the Live Stream Portal.  
+This scene can be configured to cycle through sponsor logos, images, or even video content to keep your stream polished and engaging between games.
+
+---
+
+## Why Use PoolStat Scoreboard
+
+- Automates scoreboard updates in real time  
+- Eliminates manual score changes on stream  
+- Integrates timers seamlessly  
+- Provides sponsorship display opportunities  
+- Delivers a consistent, professional broadcast look
+
+## Acknowledgements
+
+- ![CueSport Scoreboard](https://github.com/iainsmacleod/CueSport-Scoreboard "CueSports Scoreboard")
+- ![g4Scoreboard by Norman Gholson](https://github.com/ngholson/g4ScoreBoard/ "g4Scoreboard")
+- PoolStat.net.au by Brella Tech. Thank you John for trusting me to deliver this project ![PoolStat](https://info.poolstat.net.au)
+- CueTools. Thank you Shayne ![CueTools](https://cuetools.app)
+- Jay Whindross from Beyond the Cue Ball. Thank you for your input.![Beyond the Cue Ball](https://www.facebook.com/profile.php?id=61581674846444)
+  
