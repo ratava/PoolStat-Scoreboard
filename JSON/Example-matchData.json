@@ -1,0 +1,21 @@
+{
+    "rigId": "91da-7977-9ff9",
+    "compId": 7011,
+    "matchId": 22,
+    "obsProfileName": "Table1",
+    "obsSceneName": "Table 1 - Match",
+    "streamKey": "FB-10239015953915456-0-Ab223Izm2vZxMxFGAecrzRJh",
+    "streamStatus": false,
+    "matchStatus": "In Progress",
+    "eventName": "Battle of the Titans",
+    "matchFormat": "Race to 20",
+    "drawRound": "05-10-2025 - Finals",
+    "homePlayer": "Brent Wesley",
+    "awayPlayer": "Greg Johncock",
+    "homePlayerLogo": "",
+    "awayPlayerLogo": "",
+    "homePlayerScore": 5,
+    "awayPlayerScore": 2,
+    "breakingPlayer": "hp",
+    "timerId": "310701"
+}                    

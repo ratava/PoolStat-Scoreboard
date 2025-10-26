@@ -1,0 +1,37 @@
+name: Package Release
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  zip-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Required for git archive to access full history
+
+      - name: Create zip with git archive
+        run: |
+          TAG_NAME="${{ github.event.release.tag_name }}"
+          ARCHIVE_NAME="PoolStat-Scoreboard-${TAG_NAME}"
+          git archive --format=zip \
+            --output="${ARCHIVE_NAME}.zip" \
+            "${TAG_NAME}"
+
+      - name: Upload release asset
+        uses: softprops/action-gh-release@v1
+        with:
+          files: PoolStat-Scoreboard-${{ github.event.release.tag_name }}.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Rewrite release notes to de-emphasize source archives
+        run: |
+          gh release edit "${{ github.event.release.tag_name }}" \
+            --notes "🚀 Use the packaged zip below. The auto-generated 'Source code' archives do not include build artifacts or filtered files.✅ Download: PoolStat-Scoreboard-${{ github.event.release.tag_name }}.zip"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

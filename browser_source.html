@@ -1,0 +1,110 @@
+<!doctype html>
+<!-- 
+PoolStat Scoreboard is a modified version of CueSport Scoreboard by Iain Macleod which was based on g4Scoreboard. The purpose of this modification is to provide an OBS interface for
+PoolStat. A Pool scoring system used in Australia. Data is provided by a live screaming portal.
+
+CueSport Scoreboard for OBS version 2.3.0 Copyright 2025 Iain Macleod
+G4ScoreBoard addon for OBS version 1.6.1 Copyright 2022-2023 Norman Gholson IV
+https://g4billiards.com http://www.g4creations.com
+this is a purely javascript/html/css driven scoreboard system for OBS Studio
+free to use and modify and use as long as this copyright statment remains intact. 
+-->
+
+<html>
+
+<head>
+	<script>
+		// Add event listener for when DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+
+        });
+	</script><script src="./common/js/jquery.js"></script>
+	<script src="./common/js/browser_source.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.core.min.js"></script>
+	<link rel="stylesheet" href="./common/css/browser_source/required.css" />
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+</head>
+
+<body>
+	<!-- Race to & Game Info in center -->
+	<div id="gameInfoWrapper">
+		<div id="bannerBox" class="noShow fadeInElm"></div>
+		<div id="raceInfo" class="noShow fadeInElm"></div>
+		<div class="noShow fadeInElm" id="gameInfo"></div>
+		<div class="noShow fadeInElm" id="drawRound"></div>
+		<div class="ticker-container" id="ticker">
+			<div class="ticker-content" id="tickerContent"></div>
+		</div>
+	</div>
+	<div id="customImageWrapper">
+		<div id="customImage1" class="noShow fadeInElm">
+			<img id="customImage1Img" src=""></img>
+		</div>
+		<div id="customImage2" class="noShow fadeInElm">
+			<img id="customImage2Img" src=""></img>
+		</div>	
+	</div>
+	<div id="scoreBoardDiv" class="fadeInElm">
+		<!-- Main scoreboard container -->
+		<div id="scoreBoard">
+			<!-- Player 1 section -->
+			<div class="player-container left">
+				<div id="hpExtContainer" class="noShow">
+					<div id="hpExtDiv" class="fadeOutElm">
+						⏳
+					</div>
+				</div>		
+				<div id="hpImageContainer">
+					<div id="hpImageDiv" class="fadeOutElm">
+						<img id="hpImage" src=""></img>
+					</div>
+				</div>		
+				<div id="hpPlayerBPName">
+					<div id="hpBPIcon" class="fadeOutElm">Break</div>
+					<div id="hpName" class="fadeInElm">
+						<span>Home Player</span>
+					</div>
+				</div>
+				<div class="score-logo-container">
+					<div id="hpScore" class="fadeInElm">99</div>
+				</div>
+			</div>
+			<div id="cueTools">
+				<img id="cueToolsLogo" src="./common/images/cuetools-logo.png"></img>
+				<div id="shotClockContainer" class="noShow">
+					<div id="shotClock" class="fadeInElm">45</div>
+				</div>
+			</div>
+				<div id="matchClockContainer" class="noShow">
+					<div id="matchClock" class="fadeInElm">45min</div>
+				</div>			
+			<!-- Player 2 section -->
+			<div class="player-container right">
+				<div class="score-logo-container">
+					<div id="apScore" class="fadeInElm">99</div>
+				</div>
+				<div id="apPlayerBPName">
+					<div id="apName" class="fadeInElm">
+						<span>Away Player</span>
+					</div>
+					<div id="apBPIcon" class="fadeOutElm">Break</div>
+				</div>
+				<div id="apImageContainer">
+					<div id="apImageDiv" class="fadeOutElm">
+						<img id="apImage" src="">
+					</div>
+				</div>
+				<div id="apExtContainer" class="noShow">
+					<div id="apExtDiv" class="fadeOutElm">
+						⏳
+					</div>
+				</div>		
+			</div>
+		</div>
+	</div>
+	<script src="./common/js/browser_source_post.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,6 @@
+open-Dev-Obs.code-workspace
+control_panel_dynamic.html
+.prettierrc
+.vscode/settings.json
+.vscode/
+.editorconfig
