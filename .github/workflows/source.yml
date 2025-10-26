@@ -7,10 +7,6 @@ on:
         description: 'Tag to run on'
         required: true
         default: 'main'
-      message:
-        description: 'A custom message'
-        required: true
-        type: string
 
 jobs:
   delete_source_zips:
