@@ -1,0 +1,24 @@
+name: Cleanup Source.xip and tar.gz
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to run on'
+        required: true
+        default: 'main'
+      message:
+        description: 'A custom message'
+        required: true
+        type: string
+
+jobs:
+  delete_source_zips:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete source.zip and source.tar.gz
+        uses: mknejp/delete-release-assets@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${tag}
+          assets: 'v*'
