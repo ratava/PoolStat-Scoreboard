@@ -43,6 +43,4 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.event.release.tag_name }}
-          assets: |
-            source.zip
-            source.tar.gz
+          assets: 'v*'
