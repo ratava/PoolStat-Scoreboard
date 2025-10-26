@@ -1,20 +1,26 @@
-name: Cleanup Source.xip and tar.gz
+name: Delete Release Assets
 
+# Configure a manual workflow trigger
 on:
   workflow_dispatch:
     inputs:
-      tag:
-        description: 'Tag to run on'
+      release_tag:
+        description: 'The tag of the release to delete assets from'
         required: true
-        default: 'main'
 
+# Define the job to run when the workflow is manually triggered
 jobs:
-  delete_source_zips:
+  delete_assets:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # Grant permission to write to contents for release management
+
     steps:
-      - name: Delete source.zip and source.tar.gz
+      - name: Delete assets from specified release
         uses: mknejp/delete-release-assets@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${tag}
+          tag: ${{ github.event.inputs.release_tag }}
           assets: 'v*'
+          fail-if-no-release: true
+          fail-if-no-assets: false
