@@ -35,3 +35,14 @@ jobs:
             --notes "🚀 Use the packaged zip below. The auto-generated 'Source code' archives do not include build artifacts or filtered files.✅ Download: PoolStat-Scoreboard-${{ github.event.release.tag_name }}.zip"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  delete_source_zips:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete source.zip and source.tar.gz
+        uses: mknejp/delete-release-assets@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.event.release.tag_name }}
+          assets: |
+            source.zip
+            source.tar.gz
