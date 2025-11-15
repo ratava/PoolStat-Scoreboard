@@ -134,8 +134,8 @@ free to use and modify and use as long as this copyright statment remains intact
 								<!-- Updated icon to a more modern and recognizable info symbol -->
 								<span class="info-box">
 									<p>
-										This ID will need to be applied to your table configuration
-										in Poolstat live. Not having a matching ID will stop live
+										This ID will be applied to your Rig configuration
+										in Poolstat Stream Portal. Not having a matching ID will stop live
 										updates working on this Rig.
 									</p>
 								</span>
@@ -218,7 +218,7 @@ free to use and modify and use as long as this copyright statment remains intact
 				<table class="table-container">
 					<tr>
 						<td>
-							<label for="Rig Name" id="rigNameLabel">Rig Name</label>
+							<label for="rigNameTxt" id="rigNameLabel">Rig Name</label>
 						</td>
 						<td>
 							<input
@@ -360,6 +360,42 @@ free to use and modify and use as long as this copyright statment remains intact
 								Upload Custom Image 2
 							</div>
 						</td>
+					</tr>
+					<tr></tr>
+					<tr>
+						<td>
+							<label for="psLoginNameTxt" id="psLoginName">PoolStat Live Stream Portal Username</label>
+							<div class="hover-container">
+								<i class="icon">ℹ️</i>
+								<!-- Updated icon to a more modern and recognizable info symbol -->
+								<span class="info-box">
+									<p>
+										This is the username you use to login to the PoolStat Live Stream.
+										This username is not your usual PoolStat login, its specifically for the
+										Live Stream Portal. Please ensure you have the correct username issued by PoolStat.
+										This is required for the Rig to send its configuration for further setup.
+									</p>
+								</span>
+							</div>							
+						</td>
+						<td>
+							<input
+								type="text"
+								size="10"
+								id="psLoginNameTxt"
+								onchange="poolStatConfigLoginName()"
+							/>
+						</td>
+						<td>
+							<div
+								class="hover obs28"
+								onclick="sendRigReg()"
+								id="sendRigRegBtn"
+								style="color: white"
+							>
+								Send Rig Registration
+							</div>
+						</td>						
 					</tr>
 				</table>
 				<div class="section-header" id="CueTools">
@@ -2369,6 +2405,19 @@ free to use and modify and use as long as this copyright statment remains intact
 							></select>
 						</td>
 					</tr>
+					<tr>
+						<td>
+							<label for="simSceneCollectionTxt" id="simSceneCollection"
+								>OBS Scene Collection</label
+							>
+						</td>
+						<td>
+							<select
+								id="simSceneCollectionTxt"
+								onchange="configSimUpdate(this)"
+							></select>
+						</td>
+					</tr>					
 					<tr>
 						<td>
 							<label for="simSceneNameTxt" id="simSceneName"

@@ -278,6 +278,10 @@ window.onload = function () {
 		document.getElementById("rigNameTxt").value = getStorageItem("rigName");
 	}
 
+	if (getStorageItem("psLoginName")) {
+		document.getElementById("psLoginNameTxt").value = getStorageItem("psLoginName");
+	}
+
 	if (getStorageItem("obsWebSocketPort")) {
 		document.getElementById("obsWebSocketPortTxt").value = getStorageItem("obsWebSocketPort");
 	} else {
@@ -386,6 +390,7 @@ window.onload = function () {
 async function intiializeSimConfig() {
 	const profiles = await getOBSProfiles();
 	const scenes = await getOBSScenes();
+	const collections = await getOBSSceneCollections();
 	const streamConfig = await getOBSStreamConfig();
 	console.log('OBS Stream Config:', streamConfig);
 
@@ -395,6 +400,14 @@ async function intiializeSimConfig() {
 		option.value = profile;
 		option.textContent = profile;
 		document.getElementById('simProfileNameTxt').appendChild(option);
+	}
+
+	for (const collection of collections) {
+		if (extraDebug) { console.log(`OBS Scene Collection: ${collection}`); }
+		const option = document.createElement('option');
+		option.value = collection
+		option.textContent = collection;
+		document.getElementById('simSceneCollectionTxt').appendChild(option);
 	}
 
 	for (const scene of scenes) {

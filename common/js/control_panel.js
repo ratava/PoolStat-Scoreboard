@@ -27,6 +27,7 @@ const simDataKeys = {
     "compId": "simCompIdTxt",
     "matchId": "simMatchIdTxt",
     "obsProfileName": "simProfileNameTxt",
+    "obsSceneCollection": "simSceneCollectionTxt",
     "obsSceneName": "simSceneNameTxt",
     "streamKey": "simStreamKeyTxt",
     "streamStatus": "simStreamStatusEnabledToggle",
@@ -44,18 +45,20 @@ const simDataKeys = {
 };
 
 //main function to update scoreboard from PoolStat Live Stream
-function poolstatUpdate(updateJSON) {
-    if (Object.keys(updateJSON).length == 18) {
-        console.log('Update Received');
+function updateMatch(updateJSON) {
+    if (Object.keys(updateJSON).length == 19) {
+        if (extraDebug) { console.log('Match Update Received'); }
         if (updateJSON["compId"] > 1) { setStorageItem("compId", updateJSON["compId"]); }
         if (updateJSON["matchId"] > 1) { setStorageItem("matchId", updateJSON["matchId"]); }
         if (updateJSON["obsProfileName"].length > 1) { setStorageItem("obsProfileName", updateJSON["obsProfileName"]); }
+        if (updateJSON["obsSceneCollection"].length > 1) { setStorageItem("obsSceneCollection", updateJSON["obsSceneCollection"]); }
         if (updateJSON["obsSceneName"].length > 1) { setStorageItem("obsSceneName", updateJSON["obsSceneName"]); }
 
         if (updateJSON["streamKey"].length > 1) { setStorageItem("streamKey", updateJSON["streamKey"]); }
         if (updateJSON["streamStatus"] === true) {
             setStorageItem("streamStatus", updateJSON["streamStatus"]);
             changeOBSProfile(updateJSON["obsProfileName"]);
+            changeOBSSceneCollection(getStorageItem("obsSceneCollection")); 
             changeOBSScene(updateJSON["obsSceneName"]);
             updateStreamStatus();
         } else {
@@ -134,6 +137,20 @@ async function getOBSProfiles() {
 }
 
 // get list of scenes
+async function getOBSSceneCollections() {
+    const obsWS = new OBSWebSocket();
+    try {
+        await obsWS.connect(`ws://127.0.0.1:${getStorageItem("obsWebSocketPort")}`);
+        const data = await obsWS.call('GetSceneCollectionList');
+        await obsWS.disconnect();
+        return data.sceneCollections;
+    } catch (err) {
+        console.error('Error fetching scenes:', err);
+        return null;
+    }
+}
+
+// get list of scenes
 async function getOBSScenes() {
     const obsWS = new OBSWebSocket();
     try {
@@ -166,23 +183,83 @@ async function sendOBSConfig(data) {
     try {
         const profiles = await getOBSProfiles();
         const scenes = await getOBSScenes();
-        const streamConfig = await getOBStreamConfig();
+        const streamConfig = await getOBSStreamConfig();
 
         const messageJSON = {
             rigId: data.rigId,
+            user: data.user,
             profiles: profiles,
             scenes: scenes,
             streamConfig: streamConfig
         };
 
         console.log('OBS Config Message:', JSON.stringify(messageJSON));
-        client.publish('livestream/rigConfig', JSON.stringify(messageJSON));
+        client.publish('livestream/initrig', JSON.stringify(messageJSON));
 
     } catch (err) {
         console.error('Failed to send OBS config:', err);
     }
 }
 
+async function sendInitRigRequest(jsonData) {
+    try {
+        const response = await fetch('https://play.poolstat.net.au/livestream/initrig', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: jsonData // jsonData should be a JSON string
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const responseJson = await response.json();
+        console.log('Success:', responseJson);
+        return responseJson;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+function sendRigReg() {
+    const psRigId = getStorageItem("PoolStatRigId");
+    const psLoginName = getStorageItem("psLoginName");
+    const rigName = getStorageItem("rigName");
+
+    if (!psLoginName) {
+        console.error('Missing required fields for Rig Registration');
+        alert("Please enter a PoolStat Live Stream Portal Login Name for Rig Registration");
+        return;
+    }
+
+    if (!rigName) {
+        console.error('Missing required fields for Rig Registration');
+        alert("Please enter a Rig Name for Rig Registration");
+        return;
+    }
+
+    const messageJSON = {
+        rigId: psRigId,
+        user: psLoginName,
+        request: "rigConfig",
+        rigName: rigName
+    };
+
+    console.log('Sending Rig Registration Message:', JSON.stringify(messageJSON));
+    sendInitRigRequest(JSON.stringify(messageJSON))
+    .then(result => {
+        // Handle the returned JSON
+        console.log('Init Response:', result.message);
+        alert(`Rig Registration Response: ${result.message}`);
+    })
+    .catch(error => {
+        console.error('Request failed:', error);
+    });
+}
 
 function sendData(ticker) {
 
@@ -234,11 +311,10 @@ function setOBSStreamKey(newKey) {
     obsWS.connect(`ws://127.0.0.1:${getStorageItem("obsWebSocketPort")}`)
         .then(() => {
             if (extraDebug) { console.log('Connected to OBS WebSocket'); }
-
             return obsWS.call('GetStreamServiceSettings');
         })
         .then(data => {
-            console.log('Current Stream Service Settings:', data);
+            if (extraDebug) { console.log('Current Stream Service Settings:', data); }
             if (data.streamServiceSettings.key !== newKey) {
                 if (data.streamServiceType === 'rtmp_common') {
                     const newSettings = {
@@ -250,13 +326,13 @@ function setOBSStreamKey(newKey) {
                         streamServiceSettings: newSettings
                     });
                 } else {
-                    console.log('Stream service is not RTMPStream, skipping stream key update.');
+                    if (extraDebug) { console.log('Stream service is not RTMPStream, skipping stream key update.'); }
                     return Promise.resolve(); // Resolve to continue the chain
                 }
             }
         })
         .then(() => {
-            console.log('Stream service settings updated (if applicable).');
+            if (extraDebug) { console.log('Stream service settings updated (if applicable).'); }
             obsWS.disconnect();
         })
         .catch(err => {
@@ -284,7 +360,7 @@ function changeOBSProfile(newProfile) {
             return obsWS.call('GetProfileList');
         })
         .then(data => {
-            console.log('Current Profile:', data.currentProfileName);
+            if (extraDebug) { console.log('Current Profile:', data.currentProfileName); }
             if (data.currentProfileName !== newProfile) {
                 return obsWS.call('SetCurrentProfile', { profileName: newProfile });
             } else {
@@ -293,7 +369,7 @@ function changeOBSProfile(newProfile) {
             }
         })
         .then(() => {
-            console.log('Profile changed (if applicable).');
+            if (extraDebug) { console.log('Profile changed'); }
             obsWS.disconnect();
         })
         .catch(err => {
@@ -301,10 +377,44 @@ function changeOBSProfile(newProfile) {
         });
 
     obsWS.on('ConnectionClosed', () => {
-        console.log('Disconnected from OBS WebSocket');
+        if (extraDebug) { console.log('Disconnected from OBS WebSocket'); }
     });
     obsWS.on('error', err => {
         console.error('OBS WebSocket error:', err);
+    });
+    return obsWS;
+}
+
+function changeOBSSceneCollection(newSceneCollection) {
+    const obsWS = new OBSWebSocket();
+
+    obsWS.connect(`ws://127.0.0.1:${getStorageItem("obsWebSocketPort")}`)
+        .then(() => {
+            if (extraDebug) { console.log('Connected to OBS WebSocket Scene Collection'); }
+            return obsWS.call('GetSceneCollectionList');
+        })
+        .then(data => {
+            if (extraDebug) { console.log('Current Scene Collection:', data.currentSceneCollectionName); }
+            if (data.currentSceneCollectionName !== newSceneCollection) {
+                return obsWS.call('SetCurrentSceneCollection', { sceneCollectionName: newSceneCollection });
+            } else {
+                if (extraDebug) { console.log('Scene is already set to the desired scene.'); }
+                return Promise.resolve(); // Resolve to continue the chain
+            }
+        })
+        .then(() => {
+            if (extraDebug) { console.log('Scene Collection changed'); }
+            obsWS.disconnect();
+        })
+        .catch(err => {
+            console.error('OBS WebSocket error Scene Collection:', err);
+        });
+
+    obsWS.on('ConnectionClosed', () => {
+        if (extraDebug) { console.log('Disconnected from OBS WebSocket'); }
+    });
+    obsWS.on('error', err => {
+        console.error('OBS WebSocket error Scene Collection:', err);
     });
     return obsWS;
 }
@@ -327,7 +437,7 @@ function changeOBSScene(newScene) {
             }
         })
         .then(() => {
-            console.log('Profile changed (if applicable).');
+            if (extraDebug) { console.log('Scene changed'); }
             obsWS.disconnect();
         })
         .catch(err => {
@@ -342,6 +452,7 @@ function changeOBSScene(newScene) {
     });
     return obsWS;
 }
+
 // start OBS stream
 function startOBSStream() {
     const obsWS = new OBSWebSocket();
@@ -421,10 +532,10 @@ function stopOBSStream() {
 //including handling messages
 function connectPSLiveStream() {
     const psRigId = getStorageItem("PoolStatRigId");
-    console.log(psRigId);
     const host = 'wss://btim.brellahost.com.au:9001/';
+    const statusTopic = `clients/${psRigId}/status`;
     const options = {
-        keepalive: 60,
+        keepalive: 20,
         clientId: psRigId,
         protocolId: 'MQTT',
         protocolVersion: 5,
@@ -432,10 +543,10 @@ function connectPSLiveStream() {
         reconnectPeriod: 1000,
         connectTimeout: 30 * 1000,
         will: {
-            topic: 'WillMsg',
-            payload: 'Connection Closed abnormally..!',
-            qos: 0,
-            retain: false
+            topic: statusTopic,
+            payload: 'offline',
+            qos: 1,
+            retain: true
         },
     };
 
@@ -450,13 +561,19 @@ function connectPSLiveStream() {
 
         console.log('Subscribing & Sending Status');
         client.subscribe('livestream/matches');
-        client.subscribe('livestream/rigConfig');
-        client.publish('livestream/status', 'Rig ' + psRigId + ' Online');
+        client.subscribe('livestream/initrig');
+        client.publish(statusTopic, 'online', { qos: 1, retain: true });
     });
 
     client.on('error', (err) => {
         console.log('Connection error: ', err);
         client.end();
+    });
+
+    client.on('close', () => {
+        console.log('Disconnected from MQTT broker');
+        // If clean disconnect, explicitly publish offline status (LWT handles unclean)
+        client.publish(statusTopic, 'offline', { qos: 1, retain: true });
     });
 
     client.on('message', function (topic, message) {
@@ -467,8 +584,8 @@ function connectPSLiveStream() {
                 if (JSON.parse(message.toString())) {
                     //check if the message for this Rig
                     if (messageJSON['rigId'] === psRigId) {
-                        poolstatUpdate(JSON.parse(message.toString()));
-                    } else {
+                        updateMatch(JSON.parse(message.toString()));
+                    } else { 
                         //it is not ours so check if it matches our CompetitionID and if it does process it for 
                         //Ticker display
                         console.log('compid ' + typeof getStorageItem('compId'));
@@ -479,11 +596,11 @@ function connectPSLiveStream() {
                     }
                 }
                 break;
-            case 'livestream/rigConfig':
+            case 'livestream/initrig':
                 if (JSON.parse(message.toString())) {
                     //check if the message for this Rig
                     if (messageJSON['rigId'] === psRigId && messageJSON['request'] === 'rigConfig') {
-                        sendOBSConfig({ rigId: messageJSON['rigId'] });
+                        sendOBSConfig({ rigId: messageJSON['rigId'], user: messageJSON['user'] });
                     }
                 }
                 break;
@@ -984,6 +1101,12 @@ function configSimUpdate(inputElement) {
 function saveTimerID(inputElement) {
     console.log(inputElement.value + " " + inputElement.id);
     setStorageItem(inputElement.id, inputElement.value);
+}
+
+function poolStatConfigLoginName() {
+    var psLoginName = document.getElementById("psLoginNameTxt");
+    console.log(`Login Name ${psLoginName.value}`);
+    setStorageItem("psLoginName", psLoginName.value);
 }
 
 function poolStatConfigRigName() {

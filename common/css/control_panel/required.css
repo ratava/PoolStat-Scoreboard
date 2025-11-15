@@ -395,7 +395,7 @@ select {
     opacity: 0; /* Ensure it is not visible */
     transition: opacity 0.3s ease; /* Smooth transition for visibility */
     position: absolute;
-    bottom: 100%; /* Position above the icon */
+    bottom: 50%; /* Position above the icon */
     left: 50%;
     transform: translateX(-50%); /* Center the info-box */
     background-color: #555;
@@ -404,6 +404,8 @@ select {
     border-radius: 6px;
     padding: 5px;
     z-index: 1;
+	width: 250px;
+	font-size: 12pt;
 }
 
 .hover-container:hover .info-box {
