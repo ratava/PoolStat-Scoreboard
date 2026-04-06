@@ -531,13 +531,16 @@ function stopOBSStream() {
 
 //main function to connect to PoolStat Live Stream
 //including handling messages
-function connectPSLiveStream() {
+async function connectPSLiveStream() {
     const psRigId = getStorageItem("PoolStatRigId");
+    const csUser = getStorageItem("csUsername") || '';
+    const csEncPwd = getStorageItem("csPassword") || '';
+    const csPass = csEncPwd ? (await decryptPassword(csEncPwd) || '') : '';
     const host = 'wss://btim.brellahost.com.au:9001/';
     const statusTopic = `clients/${psRigId}/status`;
     const options = {
-        username: "bwadmin",
-        password: "MadD7tw6rPsHyZ2xR",
+        username: csUser,
+        password: csPass,
         keepalive: 20,
         clientId: psRigId,
         protocolId: 'MQTT',
@@ -1110,6 +1113,62 @@ function poolStatConfigLoginName() {
     var psLoginName = document.getElementById("psLoginNameTxt");
     console.log(`Login Name ${psLoginName.value}`);
     setStorageItem("psLoginName", psLoginName.value);
+}
+
+// ── MQTT credential encryption (AES-GCM via Web Crypto) ──────────────────────
+const _CRYPTO_SALT = new TextEncoder().encode('PoolStatScoreboard_v1');
+
+async function _deriveKey() {
+    const rawKey = new TextEncoder().encode('PSLiveStream_' + (INSTANCE_ID || 'default'));
+    const keyMaterial = await crypto.subtle.importKey('raw', rawKey, 'PBKDF2', false, ['deriveKey']);
+    return crypto.subtle.deriveKey(
+        { name: 'PBKDF2', salt: _CRYPTO_SALT, iterations: 100000, hash: 'SHA-256' },
+        keyMaterial,
+        { name: 'AES-GCM', length: 256 },
+        false,
+        ['encrypt', 'decrypt']
+    );
+}
+
+async function encryptPassword(plaintext) {
+    const key = await _deriveKey();
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const enc = new TextEncoder().encode(plaintext);
+    const ciphertext = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, enc);
+    const combined = new Uint8Array(12 + ciphertext.byteLength);
+    combined.set(iv);
+    combined.set(new Uint8Array(ciphertext), 12);
+    return btoa(String.fromCharCode(...combined));
+}
+
+async function decryptPassword(encoded) {
+    try {
+        const key = await _deriveKey();
+        const combined = Uint8Array.from(atob(encoded), c => c.charCodeAt(0));
+        const iv = combined.slice(0, 12);
+        const ciphertext = combined.slice(12);
+        const plaintext = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ciphertext);
+        return new TextDecoder().decode(plaintext);
+    } catch {
+        return null;
+    }
+}
+
+function poolStatConfigCsUsername() {
+    const val = document.getElementById("csUsernameTxt").value.trim();
+    setStorageItem("csUsername", val);
+    console.log('Control Server username saved');
+}
+
+async function poolStatConfigCsPassword() {
+    const input = document.getElementById("csPasswordTxt");
+    const val = input.value.trim();
+    if (!val) return;
+    const encrypted = await encryptPassword(val);
+    setStorageItem("csPassword", encrypted);
+    input.value = '';
+    input.placeholder = '●●●●●●●● (saved)';
+    console.log('Control Server password saved (encrypted)');
 }
 
 function poolStatConfigRigName() {

@@ -282,6 +282,14 @@ window.onload = function () {
 		document.getElementById("psLoginNameTxt").value = getStorageItem("psLoginName");
 	}
 
+	if (getStorageItem("csUsername")) {
+		document.getElementById("csUsernameTxt").value = getStorageItem("csUsername");
+	}
+
+	if (getStorageItem("csPassword")) {
+		document.getElementById("csPasswordTxt").placeholder = '●●●●●●●● (saved)';
+	}
+
 	if (getStorageItem("obsWebSocketPort")) {
 		document.getElementById("obsWebSocketPortTxt").value = getStorageItem("obsWebSocketPort");
 	} else {
@@ -405,7 +413,7 @@ async function intiializeSimConfig() {
 	for (const collection of collections) {
 		if (extraDebug) { console.log(`OBS Scene Collection: ${collection}`); }
 		const option = document.createElement('option');
-		option.value = collection
+		option.value = collection;
 		option.textContent = collection;
 		document.getElementById('simSceneCollectionTxt').appendChild(option);
 	}
@@ -417,7 +425,7 @@ async function intiializeSimConfig() {
 		option.textContent = scene['sceneName'];
 		document.getElementById('simSceneNameTxt').appendChild(option);
 	}
-	
+
 	document.getElementById('simStreamKeyTxt').value = streamConfig['key'] || '';
 
 	Object.entries(simDefaultValues).forEach(([key, value]) => {

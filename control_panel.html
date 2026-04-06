@@ -15,7 +15,7 @@ free to use and modify and use as long as this copyright statment remains intact
 		<link rel="stylesheet" href="./common/css/control_panel/required.css" />
 		<script>
 			//---------------------------------------------------------------------------------------------
-			var versionNum = "0.9.2-beta";
+			var versionNum = "1.0.0";
 			//---------------------------------------------------------------------------------------------
 		</script>
 		<script src="./common/js/jquery.js"></script>
@@ -396,6 +396,59 @@ free to use and modify and use as long as this copyright statment remains intact
 								Send Rig Registration
 							</div>
 						</td>						
+					</tr>
+					<tr>
+						<td>
+							<label for="csUsernameTxt">Control Server Username</label>
+							<div class="hover-container">
+								<i class="icon">ℹ️</i>
+								<span class="info-box">
+									<p>The MQTT broker username used to connect to the PoolStat Control Server.</p>
+								</span>
+							</div>
+						</td>
+						<td>
+							<input
+								type="text"
+								size="10"
+								id="csUsernameTxt"
+								onchange="poolStatConfigCsUsername()"
+							/>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>
+							<label for="csPasswordTxt">Control Server Password</label>
+							<div class="hover-container">
+								<i class="icon">ℹ️</i>
+								<span class="info-box">
+									<p>
+										The MQTT broker password for the Control Server.
+										Stored encrypted in browser local storage — never shown in plain text.
+										Enter a new value and click Save Password to update it.
+									</p>
+								</span>
+							</div>
+						</td>
+						<td>
+							<input
+								type="password"
+								size="10"
+								id="csPasswordTxt"
+								placeholder="Enter password"
+								autocomplete="new-password"
+							/>
+						</td>
+						<td>
+							<div
+								class="hover obs28"
+								onclick="poolStatConfigCsPassword()"
+								style="color: white"
+							>
+								Save Password
+							</div>
+						</td>
 					</tr>
 				</table>
 				<div class="section-header" id="CueTools">
