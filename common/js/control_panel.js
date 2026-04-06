@@ -41,24 +41,25 @@ const simDataKeys = {
     "awayPlayerLogo": "simAwayPlayerImageTxt",
     "homePlayerScore": "simHomePlayerScoreTxt",
     "awayPlayerScore": "simAwayPlayerScoreTxt",
-    "breakingPlayer": "simBreakingPlayerToggle"
+    "breakingPlayer": "simBreakingPlayerToggle",
+    "timerId": ""
 };
 
 //main function to update scoreboard from PoolStat Live Stream
 function updateMatch(updateJSON) {
-    if (Object.keys(updateJSON).length == 19) {
+    if (Object.keys(updateJSON).length == 20) {
         if (extraDebug) { console.log('Match Update Received'); }
         if (updateJSON["compId"] > 1) { setStorageItem("compId", updateJSON["compId"]); }
         if (updateJSON["matchId"] > 1) { setStorageItem("matchId", updateJSON["matchId"]); }
         if (updateJSON["obsProfileName"].length > 1) { setStorageItem("obsProfileName", updateJSON["obsProfileName"]); }
         if (updateJSON["obsSceneCollection"].length > 1) { setStorageItem("obsSceneCollection", updateJSON["obsSceneCollection"]); }
         if (updateJSON["obsSceneName"].length > 1) { setStorageItem("obsSceneName", updateJSON["obsSceneName"]); }
-
+        //if (updateJSON["timerId"].length > 1) { setStorageItem("timerID", updateJSON["timeId"]); }
         if (updateJSON["streamKey"].length > 1) { setStorageItem("streamKey", updateJSON["streamKey"]); }
         if (updateJSON["streamStatus"] === true) {
             setStorageItem("streamStatus", updateJSON["streamStatus"]);
             changeOBSProfile(updateJSON["obsProfileName"]);
-            changeOBSSceneCollection(getStorageItem("obsSceneCollection")); 
+            changeOBSSceneCollection(getStorageItem("obsSceneCollection"));
             changeOBSScene(updateJSON["obsSceneName"]);
             updateStreamStatus();
         } else {
@@ -251,14 +252,14 @@ function sendRigReg() {
 
     console.log('Sending Rig Registration Message:', JSON.stringify(messageJSON));
     sendInitRigRequest(JSON.stringify(messageJSON))
-    .then(result => {
-        // Handle the returned JSON
-        console.log('Init Response:', result.message);
-        alert(`Rig Registration Response: ${result.message}`);
-    })
-    .catch(error => {
-        console.error('Request failed:', error);
-    });
+        .then(result => {
+            // Handle the returned JSON
+            console.log('Init Response:', result.message);
+            alert(`Rig Registration Response: ${result.message}`);
+        })
+        .catch(error => {
+            console.error('Request failed:', error);
+        });
 }
 
 function sendData(ticker) {
@@ -535,6 +536,8 @@ function connectPSLiveStream() {
     const host = 'wss://btim.brellahost.com.au:9001/';
     const statusTopic = `clients/${psRigId}/status`;
     const options = {
+        username: "bwadmin",
+        password: "MadD7tw6rPsHyZ2xR",
         keepalive: 20,
         clientId: psRigId,
         protocolId: 'MQTT',
@@ -549,7 +552,7 @@ function connectPSLiveStream() {
             retain: true
         },
     };
-
+    console.log(options);
     console.log('Connecting to PoolStat Live Stream server');
     psLiveStatus.textContent = 'Connecting to PoolStat Live Stream server';
 
@@ -585,7 +588,7 @@ function connectPSLiveStream() {
                     //check if the message for this Rig
                     if (messageJSON['rigId'] === psRigId) {
                         updateMatch(JSON.parse(message.toString()));
-                    } else { 
+                    } else {
                         //it is not ours so check if it matches our CompetitionID and if it does process it for 
                         //Ticker display
                         console.log('compid ' + typeof getStorageItem('compId'));
